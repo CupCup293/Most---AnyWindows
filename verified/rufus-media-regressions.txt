@@ -48,3 +48,47 @@ Old backup GPT erased
 RUFUS-BOOT-OK
 
 Original EXE SHA-256 unchanged. Physical writes not tested in this run.
+
+2026-11-08, freshly built ELF
+Window: Rufus 4.15.2396 displayed through Qt offscreen.
+Imports: 522 bound slots reported by the linker, including fallback stubs.
+Media: all five prior scenarios passed again on the fresh build.
+
+gzip target (--gzip)
+Rufus file selected: /scratch/sample.img.gz
+  Image is a compressed bootable disk image
+Writing compressed image:
+Byte-for-byte match: 1474560 bytes
+RUFUS-BOOT-OK
+
+non-bootable FAT32 (--format)
+Partitioning (MBR)...
+Creating Main Data Partition (offset: 1048576, size: 127.0 MB)
+sfdisk --verify passed.
+Rufus read back one partition, FAT32 LBA (0x0c), start sector 2048.
+Logical drive was not found - aborting
+The partition failed fsck.fat -n because Rufus did not format it.
+
+Linux ISO attempt (same GUI write probe, sample.iso as RUFUS_PROBE_PICK)
+Alpine Virt 3.22.0 x86_64, official release SHA-256 verified:
+c935c3715c80ca416e2ce912c552f0cbfd8531219b7973ae4a600873c793eb1b
+ISO9660, Syslinux 6.04/pre1 and /efi/boot/bootx64.efi detected.
+Invoking Rufus Start control
+Missing USER32.dll!SetWindowsHookExW caller=0x14005029f
+Rufus calls WH_MOUSE for tooltips before the ISO/DD selection dialog.
+The attempt stopped before mode selection and writing.
+
+Original EXE SHA-256 unchanged. Physical media were not used.
+
+GUI launch modes and USB authorization
+The Qt smoke test preserved an existing sibling ELF and built a fresh suffixed
+Rufus ELF. Its launch menu exposes a file-backed disk and physical USB.
+The current user had no direct read/write access to Kingston DataTraveler.
+The new ELF acquired an exclusive UDisks2 descriptor for /dev/sda (61,991,813,120
+bytes) and reached the startup warning. No write to the device was attempted.
+The gzip media smoke test passed again on the same ELF.
+
+Interactive launch with the same authorized device reached the main window.
+Rufus reported one removable device and read its existing GPT and FAT32
+partition named GPARTEDLIVE. The UI used the generic Most Test Media USB name.
+The physical write workflow was not started.

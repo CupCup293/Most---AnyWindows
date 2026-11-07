@@ -153,6 +153,10 @@ static __attribute__((ms_abi)) int32_t fd_show(FileDialog* self, void* owner)
         if (self->selected_filter > 0 && self->selected_filter <= unsigned(self->filters.size()))
             picker.selectNameFilter(self->filters[self->selected_filter - 1]);
     }
+    const auto source = !native_launch && !self->save && qEnvironmentVariableIsSet("MOST_RUFUS_IMAGE")
+        ? picker_path(qEnvironmentVariable("MOST_RUFUS_IMAGE")) : QString();
+    if (QFileInfo(source).isFile())
+        picker.selectFile(source);
     self->open = &picker;
     const auto scripted = picker_path(qEnvironmentVariable("RUFUS_PROBE_PICK"));
     std::fprintf(stderr, "Rufus requested a %s file picker\n", self->save ? "save" : "open");
@@ -166,7 +170,8 @@ static __attribute__((ms_abi)) int32_t fd_show(FileDialog* self, void* owner)
     self->open = nullptr;
     const auto path = picker.selectedFiles().value(0);
     self->result = picker_path(path);
-    if (!self->result.isEmpty() && status == QDialog::Accepted) {
+    if (!self->result.isEmpty() && status == QDialog::Accepted &&
+        (source.isEmpty() || self->result == source)) {
         std::fprintf(stderr, "Rufus file selected: %s\n", qPrintable(self->result));
         return 0;
     }

@@ -3,20 +3,27 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopServices>
+#include <QDir>
 #include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QFrame>
 #include <QFutureWatcher>
+#include <QInputDialog>
 #include <QLabel>
+#include <QMenu>
+#include <QMessageBox>
 #include <QMimeData>
 #include <QPlainTextEdit>
+#include <QProcess>
 #include <QProgressBar>
 #include <QPushButton>
 #include <QSet>
 #include <QStyle>
 #include <QStyleHints>
+#include <QTemporaryFile>
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QtConcurrentRun>
@@ -112,7 +119,14 @@ public:
         assemble_->setEnabled(false);
         folder_ = new QPushButton(u"Открыть папку"_s);
         folder_->hide();
+        launch_ = new QPushButton(u"Открыть Rufus"_s);
+        auto* launchModes = new QMenu(launch_);
+        launchModes->addAction(u"Виртуальная флешка (.img)…"_s, this, [this] { launchRufus(); });
+        launchModes->addAction(u"Физический USB…"_s, this, [this] { launchUsb(); });
+        launch_->setMenu(launchModes);
+        launch_->hide();
         actions->addWidget(assemble_);
+        actions->addWidget(launch_);
         actions->addWidget(folder_);
         actions->addStretch();
         page->addLayout(actions);
@@ -198,6 +212,10 @@ public:
                 validation_->setText(u"Запуск не проверен"_s);
                 validation_->show();
                 folder_->show();
+                if (isRufus()) {
+                    launch_->show();
+                    launch_->setDefault(true);
+                }
             }
             result_->show();
             setBusy(false);
@@ -224,7 +242,12 @@ public:
         if (busy_ || !report_.ready())
             return;
         clearResult();
-        const auto path = most::defaultOutput(input_);
+        auto path = most::defaultOutput(input_);
+        if (isRufus()) {
+            const auto base = path;
+            for (int index = 2; QFileInfo::exists(path) || QFileInfo(path).isSymLink(); ++index)
+                path = u"%1-%2"_s.arg(base).arg(index);
+        }
         status_->setText(u"Сборка…"_s);
         setBusy(true);
         build_.setFuture(QtConcurrent::run([report = report_, path] {
@@ -254,6 +277,103 @@ protected:
     }
 
 private:
+    bool isRufus() const { return report_.profile == u"Rufus 4.15"; }
+
+    void launchRufus()
+    {
+        const auto image = QFileDialog::getOpenFileName(this, u"Выберите исходный образ для Rufus"_s,
+            QFileInfo(input_).absolutePath(), u"Все файлы (*)"_s);
+        if (image.isEmpty())
+            return;
+        const auto target = QFileDialog::getSaveFileName(this, u"Создайте файл виртуальной флешки"_s,
+            output_ + u"-usb.img"_s, u"Файловый носитель (*.img)"_s, nullptr, QFileDialog::DontConfirmOverwrite);
+        if (target.isEmpty())
+            return;
+        const auto path = target.endsWith(u".img") ? target : target + u".img"_s;
+        QFile disk(path);
+        constexpr qint64 mib = 1024 * 1024;
+        const auto size = qMax(8 * 1024 * mib, QFileInfo(image).size() + 256 * mib);
+        if (!disk.open(QIODevice::WriteOnly | QIODevice::NewOnly)) {
+            QMessageBox::warning(this, u"Rufus"_s, u"Выберите новое имя для файла носителя. %1"_s.arg(disk.errorString()));
+            return;
+        }
+        if (!disk.resize(size)) {
+            const auto error = disk.errorString();
+            disk.remove();
+            QMessageBox::warning(this, u"Rufus"_s, u"Не удалось создать носитель. %1"_s.arg(error));
+            return;
+        }
+        disk.close();
+
+        const auto journal = startRufus({u"--image"_s, image, u"--target-image"_s, path});
+        if (journal.isEmpty()) {
+            disk.remove();
+            return;
+        }
+        validation_->setText(u"В Rufus нажмите SELECT, подтвердите образ и нажмите START. "
+                             "Результат записи останется в %1.\nЖурнал запуска находится в %2."_s
+                             .arg(path, journal));
+    }
+
+    void launchUsb()
+    {
+        QProcess listing;
+        listing.start(output_, {u"--list-usb"_s});
+        if (!listing.waitForFinished(2000) || listing.exitStatus() != QProcess::NormalExit ||
+            listing.exitCode() != 0) {
+            QMessageBox::warning(this, u"Rufus"_s, u"Не удалось получить список USB. %1"_s
+                .arg(QString::fromLocal8Bit(listing.readAllStandardError()).trimmed()));
+            return;
+        }
+        const auto devices = QString::fromLocal8Bit(listing.readAllStandardOutput())
+            .split(u'\n', Qt::SkipEmptyParts);
+        if (devices.isEmpty()) {
+            QMessageBox::information(this, u"Rufus"_s, u"Съёмные USB-диски не найдены."_s);
+            return;
+        }
+
+        const auto selection = QInputDialog::getItem(this, u"Физический USB"_s,
+            u"Выберите накопитель, который можно стереть. Rufus откроется в нативном режиме."_s,
+            devices, 0, false);
+        if (selection.isEmpty())
+            return;
+        const auto denied = u" (no read/write permission)"_s;
+        const bool authorize = selection.endsWith(denied);
+        const auto device = authorize ? selection.chopped(denied.size()) : selection;
+        if (authorize && QMessageBox::question(this, u"Доступ к USB"_s,
+                u"Запросить у Linux права чтения и записи для выбранного накопителя?\n%1"_s.arg(device),
+                QMessageBox::Yes | QMessageBox::No, QMessageBox::No) != QMessageBox::Yes)
+            return;
+
+        const auto option = authorize ? u"--authorize-usb"_s : u"--usb"_s;
+        const auto journal = startRufus({u"--native"_s, option, device});
+        if (!journal.isEmpty())
+            validation_->setText(u"Выбран USB %1. При запросе системы подтвердите доступ.\n"
+                                 "Журнал запуска находится в %2."_s.arg(device, journal));
+    }
+
+    QString startRufus(const QStringList& arguments)
+    {
+        QTemporaryFile journal(QDir::tempPath() + u"/most-rufus-XXXXXX.log"_s);
+        if (!journal.open()) {
+            QMessageBox::warning(this, u"Rufus"_s, u"Не удалось создать журнал запуска."_s);
+            return {};
+        }
+        journal.close();
+
+        QProcess process;
+        process.setProgram(output_);
+        process.setArguments(arguments);
+        process.setStandardOutputFile(journal.fileName(), QIODevice::Append);
+        process.setStandardErrorFile(journal.fileName(), QIODevice::Append);
+        if (!process.startDetached()) {
+            QMessageBox::warning(this, u"Rufus"_s, u"Не удалось запустить Rufus. %1"_s.arg(process.errorString()));
+            return {};
+        }
+        journal.setAutoRemove(false);
+        return journal.fileName();
+    }
+
     static bool localFile(const QMimeData* data)
     {
         const auto urls = data->urls();
@@ -283,13 +403,14 @@ private:
         result_->hide();
         validation_->hide();
         folder_->hide();
+        launch_->hide();
     }
 
     bool busy_ = false;
     most::Report report_;
     QString input_, output_;
     QLabel *status_, *detail_, *result_, *validation_;
-    QPushButton *choose_, *assemble_, *folder_;
+    QPushButton *choose_, *assemble_, *folder_, *launch_;
     QToolButton* toggle_;
     QProgressBar* progress_;
     QPlainTextEdit* log_;

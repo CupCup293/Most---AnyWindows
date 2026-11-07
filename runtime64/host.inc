@@ -2,7 +2,7 @@
 #include <linux/fs.h>
 #include <sys/ioctl.h>
 
-extern int native_launch, native_usb_fd;
+extern int native_launch, native_usb_fd, native_usb_authorized;
 extern const char *native_executable;
 extern char native_workdir[];
 
@@ -68,10 +68,33 @@ static int probe_disk_stat(struct stat *info)
         S_ISREG(info->st_mode) && info->st_size >= 16 * 1024 * 1024;
 }
 
+// Duplicates of a UDisks descriptor share a Linux file offset. Keep the
+// position and requested access of each guest handle independently.
+static pthread_mutex_t authorized_disk_lock = PTHREAD_MUTEX_INITIALIZER;
+static struct {
+    off_t position;
+    int access; // O_ACCMODE value plus one, or zero for an ordinary descriptor.
+} authorized_handles[0x10000];
+
 static int open_probe_disk(int mode)
 {
     if (native_usb_fd < 0)
         return open(probe_disk_path, mode | O_NOFOLLOW);
+    if (native_usb_authorized) {
+        pthread_mutex_lock(&authorized_disk_lock);
+        int fd = fcntl(native_usb_fd, F_DUPFD_CLOEXEC, 3);
+        if (fd >= 0x10000) {
+            close(fd);
+            fd = -1;
+            errno = EMFILE;
+        }
+        if (fd >= 0) {
+            authorized_handles[fd].position = 0;
+            authorized_handles[fd].access = (mode & O_ACCMODE) + 1;
+        }
+        pthread_mutex_unlock(&authorized_disk_lock);
+        return fd;
+    }
     char fd_path[64];
     snprintf(fd_path, sizeof(fd_path), "/proc/self/fd/%d", native_usb_fd);
     return open(fd_path, mode | O_NONBLOCK);
@@ -438,8 +461,17 @@ WIN int win_CloseHandle(uintptr_t handle)
         return 1;
     }
     int fd = handle_fd(handle);
-    if (fd >= 3 && !close(fd))
-        return 1;
+    if (fd >= 3) {
+        if (native_usb_authorized)
+            pthread_mutex_lock(&authorized_disk_lock);
+        const int closed = close(fd) == 0;
+        if (native_usb_authorized) {
+            authorized_handles[fd].access = 0;
+            pthread_mutex_unlock(&authorized_disk_lock);
+        }
+        if (closed)
+            return 1;
+    }
     last_error = 6;
     return 0;
 }
@@ -453,7 +485,7 @@ typedef struct {
 static int disk_handle_stat(uintptr_t handle, struct stat *disk);
 static int discard_stale_gpt(int fd, uint64_t disk_size, const unsigned char *sector);
 
-static int file_transfer(uintptr_t handle, void *buffer, DWORD count, DWORD *completed,
+static int file_transfer_locked(uintptr_t handle, void *buffer, DWORD count, DWORD *completed,
                          Overlapped *overlapped, int writing)
 {
     int fd = handle_fd(handle);
@@ -464,10 +496,17 @@ static int file_transfer(uintptr_t handle, void *buffer, DWORD count, DWORD *com
         last_error = 87;
         return 0;
     }
+    const int access = native_usb_authorized ? authorized_handles[fd].access : 0;
+    if (access && (writing ? access == O_RDONLY + 1 : access == O_WRONLY + 1)) {
+        last_error = 5;
+        return 0;
+    }
+    off_t position = overlapped ? (off_t)overlapped->offset :
+        access ? authorized_handles[fd].position : 0;
     struct stat disk;
     int replaces_sector_zero = 0;
     if (writing && disk_handle_stat(handle, &disk)) {
-        off_t offset = overlapped ? (off_t)overlapped->offset : lseek(fd, 0, SEEK_CUR);
+        off_t offset = (overlapped || access) ? position : lseek(fd, 0, SEEK_CUR);
         if (offset < 0 || offset > disk.st_size || count > (uint64_t)(disk.st_size - offset)) {
             last_error = 112;
             return 0;
@@ -503,9 +542,9 @@ static int file_transfer(uintptr_t handle, void *buffer, DWORD count, DWORD *com
     result = done;
 #else
     do {
-        if (overlapped)
-            result = writing ? pwrite(fd, buffer, count, overlapped->offset)
-                             : pread(fd, buffer, count, overlapped->offset);
+        if (overlapped || access)
+            result = writing ? pwrite(fd, buffer, count, position)
+                             : pread(fd, buffer, count, position);
         else
             result = writing ? write(fd, buffer, count) : read(fd, buffer, count);
     } while (result < 0 && errno == EINTR);
@@ -518,6 +557,8 @@ static int file_transfer(uintptr_t handle, void *buffer, DWORD count, DWORD *com
         }
         return 0;
     }
+    if (access && !overlapped)
+        authorized_handles[fd].position += result;
     if (replaces_sector_zero && result >= 512 &&
         !discard_stale_gpt(fd, disk.st_size, buffer)) {
         last_error = 29;
@@ -532,6 +573,17 @@ static int file_transfer(uintptr_t handle, void *buffer, DWORD count, DWORD *com
             win_SetEvent(overlapped->event & ~(uintptr_t)1);
     }
     return 1;
+}
+
+static int file_transfer(uintptr_t handle, void *buffer, DWORD count, DWORD *completed,
+                         Overlapped *overlapped, int writing)
+{
+    if (native_usb_authorized)
+        pthread_mutex_lock(&authorized_disk_lock);
+    int result = file_transfer_locked(handle, buffer, count, completed, overlapped, writing);
+    if (native_usb_authorized)
+        pthread_mutex_unlock(&authorized_disk_lock);
+    return result;
 }
 
 WIN int win_ReadFile(uintptr_t handle, void *buffer, DWORD count, DWORD *completed, Overlapped *overlapped)
@@ -1001,6 +1053,10 @@ WIN int win_GetFileSizeEx(uintptr_t handle, int64_t *length)
         last_error = 6;
         return 0;
     }
+    if (S_ISBLK(info.st_mode) && !disk_handle_stat(handle, &info)) {
+        last_error = 6;
+        return 0;
+    }
     *length = info.st_size;
     return 1;
 }
@@ -1012,7 +1068,23 @@ WIN int win_SetFilePointerEx(uintptr_t handle, int64_t distance, int64_t *result
         last_error = 87;
         return 0;
     }
-    off_t offset = lseek(fd, distance, origin);
+    off_t offset = -1;
+    if (native_usb_authorized)
+        pthread_mutex_lock(&authorized_disk_lock);
+    if (native_usb_authorized && authorized_handles[fd].access) {
+        struct stat disk;
+        if (disk_handle_stat(handle, &disk)) {
+            const off_t base = origin == SEEK_END ? disk.st_size :
+                origin == SEEK_CUR ? authorized_handles[fd].position : 0;
+            off_t next;
+            if (!__builtin_add_overflow(base, distance, &next) && next >= 0)
+                offset = authorized_handles[fd].position = next;
+        }
+    } else {
+        offset = lseek(fd, distance, origin);
+    }
+    if (native_usb_authorized)
+        pthread_mutex_unlock(&authorized_disk_lock);
     if (offset < 0) {
         last_error = 25;
         return 0;
@@ -2187,7 +2259,6 @@ static unsigned disk_layout(int fd, uint64_t disk_size, unsigned char *output)
 WIN int win_DeviceIoControl(uintptr_t handle, DWORD code, const void *input, DWORD input_size,
                              void *output, DWORD capacity, DWORD *returned, Overlapped *overlapped)
 {
-    (void)input; (void)input_size;
     if (returned)
         *returned = 0;
 #ifdef MOST_CHSIZE
@@ -2221,6 +2292,84 @@ WIN int win_DeviceIoControl(uintptr_t handle, DWORD code, const void *input, DWO
             return 1;
         last_error = 6;
         return 0;
+    case 0x7c054: // IOCTL_DISK_SET_DRIVE_LAYOUT_EX
+    case 0x7c058: { // IOCTL_DISK_CREATE_DISK
+        const int set_layout = code == 0x7c054;
+        if (!input || input_size < (set_layout ? disk_layout_header_size : 24)) {
+            last_error = 87;
+            return 0;
+        }
+        const unsigned char *layout = input;
+        DWORD style = read_dword(layout);
+        if (!S_ISREG(disk.st_mode) || (style != 0 && (set_layout || style != 2))) {
+            last_error = 50;
+            return 0;
+        }
+        int fd = handle_fd(handle);
+        if ((fcntl(fd, F_GETFL) & O_ACCMODE) == O_RDONLY) {
+            last_error = 5;
+            return 0;
+        }
+        unsigned char sector[512] = {0};
+        if (set_layout) {
+            // The current profile supports a single primary data partition.
+            DWORD count = read_dword(layout + 4);
+            if (!count || count > mbr_partition_count ||
+                input_size < disk_layout_header_size + count * disk_partition_size) {
+                last_error = 87;
+                return 0;
+            }
+            for (DWORD i = 0; i < count; ++i) {
+                const unsigned char *partition = layout + disk_layout_header_size + i * disk_partition_size;
+                unsigned char type = partition[32];
+                if (!type)
+                    continue;
+                if (i || (type != 0x0b && type != 0x0c)) {
+                    last_error = 50;
+                    return 0;
+                }
+                uint64_t start = disk_qword(partition + 8), length = disk_qword(partition + 16);
+                if (read_dword(partition) || start < 512 || !length ||
+                    start % 512 || length % 512 || start / 512 > UINT32_MAX ||
+                    length / 512 > UINT32_MAX || start > (uint64_t)disk.st_size ||
+                    length > (uint64_t)disk.st_size - start) {
+                    last_error = 87;
+                    return 0;
+                }
+                unsigned char *entry = sector + 446;
+                entry[0] = partition[33] ? 0x80 : 0;
+                entry[1] = entry[5] = 0xfe;
+                entry[2] = entry[3] = entry[6] = entry[7] = 0xff;
+                entry[4] = type;
+                DWORD lba = start / 512, sectors = length / 512;
+                memcpy(entry + 8, &lba, 4);
+                memcpy(entry + 12, &sectors, 4);
+            }
+            if (!sector[450]) {
+                last_error = 87;
+                return 0;
+            }
+        }
+        if (!set_layout && !discard_stale_gpt(fd, disk.st_size, sector)) {
+            last_error = 29;
+            return 0;
+        }
+        if (style == 0) {
+            memcpy(sector + 440, layout + (set_layout ? 8 : 4), 4);
+            sector[510] = 0x55;
+            sector[511] = 0xaa;
+        }
+        ssize_t written;
+        do {
+            written = pwrite(fd, sector, sizeof(sector), 0);
+        } while (written < 0 && errno == EINTR);
+        if (written != sizeof(sector)) {
+            last_error = 29;
+            return 0;
+        }
+        probe_mounted = 0;
+        return 1;
+    }
     case 0x70140: // IOCTL_DISK_UPDATE_PROPERTIES
         if (probe_volume_ready())
             probe_mounted = 1;

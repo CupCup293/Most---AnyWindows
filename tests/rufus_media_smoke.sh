@@ -4,7 +4,7 @@ test "$#" -ge 1
 test "$#" -le 2
 mode=${2:-}
 case "$mode" in
-    ''|--mbr-target|--gpt-target|--corrupt-gpt-target|--write-gpt-target) ;;
+    ''|--format|--gzip|--mbr-target|--gpt-target|--corrupt-gpt-target|--write-gpt-target) ;;
     *) exit 2 ;;
 esac
 elf=$(realpath "$1")
@@ -19,7 +19,15 @@ offset=$(od -An -tu1 -j1 -N1 "$temporary/source.img")
 dd if="$temporary/boot.bin" of="$temporary/source.img" bs=1 seek=$((offset + 2)) conv=notrunc status=none
 truncate -s 128M "$temporary/target.img"
 control=Write
+picker=sample.img
+input=$temporary/source.img
+if [ "$mode" = --gzip ]; then
+    picker=sample.img.gz
+    input=$temporary/source.img.gz
+    gzip -n -c "$temporary/source.img" > "$input"
+fi
 case "$mode" in
+    --format) control=Format ;;
     --mbr-target)
         printf 'label: dos\nstart=2048, size=32768, type=c, bootable\n' |
             sfdisk --quiet "$temporary/target.img" ;;
@@ -42,10 +50,10 @@ timeout 35 bwrap --unshare-all --uid 0 --gid 0 --clearenv \
     --setenv QT_QPA_PLATFORM offscreen --setenv HOME /scratch --setenv XDG_CACHE_HOME /scratch/cache \
     --setenv RUFUS_PROBE_NONINTERACTIVE 1 --setenv RUFUS_PROBE_STARTUP 1 \
     --setenv RUFUS_PROBE_CAPTURE /capture/window.png --setenv RUFUS_PROBE_CONTROL "$control" \
-    --setenv RUFUS_PROBE_PICK sample.img --setenv RUFUS_PROBE_DEVICE 1 \
+    --setenv RUFUS_PROBE_PICK "$picker" --setenv RUFUS_PROBE_DEVICE 1 \
     --ro-bind-try /etc/fonts /etc/fonts --ro-bind /usr /usr --ro-bind /lib /lib --ro-bind /lib64 /lib64 \
     --ro-bind "$elf" /rufus --dir /capture --bind "$temporary" /capture --tmpfs /scratch \
-    --ro-bind "$temporary/source.img" /scratch/sample.img \
+    --ro-bind "$input" "/scratch/$picker" \
     --bind "$temporary/target.img" /scratch/device.img --proc /proc --chdir /scratch -- /rufus \
     > "$temporary/rufus.log" 2>&1 || { cat "$temporary/rufus.log"; exit 1; }
 if grep -Eq '^Missing |^Signal ' "$temporary/rufus.log"; then
@@ -77,13 +85,41 @@ case "$mode" in
         require_log 'Partition type: GPT, NB Partitions: 1'
         require_log 'Start Sector: 2048, Attributes:' ;;
 esac
+if [ "$mode" = --format ]; then
+    require_log 'Confirmed write'
+    require_log 'returned to its main dialog'
+    require_log 'Rufus exit'
+    if ! sfdisk --verify "$temporary/target.img" ||
+       ! partition=$(partx --raw --noheadings --output START,SECTORS,SCHEME,TYPE \
+           "$temporary/target.img") ||
+       ! read -r start sectors scheme type <<EOF
+$partition
+EOF
+    then
+        cat "$temporary/rufus.log"
+        exit 1
+    fi
+    if [ "$start" != 2048 ] || [ "$scheme" != dos ] || [ "$type" != 0xc ] ||
+       ! dd if="$temporary/target.img" of="$temporary/partition.img" bs=512 \
+           skip="$start" count="$sectors" status=none ||
+       ! fsck.fat -n "$temporary/partition.img"; then
+        cat "$temporary/rufus.log"
+        exit 1
+    fi
+    exit 0
+fi
 require_log 'Rufus file selected'
-require_log 'Image is a bootable disk image'
+if [ "$mode" = --gzip ]; then
+    require_log 'Image is a compressed bootable disk image'
+    require_log 'Writing compressed image'
+else
+    require_log 'Image is a bootable disk image'
+fi
 require_log 'Confirmed write'
 require_log 'returned to its main dialog'
 require_log 'Rufus exit'
 size=$(stat -c %s "$temporary/source.img")
-cmp -n "$size" "$temporary/source.img" "$temporary/target.img"
+cmp -n "$size" "$temporary/source.img" "$temporary/target.img" || { cat "$temporary/rufus.log"; exit 1; }
 printf 'Byte-for-byte match: %s bytes\n' "$size"
 if [ "$mode" = --write-gpt-target ]; then
     tail -c $((33 * 512)) "$temporary/target.img" > "$temporary/gpt-tail"
@@ -93,4 +129,4 @@ if [ "$mode" = --write-gpt-target ]; then
     echo 'Old backup GPT erased'
 fi
 cc -O2 -Wall -Wextra "$here/rufus_boot_check.c" -o "$temporary/boot-check"
-timeout 5 "$temporary/boot-check" "$temporary/target.img"
+timeout 5 "$temporary/boot-check" "$temporary/target.img" || { cat "$temporary/rufus.log"; exit 1; }

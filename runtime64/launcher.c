@@ -1,5 +1,8 @@
 #define _GNU_SOURCE
 #include <limits.h>
+#ifdef MOST_RUFUS
+#include <systemd/sd-bus.h>
+#endif
 #include <dirent.h>
 #include <fcntl.h>
 #include <linux/fs.h>
@@ -30,6 +33,7 @@ static int executable_path(char path[PATH_MAX])
 
 int native_launch;
 int native_usb_fd = -1;
+int native_usb_authorized;
 const char *native_executable;
 char native_workdir[] = "/tmp/most-native-XXXXXX";
 
@@ -86,7 +90,46 @@ static int list_usb(void)
     return 0;
 }
 
-static int claim_usb(const char *name)
+#ifdef MOST_RUFUS
+static int authorize_usb(const char *path)
+{
+    const char *device = strrchr(path, '/') + 1;
+    if (!*device || strspn(device, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_") != strlen(device))
+        return -1;
+    char object[PATH_MAX];
+    if (snprintf(object, sizeof(object), "/org/freedesktop/UDisks2/block_devices/%s", device) >= (int)sizeof(object))
+        return -1;
+
+    sd_bus *bus = NULL;
+    sd_bus_message *reply = NULL;
+    sd_bus_error error = SD_BUS_ERROR_NULL;
+    int fd = -1;
+    int result = sd_bus_open_system(&bus);
+    if (result >= 0)
+        result = sd_bus_set_allow_interactive_authorization(bus, 1);
+    if (result >= 0)
+        result = sd_bus_set_method_call_timeout(bus, 120000000);
+    if (result >= 0)
+        result = sd_bus_call_method(bus, "org.freedesktop.UDisks2", object,
+            "org.freedesktop.UDisks2.Block", "OpenDevice", &error, &reply,
+            "sa{sv}", "rw", 1, "flags", "i", O_EXCL | O_CLOEXEC | O_NONBLOCK);
+    if (result >= 0) {
+        int received;
+        result = sd_bus_message_read(reply, "h", &received);
+        if (result > 0)
+            fd = fcntl(received, F_DUPFD_CLOEXEC, 3);
+    }
+    if (fd < 0)
+        fprintf(stderr, "UDisks could not authorize access to the USB disk: %s\n",
+                error.message ? error.message : result < 0 ? strerror(-result) : "invalid device descriptor");
+    sd_bus_error_free(&error);
+    sd_bus_message_unref(reply);
+    sd_bus_unref(bus);
+    return fd;
+}
+#endif
+
+static int claim_usb(const char *name, int authorize)
 {
     char path[PATH_MAX];
     struct stat expected, opened;
@@ -95,14 +138,25 @@ static int claim_usb(const char *name)
         fputs("Select a whole removable USB disk from --list-usb.\n", stderr);
         return 0;
     }
-    int fd = open(path, O_RDWR | O_EXCL | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
+    int fd;
+#ifdef MOST_RUFUS
+    if (authorize) {
+        fd = authorize_usb(path);
+        if (fd < 0)
+            return 0;
+    } else
+#else
+    (void)authorize;
+#endif
+        fd = open(path, O_RDWR | O_EXCL | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
     if (fd < 0) {
         perror("Cannot exclusively open USB disk");
         return 0;
     }
     int sector = 0;
     uint64_t size = 0;
-    if (fstat(fd, &opened) || !S_ISBLK(opened.st_mode) || opened.st_rdev != expected.st_rdev ||
+    if ((fcntl(fd, F_GETFL) & O_ACCMODE) != O_RDWR ||
+        fstat(fd, &opened) || !S_ISBLK(opened.st_mode) || opened.st_rdev != expected.st_rdev ||
         !usb_candidate(name, &opened) || opened.st_rdev != expected.st_rdev ||
         ioctl(fd, BLKSSZGET, &sector) || sector != 512 ||
         ioctl(fd, BLKGETSIZE64, &size) || size < 16 * 1024 * 1024) {
@@ -111,6 +165,7 @@ static int claim_usb(const char *name)
         return 0;
     }
     native_usb_fd = fd;
+    native_usb_authorized = authorize;
     fprintf(stderr, "Selected USB disk: %s (%s, %llu bytes).\n",
             name, path, (unsigned long long)size);
     return 1;
@@ -208,8 +263,13 @@ int launch_if_needed(int argc, char **argv)
         }
 #ifndef MOST_W32VER
         if (argc == 4 && !strcmp(argv[2], "--usb")) {
-            if (!claim_usb(argv[3]))
+            if (!claim_usb(argv[3], 0))
                 return 124;
+#ifdef MOST_RUFUS
+        } else if (argc == 4 && !strcmp(argv[2], "--authorize-usb")) {
+            if (!claim_usb(argv[3], 1))
+                return 124;
+#endif
         } else
 #endif
         if (argc != 2) {
@@ -270,13 +330,19 @@ int launch_if_needed(int argc, char **argv)
         }
         if (!strcmp(argv[index], "--image") && !mount_image) {
             if (!realpath(argv[index + 1], image) || stat(image, &image_info) ||
-                !S_ISREG(image_info.st_mode) ||
-                snprintf(image_mount, sizeof(image_mount), "/scratch%s", strrchr(image, '/')) >=
-                    (int)sizeof(image_mount) ||
-                !strcmp(image_mount, "/scratch/device.img")) {
+                !S_ISREG(image_info.st_mode)) {
                 fputs("Could not open the selected image file.\n", stderr);
                 return 124;
             }
+            // Keep the guest path short and ASCII. Rufus uses the suffix for compressed formats.
+            const char *name = strrchr(argv[index + 1], '/');
+            name = name ? name + 1 : argv[index + 1];
+            const char *suffix = strrchr(name, '.');
+            const char *letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            if (!suffix || !suffix[1] || strlen(suffix) > 17 ||
+                strspn(suffix + 1, letters) != strlen(suffix + 1))
+                suffix = ".img";
+            snprintf(image_mount, sizeof(image_mount), "/scratch/source%s", suffix);
             mount_image = 1;
         } else if (!strcmp(argv[index], "--target-image") && !mount_device) {
             if (!realpath(argv[index + 1], device) || stat(device, &device_info) ||
@@ -317,6 +383,9 @@ int launch_if_needed(int argc, char **argv)
     if (mount_image) {
         arguments[i++] = "--ro-bind";
         arguments[i++] = image;
+        arguments[i++] = image_mount;
+        arguments[i++] = "--setenv";
+        arguments[i++] = "MOST_RUFUS_IMAGE";
         arguments[i++] = image_mount;
     }
     if (mount_device) {

@@ -65,14 +65,25 @@ int main(int argc, char** argv)
         return 4;
     const auto rufus = output.filePath(u"rufus sample.exe"_s);
     const auto rufusElf = output.filePath(u"rufus sample-linux"_s);
+    // A previous sibling build must survive while the GUI builds an updated Rufus.
+    QFile prior(rufusElf);
+    if (!prior.open(QIODevice::WriteOnly | QIODevice::NewOnly) || prior.write("previous") != 8)
+        return 5;
+    prior.close();
     if (!QFile::copy(app.arguments()[2], rufus) || !drop(window, rufus) ||
         !waitFor(window, u"Собрано · Rufus 4.15"_s) ||
-        !hasLabel(window, u"Запуск в песочнице Wayland."_s) || !QFileInfo::exists(rufusElf))
+        !hasLabel(window, u"Запуск в песочнице Wayland."_s) || !QFileInfo::exists(rufusElf + u"-2"_s) ||
+        !prior.open(QIODevice::ReadOnly) || prior.readAll() != "previous")
         return 5;
-    for (auto* button : window.findChildren<QPushButton*>())
+    bool launchVisible = false;
+    for (auto* button : window.findChildren<QPushButton*>()) {
+        if (button->text() == u"Открыть Rufus" && button->isVisible() && button->isEnabled() &&
+            button->menu() && button->menu()->actions().size() == 2)
+            launchVisible = true;
         if (button->text() == u"Копировать журнал")
             button->click();
-    if (!QApplication::clipboard()->text().contains(u"KERNEL32.DLL!DeviceIoControl"))
+    }
+    if (!launchVisible || !QApplication::clipboard()->text().contains(u"KERNEL32.DLL!DeviceIoControl"))
         return 7;
     if (app.arguments().size() == 4) {
         const auto w32ver = output.filePath(u"w32ver sample.exe"_s);

@@ -267,7 +267,12 @@ void linkWin64(const QByteArray& image, const QString& directory, const QString&
     if (exelist)
         linkArgs << u"-DMOST_EXELIST"_s;
     log(u"Перелинковка %1 — %2 привязанных слотов импорта."_s.arg(profile).arg(patched));
-    const auto qt = process(pkg, {u"--cflags"_s, u"--libs"_s, u"Qt6Widgets"_s}, stage);
+    QStringList packages{u"--cflags"_s, u"--libs"_s, u"Qt6Widgets"_s};
+    if (profile == u"Rufus 4.15") {
+        linkArgs << u"-DMOST_RUFUS"_s;
+        packages << u"libsystemd"_s;
+    }
+    const auto qt = process(pkg, packages, stage);
     linkArgs << u"guest.S"_s << u"runtime.c"_s << u"launcher.c"_s << u"startup.c"_s << u"gui.cpp"_s
         << QProcess::splitCommand(QString::fromLocal8Bit(qt)) << u"-lstdc++"_s << u"-o"_s << result;
     const auto messages = process(gcc, linkArgs, stage);

@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QThread>
 #include <QGuiApplication>
 #include <QCloseEvent>
 #include <QScreen>
@@ -322,7 +323,8 @@ WINAPI void* win_CreateDialogIndirectParamW(void* instance, const void* memory, 
 }
 static bool test_writing()
 {
-    return qEnvironmentVariable("RUFUS_PROBE_CONTROL") == QStringLiteral("Write") &&
+    const auto control = qEnvironmentVariable("RUFUS_PROBE_CONTROL");
+    return (control == QStringLiteral("Write") || control == QStringLiteral("Format")) &&
            qEnvironmentVariable("RUFUS_PROBE_DEVICE") == QStringLiteral("1");
 }
 extern "C" int probe_is_virtual_disk();
@@ -543,36 +545,53 @@ WINAPI int win_IsWindowVisible(void* handle)
     auto* widget = as_widget(handle);
     return widget && widget->isVisible();
 }
+// Rufus scans images on a worker thread, while QWidget belongs to the Qt thread.
+template<typename Action>
+static int on_gui_thread(Action action)
+{
+    auto& app = application();
+    if (QThread::currentThread() == app.thread())
+        return action();
+    int result = 0;
+    QMetaObject::invokeMethod(&app, [&] { result = action(); }, Qt::BlockingQueuedConnection);
+    return result;
+}
 WINAPI int win_EnableWindow(void* handle, int enable)
 {
-    auto* widget = as_widget(handle);
-    if (!widget)
-        return 0;
-    const bool was_disabled = !widget->isEnabled();
-    widget->setEnabled(enable);
-    return was_disabled;
+    return on_gui_thread([&]() -> int {
+        auto* widget = as_widget(handle);
+        if (!widget)
+            return 0;
+        const bool was_disabled = !widget->isEnabled();
+        widget->setEnabled(enable);
+        return was_disabled;
+    });
 }
 WINAPI int win_ShowWindow(void* handle, int command)
 {
-    auto* widget = as_widget(handle);
-    if (!widget)
-        return 0;
-    const bool was_visible = widget->isVisible();
-    if (!command) widget->hide();
-    else if (command == 3) widget->showMaximized();
-    else if (command == 6) widget->showMinimized();
-    else widget->show();
-    if (!was_visible && widget->isVisible() && widget->windowTitle().startsWith(QStringLiteral("Rufus")))
-        std::fprintf(stderr, "Rufus main window visible: %s\n", qPrintable(widget->windowTitle()));
-    return was_visible;
+    return on_gui_thread([&]() -> int {
+        auto* widget = as_widget(handle);
+        if (!widget)
+            return 0;
+        const bool was_visible = widget->isVisible();
+        if (!command) widget->hide();
+        else if (command == 3) widget->showMaximized();
+        else if (command == 6) widget->showMinimized();
+        else widget->show();
+        if (!was_visible && widget->isVisible() && widget->windowTitle().startsWith(QStringLiteral("Rufus")))
+            std::fprintf(stderr, "Rufus main window visible: %s\n", qPrintable(widget->windowTitle()));
+        return was_visible;
+    });
 }
 WINAPI int win_UpdateWindow(void* handle)
 {
-    auto* widget = as_widget(handle);
-    if (!widget)
-        return 0;
-    widget->repaint();
-    return 1;
+    return on_gui_thread([&]() -> int {
+        auto* widget = as_widget(handle);
+        if (!widget)
+            return 0;
+        widget->repaint();
+        return 1;
+    });
 }
 
 static QString widget_text(QWidget* widget)
@@ -596,11 +615,15 @@ static int set_widget_text(QWidget* widget, const QString& value)
 }
 WINAPI int win_SetWindowTextW(void* handle, const char16_t* value)
 {
-    return set_widget_text(as_widget(handle), utf16(value));
+    return on_gui_thread([&]() -> int {
+        return set_widget_text(as_widget(handle), utf16(value));
+    });
 }
 WINAPI int win_SetWindowTextA(void* handle, const char* value)
 {
-    return set_widget_text(as_widget(handle), value ? QString::fromLocal8Bit(value) : QString());
+    return on_gui_thread([&]() -> int {
+        return set_widget_text(as_widget(handle), value ? QString::fromLocal8Bit(value) : QString());
+    });
 }
 WINAPI int win_SetDlgItemTextW(void* handle, int id, const char16_t* value)
 {
@@ -667,28 +690,31 @@ WINAPI int win_MapDialogRect(void* handle, WinRect* rect)
 }
 WINAPI int win_MoveWindow(void* handle, int x, int y, int w, int h, int repaint)
 {
-    auto* widget = as_widget(handle);
-    if (!widget) return 0;
-    widget->setGeometry(x, y, w, h);
-    if (repaint) widget->update();
-    return 1;
+    return on_gui_thread([&]() -> int {
+        auto* widget = as_widget(handle);
+        if (!widget) return 0;
+        widget->setGeometry(x, y, w, h);
+        if (repaint) widget->update();
+        return 1;
+    });
 }
 WINAPI int win_SetWindowPos(void* handle, void* after, int x, int y, int w, int h, uint32_t flags)
 {
-    (void)after;
-    auto* widget = as_widget(handle);
-    if (!widget) return 0;
-    if (!(flags & 2)) widget->move(x, y);
-    if (!(flags & 1)) widget->resize(w, h);
-    if (flags & 0x40) widget->show();
-    if (flags & 0x80) widget->hide();
-    return 1;
+    return on_gui_thread([&]() -> int {
+        (void)after;
+        auto* widget = as_widget(handle);
+        if (!widget) return 0;
+        if (!(flags & 2)) widget->move(x, y);
+        if (!(flags & 1)) widget->resize(w, h);
+        if (flags & 0x40) widget->show();
+        if (flags & 0x80) widget->hide();
+        return 1;
+    });
 }
 
 #include <QTimer>
 #include <QAbstractItemView>
 #include <QEventLoop>
-#include <QThread>
 #include <atomic>
 #include <QQueue>
 #include <QTextCursor>
@@ -965,14 +991,33 @@ WINAPI int win_GetMessageW(WinMessage* output, void* filter, uint32_t first, uin
                         qPrintable(dialog->window->windowTitle()), dialog->window->width(), dialog->window->height(), saved);
                     const auto test_control = qEnvironmentVariable("RUFUS_PROBE_CONTROL");
                     if (saved && !test_control.isEmpty()) {
-                        const auto first = test_control == QStringLiteral("Write")
+                        const bool format = test_control == QStringLiteral("Format");
+                        if (format) {
+                            // IDC_BOOT_SELECTION in the Rufus 4.15 dialog resource.
+                            auto* boot = qobject_cast<QComboBox*>(dialog->controls.value(1011));
+                            const int index = boot ? boot->findText(QStringLiteral("Non bootable")) : -1;
+                            if (index < 0 || !probe_is_virtual_disk())
+                                std::_Exit(130);
+                            boot->setCurrentIndex(index);
+                            Q_EMIT boot->activated(index);
+                            // IDC_FILE_SYSTEM in the same resource.
+                            auto* fs = qobject_cast<QComboBox*>(dialog->controls.value(1002));
+                            const int fat32 = fs ? fs->findText(QStringLiteral("FAT32"), Qt::MatchStartsWith) : -1;
+                            if (fat32 < 0)
+                                std::_Exit(130);
+                            fs->setCurrentIndex(fat32);
+                            Q_EMIT fs->activated(fat32);
+                        }
+                        const auto first = format ? QStringLiteral("Start") : test_control == QStringLiteral("Write")
                             ? QStringLiteral("Select") : test_control;
                         auto* button = named_button(dialog->window, first);
                         if (!button)
                             std::_Exit(130);
-                        std::fprintf(stderr, "Invoking Rufus %s control\n", qPrintable(first));
-                        button->click();
-                        if (test_control == QStringLiteral("Write")) {
+                        if (!format) {
+                            std::fprintf(stderr, "Invoking Rufus %s control\n", qPrintable(first));
+                            button->click();
+                        }
+                        if (format || test_control == QStringLiteral("Write")) {
                             auto* timer = new QTimer(dialog->window);
                             auto* window = dialog->window;
                             QObject::connect(timer, &QTimer::timeout, window,
@@ -1247,15 +1292,17 @@ WINAPI void* win_GetDesktopWindow(void)
 }
 WINAPI int win_InvalidateRect(void* handle, const WinRect* region, int erase)
 {
-    (void)erase;
-    auto* widget = as_widget(handle);
-    if (!widget)
-        return 0;
-    if (region)
-        widget->update(region->left, region->top, region->right - region->left, region->bottom - region->top);
-    else
-        widget->update();
-    return 1;
+    return on_gui_thread([&]() -> int {
+        (void)erase;
+        auto* widget = as_widget(handle);
+        if (!widget)
+            return 0;
+        if (region)
+            widget->update(region->left, region->top, region->right - region->left, region->bottom - region->top);
+        else
+            widget->update();
+        return 1;
+    });
 }
 WINAPI int win_RedrawWindow(void* handle, const WinRect* region, void* clip, unsigned flags)
 {
