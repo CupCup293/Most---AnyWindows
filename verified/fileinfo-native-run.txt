@@ -1,0 +1,23 @@
+ELF SHA-256: a4655ba68e9d7f0693781f5b0a640984698d495da9acae6c0c383db01932483b
+  Class:                             ELF64
+Filename: /test/метаданные файла
+File size: 6 bytes
+File size: 6 bytes
+File attributes: Read-only
+File attributes: Read-only
+File attributes: Directory
+Last access time: 2024-01-02 03:04:05
+Last access time: 2024-01-02 03:04:05
+Last write time: 2023-05-06 07:08:09
+Last write time: 2023-05-06 07:08:09
+Creation time: 2026-11-07 20:25:38
+Creation time: 2026-11-07 20:25:38
+Creation time: 2026-11-07 20:25:38
+PASS size, attributes, directory, UTC timestamps, hard-link count and identity
+stdin:
+File size: 6 bytes
+FileInfo could not open missing: No such file or directory
+FileInfo can inspect attributes; changing them is unavailable.
+File size: 6 bytes
+PASS redirected stdin, missing file and attribute-change refusal
+PASS direct Linux run with Bubblewrap absent from PATH

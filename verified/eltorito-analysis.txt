@@ -1,0 +1,35 @@
+Готово к сборке
+Архитектура — x86-64 / PE32+
+Доступна экспериментальная перелинковка Win64 — GetElTorito x64.
+Консольный запуск в Linux. Доступные операции зависят от профиля.
+
+Импорты — 29
+  KERNEL32.dll!WriteFile
+  KERNEL32.dll!GetStdHandle
+  KERNEL32.dll!ReadFile
+  KERNEL32.dll!CreateFileA
+  KERNEL32.dll!FormatMessageA
+  KERNEL32.dll!GetLastError
+  KERNEL32.dll!LocalFree
+  msvcrt.dll!memcmp
+  msvcrt.dll!fprintf
+  msvcrt.dll!fflush
+  msvcrt.dll!__C_specific_handler
+  msvcrt.dll!_XcptFilter
+  msvcrt.dll!_c_exit
+  msvcrt.dll!_exit
+  msvcrt.dll!puts
+  msvcrt.dll!exit
+  msvcrt.dll!__initenv
+  msvcrt.dll!__getmainargs
+  msvcrt.dll!_initterm
+  msvcrt.dll!__setusermatherr
+  msvcrt.dll!_commode
+  msvcrt.dll!_fmode
+  msvcrt.dll!__set_app_type
+  msvcrt.dll!_iob
+  msvcrt.dll!fputs
+  msvcrt.dll!malloc
+  msvcrt.dll!perror
+  msvcrt.dll!_cexit
+  USER32.dll!CharToOemA

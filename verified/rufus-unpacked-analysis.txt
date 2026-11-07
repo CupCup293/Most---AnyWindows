@@ -1,0 +1,1056 @@
+Rufus 4.15 — диагностика после распаковки
+
+Исходный файл: <downloads>/rufus-4.15.exe
+Распаковщик: UPX 5.2.1. Распаковано в отдельный файл без исполнения Rufus.
+Размер до и после: 1 989 992 → 5 422 952 байта.
+Обнаружено: 522 записи импортов из 17 DLL.
+
+Сборка недоступна
+Архитектура — x86-64 / PE32+
+  KERNEL32.DLL!InitializeCriticalSectionEx
+  KERNEL32.DLL!FreeEnvironmentStringsW
+  KERNEL32.DLL!GetEnvironmentStringsW
+  KERNEL32.DLL!GetCommandLineW
+  KERNEL32.DLL!GetCommandLineA
+  KERNEL32.DLL!GetACP
+  KERNEL32.DLL!IsValidCodePage
+  KERNEL32.DLL!FindFirstFileExW
+  KERNEL32.DLL!GetStringTypeW
+  KERNEL32.DLL!GetCPInfo
+  KERNEL32.DLL!EnumSystemLocalesW
+  KERNEL32.DLL!IsValidLocale
+  KERNEL32.DLL!GetLocaleInfoW
+  KERNEL32.DLL!LCMapStringW
+  KERNEL32.DLL!CompareStringW
+  KERNEL32.DLL!GetTickCount64
+  KERNEL32.DLL!MultiByteToWideChar
+  KERNEL32.DLL!GetProcAddress
+  KERNEL32.DLL!GetModuleHandleW
+  KERNEL32.DLL!VerifyVersionInfoW
+  KERNEL32.DLL!LoadLibraryExW
+  KERNEL32.DLL!GetOEMCP
+  KERNEL32.DLL!GetUserDefaultUILanguage
+  KERNEL32.DLL!GetLocaleInfoA
+  KERNEL32.DLL!GetSystemDefaultLangID
+  KERNEL32.DLL!ReadFile
+  KERNEL32.DLL!GetVolumeInformationW
+  KERNEL32.DLL!SetLastError
+  KERNEL32.DLL!DeleteVolumeMountPointA
+  KERNEL32.DLL!DeviceIoControl
+  KERNEL32.DLL!GetDriveTypeA
+  KERNEL32.DLL!QueryDosDeviceA
+  KERNEL32.DLL!FindFirstVolumeA
+  KERNEL32.DLL!GetVolumeInformationA
+  KERNEL32.DLL!GetVolumeNameForVolumeMountPointA
+  KERNEL32.DLL!Sleep
+  KERNEL32.DLL!GetLastError
+  KERNEL32.DLL!SetVolumeMountPointA
+  KERNEL32.DLL!CreateFileA
+  KERNEL32.DLL!DefineDosDeviceA
+  KERNEL32.DLL!CloseHandle
+  KERNEL32.DLL!GetLogicalDriveStringsA
+  KERNEL32.DLL!SetFilePointerEx
+  KERNEL32.DLL!FindNextVolumeA
+  KERNEL32.DLL!FindVolumeClose
+  KERNEL32.DLL!WideCharToMultiByte
+  KERNEL32.DLL!GetVolumeInformationByHandleW
+  KERNEL32.DLL!FlushFileBuffers
+  KERNEL32.DLL!WriteFile
+  KERNEL32.DLL!SetThreadUILanguage
+  KERNEL32.DLL!GetEnvironmentVariableW
+  KERNEL32.DLL!WaitForSingleObject
+  KERNEL32.DLL!CreateFileW
+  KERNEL32.DLL!ExitThread
+  KERNEL32.DLL!GetThreadUILanguage
+  KERNEL32.DLL!DeleteFileW
+  KERNEL32.DLL!SetFileAttributesA
+  KERNEL32.DLL!GetLocalTime
+  KERNEL32.DLL!GetOverlappedResultEx
+  KERNEL32.DLL!CopyFileW
+  KERNEL32.DLL!CreateDirectoryA
+  KERNEL32.DLL!CreateEventA
+  KERNEL32.DLL!SetFileTime
+  KERNEL32.DLL!SetVolumeLabelA
+  KERNEL32.DLL!SizeofResource
+  KERNEL32.DLL!FindResourceA
+  KERNEL32.DLL!LockResource
+  KERNEL32.DLL!LoadResource
+  KERNEL32.DLL!CreateDirectoryW
+  KERNEL32.DLL!MoveFileA
+  KERNEL32.DLL!CopyFileA
+  KERNEL32.DLL!DeleteFileA
+  KERNEL32.DLL!CreateThread
+  KERNEL32.DLL!CreateSymbolicLinkW
+  KERNEL32.DLL!EnumUILanguagesW
+  KERNEL32.DLL!CreateNamedPipeA
+  KERNEL32.DLL!GetCurrentProcess
+  KERNEL32.DLL!PeekNamedPipe
+  KERNEL32.DLL!SetFileAttributesW
+  KERNEL32.DLL!LocalFree
+  KERNEL32.DLL!SystemTimeToFileTime
+  KERNEL32.DLL!GetSystemTime
+  KERNEL32.DLL!IsWow64Process
+  KERNEL32.DLL!GetModuleFileNameW
+  KERNEL32.DLL!lstrcmpA
+  KERNEL32.DLL!OutputDebugStringA
+  KERNEL32.DLL!K32GetModuleFileNameExW
+  KERNEL32.DLL!SetThreadPriority
+  KERNEL32.DLL!CreateMutexA
+  KERNEL32.DLL!K32GetProcessImageFileNameW
+  KERNEL32.DLL!ReleaseMutex
+  KERNEL32.DLL!SetEvent
+  KERNEL32.DLL!TerminateThread
+  KERNEL32.DLL!GetNativeSystemInfo
+  KERNEL32.DLL!ReadProcessMemory
+  KERNEL32.DLL!GetCurrentProcessId
+  KERNEL32.DLL!QueryFullProcessImageNameW
+  KERNEL32.DLL!GetFileType
+  KERNEL32.DLL!GetExitCodeProcess
+  KERNEL32.DLL!SetDefaultDllDirectories
+  KERNEL32.DLL!GetFullPathNameW
+  KERNEL32.DLL!GetFinalPathNameByHandleW
+  KERNEL32.DLL!LoadLibraryExA
+  KERNEL32.DLL!GetTempPathW
+  KERNEL32.DLL!GetFileAttributesW
+  KERNEL32.DLL!GetCurrentThreadId
+  KERNEL32.DLL!GetSystemDirectoryW
+  KERNEL32.DLL!UnmapViewOfFile
+  KERNEL32.DLL!AttachConsole
+  KERNEL32.DLL!FreeConsole
+  KERNEL32.DLL!FreeLibrary
+  KERNEL32.DLL!GetConsoleWindow
+  KERNEL32.DLL!GetTempFileNameW
+  KERNEL32.DLL!CreateFileMappingW
+  KERNEL32.DLL!MapViewOfFile
+  KERNEL32.DLL!MulDiv
+  KERNEL32.DLL!SetThreadAffinityMask
+  KERNEL32.DLL!WaitForMultipleObjects
+  KERNEL32.DLL!CreateEventW
+  KERNEL32.DLL!GetCurrentThread
+  KERNEL32.DLL!lstrcmpiA
+  KERNEL32.DLL!MoveFileW
+  KERNEL32.DLL!VerifyVersionInfoA
+  KERNEL32.DLL!TerminateProcess
+  KERNEL32.DLL!GetProcessAffinityMask
+  KERNEL32.DLL!GetProductInfo
+  KERNEL32.DLL!CreatePipe
+  KERNEL32.DLL!LCIDToLocaleName
+  KERNEL32.DLL!GetExitCodeThread
+  KERNEL32.DLL!GetVersionExA
+  KERNEL32.DLL!GetFileSize
+  KERNEL32.DLL!CreateProcessW
+  KERNEL32.DLL!SetThreadLocale
+  KERNEL32.DLL!FindFirstFileW
+  KERNEL32.DLL!FindNextFileW
+  KERNEL32.DLL!GetThreadLocale
+  KERNEL32.DLL!FindClose
+  KERNEL32.DLL!GetModuleHandleA
+  KERNEL32.DLL!FormatMessageW
+  KERNEL32.DLL!CancelSynchronousIo
+  KERNEL32.DLL!OutputDebugStringW
+  KERNEL32.DLL!LoadLibraryW
+  KERNEL32.DLL!GetFileSizeEx
+  KERNEL32.DLL!CancelIoEx
+  KERNEL32.DLL!GetOverlappedResult
+  KERNEL32.DLL!MoveFileExW
+  KERNEL32.DLL!GetDiskFreeSpaceExA
+  KERNEL32.DLL!GetVolumePathNameA
+  KERNEL32.DLL!GetSystemDefaultLCID
+  KERNEL32.DLL!GetTimeZoneInformation
+  KERNEL32.DLL!GetUserDefaultLCID
+  KERNEL32.DLL!FlsSetValue
+  KERNEL32.DLL!FlsGetValue
+  KERNEL32.DLL!FlsAlloc
+  KERNEL32.DLL!FlsFree
+  KERNEL32.DLL!GetStartupInfoW
+  KERNEL32.DLL!SetUnhandledExceptionFilter
+  KERNEL32.DLL!InitializeSListHead
+  KERNEL32.DLL!QueryPerformanceCounter
+  KERNEL32.DLL!DeleteCriticalSection
+  KERNEL32.DLL!InitializeConditionVariable
+  KERNEL32.DLL!InitializeCriticalSection
+  KERNEL32.DLL!LeaveCriticalSection
+  KERNEL32.DLL!WakeConditionVariable
+  KERNEL32.DLL!WakeAllConditionVariable
+  KERNEL32.DLL!EnterCriticalSection
+  KERNEL32.DLL!SleepConditionVariableCS
+  KERNEL32.DLL!GetFileInformationByHandle
+  KERNEL32.DLL!SetEndOfFile
+  KERNEL32.DLL!HeapAlloc
+  KERNEL32.DLL!GetProcessHeap
+  KERNEL32.DLL!HeapFree
+  KERNEL32.DLL!GetSystemTimeAsFileTime
+  KERNEL32.DLL!GlobalMemoryStatusEx
+  KERNEL32.DLL!VirtualQuery
+  KERNEL32.DLL!VirtualProtect
+  KERNEL32.DLL!GetSystemInfo
+  KERNEL32.DLL!RaiseException
+  KERNEL32.DLL!EncodePointer
+  KERNEL32.DLL!GetStdHandle
+  KERNEL32.DLL!GetModuleHandleExW
+  KERNEL32.DLL!WriteConsoleW
+  KERNEL32.DLL!IsProcessorFeaturePresent
+  KERNEL32.DLL!GetConsoleOutputCP
+  KERNEL32.DLL!GetConsoleMode
+  KERNEL32.DLL!SetEnvironmentVariableW
+  KERNEL32.DLL!SetCurrentDirectoryW
+  KERNEL32.DLL!GetCurrentDirectoryW
+  KERNEL32.DLL!GetDriveTypeW
+  KERNEL32.DLL!SystemTimeToTzSpecificLocalTime
+  KERNEL32.DLL!FileTimeToSystemTime
+  KERNEL32.DLL!GetFileAttributesExW
+  KERNEL32.DLL!ReadConsoleW
+  KERNEL32.DLL!SetStdHandle
+  KERNEL32.DLL!ExitProcess
+  KERNEL32.DLL!IsDebuggerPresent
+  KERNEL32.DLL!UnhandledExceptionFilter
+  KERNEL32.DLL!HeapReAlloc
+  KERNEL32.DLL!HeapSize
+  KERNEL32.DLL!HeapQueryInformation
+  ntdll.dll!RtlCaptureContext
+  ntdll.dll!RtlPcToFileHeader
+  ntdll.dll!RtlLookupFunctionEntry
+  ntdll.dll!RtlUnwind
+  ntdll.dll!RtlUnwindEx
+  ntdll.dll!NtQuerySecurityObject
+  ntdll.dll!NtQueryDirectoryFile
+  ntdll.dll!NtQueryEaFile
+  ntdll.dll!NtSetSecurityObject
+  ntdll.dll!NtSetEaFile
+  ntdll.dll!NtSetInformationFile
+  ntdll.dll!RtlInitUnicodeString
+  ntdll.dll!NtOpenSymbolicLinkObject
+  ntdll.dll!NtWaitForSingleObject
+  ntdll.dll!NtDelayExecution
+  ntdll.dll!NtFsControlFile
+  ntdll.dll!NtFlushBuffersFile
+  ntdll.dll!NtWriteFile
+  ntdll.dll!NtReadFile
+  ntdll.dll!RtlNtStatusToDosError
+  ntdll.dll!NtDeviceIoControlFile
+  ntdll.dll!NtOpenFile
+  ntdll.dll!RtlVirtualUnwind
+  ntdll.dll!NtQueryVolumeInformationFile
+  ntdll.dll!NtCreateFile
+  ntdll.dll!NtQueryObject
+  ntdll.dll!RtlCreateHeap
+  ntdll.dll!RtlFreeHeap
+  ntdll.dll!NtQueryInformationFile
+  ntdll.dll!NtDuplicateObject
+  ntdll.dll!NtClose
+  ntdll.dll!NtOpenProcess
+  ntdll.dll!NtQueryInformationProcess
+  ntdll.dll!NtQuerySystemInformation
+  ntdll.dll!RtlAllocateHeap
+  ntdll.dll!RtlDestroyHeap
+  ntdll.dll!NtOpenProcessToken
+  ntdll.dll!NtAdjustPrivilegesToken
+  ntdll.dll!VerSetConditionMask
+  USER32.dll!DrawTextExA
+  USER32.dll!DrawTextExW
+  USER32.dll!DestroyMenu
+  USER32.dll!MoveWindow
+  USER32.dll!GetSysColor
+  USER32.dll!MessageBoxA
+  USER32.dll!GetDlgItemTextW
+  USER32.dll!SetWindowTextA
+  USER32.dll!SetDlgItemTextW
+  USER32.dll!GetWindowTextA
+  USER32.dll!ClientToScreen
+  USER32.dll!IsDialogMessageW
+  USER32.dll!DispatchMessageW
+  USER32.dll!ShowWindow
+  USER32.dll!CreatePopupMenu
+  USER32.dll!MessageBeep
+  USER32.dll!GetSystemMetrics
+  USER32.dll!MessageBoxExW
+  USER32.dll!SetWindowPos
+  USER32.dll!IsWindowVisible
+  USER32.dll!DestroyWindow
+  USER32.dll!GetWindowRect
+  USER32.dll!SetProcessDefaultLayout
+  USER32.dll!GetKeyState
+  USER32.dll!GetMessageW
+  USER32.dll!GetWindowTextLengthW
+  USER32.dll!EndDialog
+  USER32.dll!LoadImageW
+  USER32.dll!UnhookWinEvent
+  USER32.dll!SetWinEventHook
+  USER32.dll!CreateDialogIndirectParamW
+  USER32.dll!DrawIconEx
+  USER32.dll!FlashWindowEx
+  USER32.dll!SetCursor
+  USER32.dll!SetWindowsHookExW
+  USER32.dll!SetDlgItemTextA
+  USER32.dll!LoadCursorW
+  USER32.dll!LoadIconW
+  USER32.dll!UnhookWindowsHookEx
+  USER32.dll!DialogBoxIndirectParamW
+  USER32.dll!CopyRect
+  USER32.dll!GetWindowInfo
+  USER32.dll!OffsetRect
+  USER32.dll!LoadStringW
+  USER32.dll!CallNextHookEx
+  USER32.dll!ScreenToClient
+  USER32.dll!CreateWindowExW
+  USER32.dll!GetWindow
+  USER32.dll!CallWindowProcW
+  USER32.dll!AdjustWindowRectEx
+  USER32.dll!MapDialogRect
+  USER32.dll!CreateIconFromResourceEx
+  USER32.dll!SendDlgItemMessageA
+  USER32.dll!ChangeWindowMessageFilterEx
+  USER32.dll!SendMessageA
+  USER32.dll!InsertMenuW
+  USER32.dll!TrackPopupMenuEx
+  USER32.dll!CharUpperBuffW
+  USER32.dll!CheckDlgButton
+  USER32.dll!PostQuitMessage
+  USER32.dll!GetDesktopWindow
+  USER32.dll!GetSysColorBrush
+  USER32.dll!FindWindowA
+  USER32.dll!UpdateWindow
+  USER32.dll!SendInput
+  USER32.dll!EnableWindow
+  USER32.dll!CharLowerA
+  USER32.dll!SetWindowTextW
+  USER32.dll!IsWindow
+  USER32.dll!GetDlgItem
+  USER32.dll!CharUpperA
+  USER32.dll!PostMessageW
+  USER32.dll!IsDlgButtonChecked
+  USER32.dll!GetKeyboardLayoutNameA
+  USER32.dll!DefWindowProcW
+  USER32.dll!InflateRect
+  USER32.dll!GetDC
+  USER32.dll!EnumChildWindows
+  USER32.dll!SetWindowLongPtrW
+  USER32.dll!wsprintfW
+  USER32.dll!GetIconInfo
+  USER32.dll!SendMessageW
+  USER32.dll!GetWindowLongPtrW
+  USER32.dll!RedrawWindow
+  USER32.dll!DestroyIcon
+  USER32.dll!CreateIconIndirect
+  USER32.dll!GetDlgCtrlID
+  USER32.dll!MapWindowPoints
+  USER32.dll!DrawFocusRect
+  USER32.dll!IsWindowEnabled
+  USER32.dll!IntersectRect
+  USER32.dll!SetPropW
+  USER32.dll!GetClassNameW
+  USER32.dll!GetClientRect
+  USER32.dll!DrawTextW
+  USER32.dll!SystemParametersInfoW
+  USER32.dll!GetParent
+  USER32.dll!InvalidateRect
+  USER32.dll!ReleaseDC
+  USER32.dll!BeginPaint
+  USER32.dll!GetWindowTextW
+  USER32.dll!SetTimer
+  USER32.dll!KillTimer
+  USER32.dll!TranslateMessage
+  USER32.dll!EndPaint
+  USER32.dll!FillRect
+  ADVAPI32.dll!RegOpenKeyExA (отложенный)
+  ADVAPI32.dll!RegLoadKeyW (отложенный)
+  ADVAPI32.dll!RegCreateKeyExA (отложенный)
+  ADVAPI32.dll!RegQueryValueExA (отложенный)
+  ADVAPI32.dll!RegGetValueA (отложенный)
+  ADVAPI32.dll!RegCloseKey (отложенный)
+  ADVAPI32.dll!RegSetValueExA (отложенный)
+  ADVAPI32.dll!ConvertStringSecurityDescriptorToSecurityDescriptorA (отложенный)
+  ADVAPI32.dll!CryptReleaseContext (отложенный)
+  ADVAPI32.dll!CryptImportKey (отложенный)
+  ADVAPI32.dll!CryptDestroyHash (отложенный)
+  ADVAPI32.dll!CryptHashData (отложенный)
+  ADVAPI32.dll!CryptCreateHash (отложенный)
+  ADVAPI32.dll!CryptVerifySignatureW (отложенный)
+  ADVAPI32.dll!CryptAcquireContextW (отложенный)
+  ADVAPI32.dll!GetUserNameA (отложенный)
+  ADVAPI32.dll!RegDeleteKeyA (отложенный)
+  ADVAPI32.dll!GetTokenInformation (отложенный)
+  ADVAPI32.dll!RegDeleteValueA (отложенный)
+  ADVAPI32.dll!ConvertStringSidToSidA (отложенный)
+  ADVAPI32.dll!InitializeSecurityDescriptor (отложенный)
+  ADVAPI32.dll!CheckTokenMembership (отложенный)
+  ADVAPI32.dll!RegLoadKeyA (отложенный)
+  ADVAPI32.dll!FreeSid (отложенный)
+  ADVAPI32.dll!OpenProcessToken (отложенный)
+  ADVAPI32.dll!RegUnLoadKeyA (отложенный)
+  ADVAPI32.dll!AllocateAndInitializeSid (отложенный)
+  ADVAPI32.dll!SetSecurityDescriptorOwner (отложенный)
+  ADVAPI32.dll!ConvertSidToStringSidA (отложенный)
+  ADVAPI32.dll!AdjustTokenPrivileges (отложенный)
+  ADVAPI32.dll!LookupPrivilegeValueW (отложенный)
+  ADVAPI32.dll!GetUserNameW (отложенный)
+  ADVAPI32.dll!RegUnLoadKeyW (отложенный)
+  ADVAPI32.dll!WriteEncryptedFileRaw (отложенный)
+  ADVAPI32.dll!RegSetValueExW (отложенный)
+  ADVAPI32.dll!RegCreateKeyExW (отложенный)
+  ADVAPI32.dll!RegFlushKey (отложенный)
+  ADVAPI32.dll!CloseEncryptedFileRaw (отложенный)
+  ADVAPI32.dll!ReadEncryptedFileRaw (отложенный)
+  ADVAPI32.dll!SystemFunction036 (отложенный)
+  ADVAPI32.dll!OpenEncryptedFileRawW (отложенный)
+  COMCTL32.dll!#411 (отложенный)
+  COMCTL32.dll!#410 (отложенный)
+  COMCTL32.dll!#413 (отложенный)
+  COMCTL32.dll!ImageList_Create (отложенный)
+  COMCTL32.dll!#412 (отложенный)
+  COMCTL32.dll!ImageList_ReplaceIcon (отложенный)
+  COMCTL32.dll!ImageList_Destroy (отложенный)
+  CRYPT32.dll!CertCloseStore (отложенный)
+  CRYPT32.dll!CertGetNameStringA (отложенный)
+  CRYPT32.dll!CryptDecodeObjectEx (отложенный)
+  CRYPT32.dll!CryptMsgOpenToDecode (отложенный)
+  CRYPT32.dll!CertFreeCertificateContext (отложенный)
+  CRYPT32.dll!CertFindCertificateInStore (отложенный)
+  CRYPT32.dll!CryptMsgGetParam (отложенный)
+  CRYPT32.dll!CertGetCertificateChain (отложенный)
+  CRYPT32.dll!CryptMsgUpdate (отложенный)
+  CRYPT32.dll!CryptMsgClose (отложенный)
+  CRYPT32.dll!CryptHashCertificate (отложенный)
+  CRYPT32.dll!CryptQueryObject (отложенный)
+  GDI32.dll!CreatePen (отложенный)
+  GDI32.dll!SetBkMode (отложенный)
+  GDI32.dll!SetTextColor (отложенный)
+  GDI32.dll!GetTextExtentPoint32W (отложенный)
+  GDI32.dll!DeleteDC (отложенный)
+  GDI32.dll!GetDIBits (отложенный)
+  GDI32.dll!SelectClipRgn (отложенный)
+  GDI32.dll!GetStockObject (отложенный)
+  GDI32.dll!CreateCompatibleDC (отложенный)
+  GDI32.dll!SelectObject (отложенный)
+  GDI32.dll!CreateCompatibleBitmap (отложенный)
+  GDI32.dll!GetDeviceCaps (отложенный)
+  GDI32.dll!CreateFontA (отложенный)
+  GDI32.dll!EnumFontFamiliesExA (отложенный)
+  GDI32.dll!CreateBitmap (отложенный)
+  GDI32.dll!GetTextMetricsW (отложенный)
+  GDI32.dll!SetLayout (отложенный)
+  GDI32.dll!GetTextFaceW (отложенный)
+  GDI32.dll!GetTextExtentPoint32A (отложенный)
+  GDI32.dll!CreateDIBSection (отложенный)
+  GDI32.dll!BitBlt (отложенный)
+  GDI32.dll!ExtTextOutW (отложенный)
+  GDI32.dll!SetDCPenColor (отложенный)
+  GDI32.dll!MoveToEx (отложенный)
+  GDI32.dll!Rectangle (отложенный)
+  GDI32.dll!LineTo (отложенный)
+  GDI32.dll!GetObjectW (отложенный)
+  GDI32.dll!SetDIBits (отложенный)
+  GDI32.dll!ExcludeClipRect (отложенный)
+  GDI32.dll!SetBkColor (отложенный)
+  GDI32.dll!DeleteObject (отложенный)
+  GDI32.dll!CreateSolidBrush (отложенный)
+  GDI32.dll!CreateFontIndirectW (отложенный)
+  GDI32.dll!RoundRect (отложенный)
+  GDI32.dll!Polyline (отложенный)
+  ole32.dll!CoUninitialize (отложенный)
+  ole32.dll!CoInitializeSecurity (отложенный)
+  ole32.dll!CoTaskMemFree (отложенный)
+  ole32.dll!CoCreateInstance (отложенный)
+  ole32.dll!CoCreateGuid (отложенный)
+  ole32.dll!CoInitializeEx (отложенный)
+  dwmapi.dll!DwmGetColorizationColor (отложенный)
+  dwmapi.dll!DwmSetWindowAttribute (отложенный)
+  dwmapi.dll!DwmGetWindowAttribute (отложенный)
+  SETUPAPI.dll!SetupDiGetDeviceInstanceIdA (отложенный)
+  SETUPAPI.dll!SetupDiDestroyDeviceInfoList (отложенный)
+  SETUPAPI.dll!CM_Get_Parent (отложенный)
+  SETUPAPI.dll!CM_Get_Device_IDA (отложенный)
+  SETUPAPI.dll!SetupDiEnumDeviceInterfaces (отложенный)
+  SETUPAPI.dll!CM_Get_DevNode_Status (отложенный)
+  SETUPAPI.dll!SetupDiChangeState (отложенный)
+  SETUPAPI.dll!SetupDiGetClassDevsA (отложенный)
+  SETUPAPI.dll!SetupDiGetDeviceInterfaceDetailA (отложенный)
+  SETUPAPI.dll!CM_Get_DevNode_Registry_PropertyA (отложенный)
+  SETUPAPI.dll!CM_Get_Device_ID_ListA (отложенный)
+  SETUPAPI.dll!CM_Get_Sibling (отложенный)
+  SETUPAPI.dll!SetupDiSetClassInstallParamsW (отложенный)
+  SETUPAPI.dll!CM_Get_Device_ID_List_SizeA (отложенный)
+  SETUPAPI.dll!CM_Get_Child (отложенный)
+  SETUPAPI.dll!CM_Locate_DevNodeA (отложенный)
+  SETUPAPI.dll!SetupDiEnumDeviceInfo (отложенный)
+  SETUPAPI.dll!SetupDiGetDeviceRegistryPropertyA (отложенный)
+  SETUPAPI.dll!SetupDiGetDeviceRegistryPropertyW (отложенный)
+  SHELL32.dll!SHCreateDirectoryExW (отложенный)
+  SHELL32.dll!DragQueryFileW (отложенный)
+  SHELL32.dll!SHCreateDirectoryExA (отложенный)
+  SHELL32.dll!SHFileOperationW (отложенный)
+  SHELL32.dll!#4 (отложенный)
+  SHELL32.dll!#2 (отложенный)
+  SHELL32.dll!SHGetSpecialFolderLocation (отложенный)
+  SHELL32.dll!SHGetSpecialFolderPathW (отложенный)
+  SHELL32.dll!ShellExecuteW (отложенный)
+  SHELL32.dll!SHCreateItemFromParsingName (отложенный)
+  SHELL32.dll!ShellExecuteA (отложенный)
+  SHELL32.dll!SHGetKnownFolderPath (отложенный)
+  SHLWAPI.dll!PathCombineW (отложенный)
+  SHLWAPI.dll!wnsprintfW (отложенный)
+  SHLWAPI.dll!PathFileExistsW (отложенный)
+  SHLWAPI.dll!PathFileExistsA (отложенный)
+  SHLWAPI.dll!StrStrIA (отложенный)
+  SHLWAPI.dll!PathGetDriveNumberW (отложенный)
+  UxTheme.dll!GetThemeFont (отложенный)
+  UxTheme.dll!EndBufferedAnimation (отложенный)
+  UxTheme.dll!GetThemeBackgroundContentRect (отложенный)
+  UxTheme.dll!DrawThemeTextEx (отложенный)
+  UxTheme.dll!BufferedPaintStopAllAnimations (отложенный)
+  UxTheme.dll!BeginBufferedAnimation (отложенный)
+  UxTheme.dll!BufferedPaintRenderAnimation (отложенный)
+  UxTheme.dll!OpenThemeData (отложенный)
+  UxTheme.dll!DrawThemeBackground (отложенный)
+  UxTheme.dll!GetThemePartSize (отложенный)
+  UxTheme.dll!CloseThemeData (отложенный)
+  UxTheme.dll!DrawThemeParentBackground (отложенный)
+  UxTheme.dll!GetThemeTransitionDuration (отложенный)
+  UxTheme.dll!SetWindowTheme (отложенный)
+  VERSION.dll!GetFileVersionInfoW (отложенный)
+  VERSION.dll!VerQueryValueA (отложенный)
+  VERSION.dll!GetFileVersionInfoSizeW (отложенный)
+  VirtDisk.dll!DetachVirtualDisk (отложенный)
+  VirtDisk.dll!CreateVirtualDisk (отложенный)
+  VirtDisk.dll!GetVirtualDiskPhysicalPath (отложенный)
+  VirtDisk.dll!AttachVirtualDisk (отложенный)
+  VirtDisk.dll!GetVirtualDiskInformation (отложенный)
+  VirtDisk.dll!GetVirtualDiskOperationProgress (отложенный)
+  VirtDisk.dll!OpenVirtualDisk (отложенный)
+  WININET.dll!HttpQueryInfoA (отложенный)
+  WININET.dll!InternetConnectA (отложенный)
+  WININET.dll!HttpOpenRequestA (отложенный)
+  WININET.dll!InternetCrackUrlA (отложенный)
+  WININET.dll!InternetSetOptionA (отложенный)
+  WININET.dll!HttpAddRequestHeadersA (отложенный)
+  WININET.dll!InternetOpenA (отложенный)
+  WININET.dll!InternetCloseHandle (отложенный)
+  WININET.dll!HttpSendRequestA (отложенный)
+  WININET.dll!InternetGetConnectedState (отложенный)
+  WININET.dll!InternetReadFile (отложенный)
+  WINTRUST.dll!WinVerifyTrustEx (отложенный)
+Поддерживается только x86 PE32.
+Требуется консольный Windows EXE (подсистема CUI).
+Каталог RESOURCE не поддерживается.
+Каталог EXCEPTION не поддерживается.
+Каталог LOAD_CONFIG не поддерживается.
+Каталог DELAY_IMPORT не поддерживается.
+Неподдерживаемый импорт KERNEL32.DLL!InitializeCriticalSectionEx.
+Неподдерживаемый импорт KERNEL32.DLL!FreeEnvironmentStringsW.
+Неподдерживаемый импорт KERNEL32.DLL!GetEnvironmentStringsW.
+Неподдерживаемый импорт KERNEL32.DLL!GetCommandLineW.
+Неподдерживаемый импорт KERNEL32.DLL!GetCommandLineA.
+Неподдерживаемый импорт KERNEL32.DLL!GetACP.
+Неподдерживаемый импорт KERNEL32.DLL!IsValidCodePage.
+Неподдерживаемый импорт KERNEL32.DLL!FindFirstFileExW.
+Неподдерживаемый импорт KERNEL32.DLL!GetStringTypeW.
+Неподдерживаемый импорт KERNEL32.DLL!GetCPInfo.
+Неподдерживаемый импорт KERNEL32.DLL!EnumSystemLocalesW.
+Неподдерживаемый импорт KERNEL32.DLL!IsValidLocale.
+Неподдерживаемый импорт KERNEL32.DLL!GetLocaleInfoW.
+Неподдерживаемый импорт KERNEL32.DLL!LCMapStringW.
+Неподдерживаемый импорт KERNEL32.DLL!CompareStringW.
+Неподдерживаемый импорт KERNEL32.DLL!GetTickCount64.
+Неподдерживаемый импорт KERNEL32.DLL!MultiByteToWideChar.
+Неподдерживаемый импорт KERNEL32.DLL!GetProcAddress.
+Неподдерживаемый импорт KERNEL32.DLL!GetModuleHandleW.
+Неподдерживаемый импорт KERNEL32.DLL!VerifyVersionInfoW.
+Неподдерживаемый импорт KERNEL32.DLL!LoadLibraryExW.
+Неподдерживаемый импорт KERNEL32.DLL!GetOEMCP.
+Неподдерживаемый импорт KERNEL32.DLL!GetUserDefaultUILanguage.
+Неподдерживаемый импорт KERNEL32.DLL!GetLocaleInfoA.
+Неподдерживаемый импорт KERNEL32.DLL!GetSystemDefaultLangID.
+Неподдерживаемый импорт KERNEL32.DLL!ReadFile.
+Неподдерживаемый импорт KERNEL32.DLL!GetVolumeInformationW.
+Неподдерживаемый импорт KERNEL32.DLL!SetLastError.
+Неподдерживаемый импорт KERNEL32.DLL!DeleteVolumeMountPointA.
+Неподдерживаемый импорт KERNEL32.DLL!DeviceIoControl.
+Неподдерживаемый импорт KERNEL32.DLL!GetDriveTypeA.
+Неподдерживаемый импорт KERNEL32.DLL!QueryDosDeviceA.
+Неподдерживаемый импорт KERNEL32.DLL!FindFirstVolumeA.
+Неподдерживаемый импорт KERNEL32.DLL!GetVolumeInformationA.
+Неподдерживаемый импорт KERNEL32.DLL!GetVolumeNameForVolumeMountPointA.
+Неподдерживаемый импорт KERNEL32.DLL!Sleep.
+Неподдерживаемый импорт KERNEL32.DLL!SetVolumeMountPointA.
+Неподдерживаемый импорт KERNEL32.DLL!CreateFileA.
+Неподдерживаемый импорт KERNEL32.DLL!DefineDosDeviceA.
+Неподдерживаемый импорт KERNEL32.DLL!CloseHandle.
+Неподдерживаемый импорт KERNEL32.DLL!GetLogicalDriveStringsA.
+Неподдерживаемый импорт KERNEL32.DLL!SetFilePointerEx.
+Неподдерживаемый импорт KERNEL32.DLL!FindNextVolumeA.
+Неподдерживаемый импорт KERNEL32.DLL!FindVolumeClose.
+Неподдерживаемый импорт KERNEL32.DLL!WideCharToMultiByte.
+Неподдерживаемый импорт KERNEL32.DLL!GetVolumeInformationByHandleW.
+Неподдерживаемый импорт KERNEL32.DLL!FlushFileBuffers.
+Неподдерживаемый импорт KERNEL32.DLL!SetThreadUILanguage.
+Неподдерживаемый импорт KERNEL32.DLL!GetEnvironmentVariableW.
+Неподдерживаемый импорт KERNEL32.DLL!WaitForSingleObject.
+Неподдерживаемый импорт KERNEL32.DLL!CreateFileW.
+Неподдерживаемый импорт KERNEL32.DLL!ExitThread.
+Неподдерживаемый импорт KERNEL32.DLL!GetThreadUILanguage.
+Неподдерживаемый импорт KERNEL32.DLL!DeleteFileW.
+Неподдерживаемый импорт KERNEL32.DLL!SetFileAttributesA.
+Неподдерживаемый импорт KERNEL32.DLL!GetLocalTime.
+Неподдерживаемый импорт KERNEL32.DLL!GetOverlappedResultEx.
+Неподдерживаемый импорт KERNEL32.DLL!CopyFileW.
+Неподдерживаемый импорт KERNEL32.DLL!CreateDirectoryA.
+Неподдерживаемый импорт KERNEL32.DLL!CreateEventA.
+Неподдерживаемый импорт KERNEL32.DLL!SetFileTime.
+Неподдерживаемый импорт KERNEL32.DLL!SetVolumeLabelA.
+Неподдерживаемый импорт KERNEL32.DLL!SizeofResource.
+Неподдерживаемый импорт KERNEL32.DLL!FindResourceA.
+Неподдерживаемый импорт KERNEL32.DLL!LockResource.
+Неподдерживаемый импорт KERNEL32.DLL!LoadResource.
+Неподдерживаемый импорт KERNEL32.DLL!CreateDirectoryW.
+Неподдерживаемый импорт KERNEL32.DLL!MoveFileA.
+Неподдерживаемый импорт KERNEL32.DLL!CopyFileA.
+Неподдерживаемый импорт KERNEL32.DLL!DeleteFileA.
+Неподдерживаемый импорт KERNEL32.DLL!CreateThread.
+Неподдерживаемый импорт KERNEL32.DLL!CreateSymbolicLinkW.
+Неподдерживаемый импорт KERNEL32.DLL!EnumUILanguagesW.
+Неподдерживаемый импорт KERNEL32.DLL!CreateNamedPipeA.
+Неподдерживаемый импорт KERNEL32.DLL!GetCurrentProcess.
+Неподдерживаемый импорт KERNEL32.DLL!PeekNamedPipe.
+Неподдерживаемый импорт KERNEL32.DLL!SetFileAttributesW.
+Неподдерживаемый импорт KERNEL32.DLL!LocalFree.
+Неподдерживаемый импорт KERNEL32.DLL!SystemTimeToFileTime.
+Неподдерживаемый импорт KERNEL32.DLL!GetSystemTime.
+Неподдерживаемый импорт KERNEL32.DLL!IsWow64Process.
+Неподдерживаемый импорт KERNEL32.DLL!GetModuleFileNameW.
+Неподдерживаемый импорт KERNEL32.DLL!lstrcmpA.
+Неподдерживаемый импорт KERNEL32.DLL!OutputDebugStringA.
+Неподдерживаемый импорт KERNEL32.DLL!K32GetModuleFileNameExW.
+Неподдерживаемый импорт KERNEL32.DLL!SetThreadPriority.
+Неподдерживаемый импорт KERNEL32.DLL!CreateMutexA.
+Неподдерживаемый импорт KERNEL32.DLL!K32GetProcessImageFileNameW.
+Неподдерживаемый импорт KERNEL32.DLL!ReleaseMutex.
+Неподдерживаемый импорт KERNEL32.DLL!SetEvent.
+Неподдерживаемый импорт KERNEL32.DLL!TerminateThread.
+Неподдерживаемый импорт KERNEL32.DLL!GetNativeSystemInfo.
+Неподдерживаемый импорт KERNEL32.DLL!ReadProcessMemory.
+Неподдерживаемый импорт KERNEL32.DLL!GetCurrentProcessId.
+Неподдерживаемый импорт KERNEL32.DLL!QueryFullProcessImageNameW.
+Неподдерживаемый импорт KERNEL32.DLL!GetFileType.
+Неподдерживаемый импорт KERNEL32.DLL!GetExitCodeProcess.
+Неподдерживаемый импорт KERNEL32.DLL!SetDefaultDllDirectories.
+Неподдерживаемый импорт KERNEL32.DLL!GetFullPathNameW.
+Неподдерживаемый импорт KERNEL32.DLL!GetFinalPathNameByHandleW.
+Неподдерживаемый импорт KERNEL32.DLL!LoadLibraryExA.
+Неподдерживаемый импорт KERNEL32.DLL!GetTempPathW.
+Неподдерживаемый импорт KERNEL32.DLL!GetFileAttributesW.
+Неподдерживаемый импорт KERNEL32.DLL!GetCurrentThreadId.
+Неподдерживаемый импорт KERNEL32.DLL!GetSystemDirectoryW.
+Неподдерживаемый импорт KERNEL32.DLL!UnmapViewOfFile.
+Неподдерживаемый импорт KERNEL32.DLL!AttachConsole.
+Неподдерживаемый импорт KERNEL32.DLL!FreeConsole.
+Неподдерживаемый импорт KERNEL32.DLL!FreeLibrary.
+Неподдерживаемый импорт KERNEL32.DLL!GetConsoleWindow.
+Неподдерживаемый импорт KERNEL32.DLL!GetTempFileNameW.
+Неподдерживаемый импорт KERNEL32.DLL!CreateFileMappingW.
+Неподдерживаемый импорт KERNEL32.DLL!MapViewOfFile.
+Неподдерживаемый импорт KERNEL32.DLL!MulDiv.
+Неподдерживаемый импорт KERNEL32.DLL!SetThreadAffinityMask.
+Неподдерживаемый импорт KERNEL32.DLL!WaitForMultipleObjects.
+Неподдерживаемый импорт KERNEL32.DLL!CreateEventW.
+Неподдерживаемый импорт KERNEL32.DLL!GetCurrentThread.
+Неподдерживаемый импорт KERNEL32.DLL!lstrcmpiA.
+Неподдерживаемый импорт KERNEL32.DLL!MoveFileW.
+Неподдерживаемый импорт KERNEL32.DLL!VerifyVersionInfoA.
+Неподдерживаемый импорт KERNEL32.DLL!TerminateProcess.
+Неподдерживаемый импорт KERNEL32.DLL!GetProcessAffinityMask.
+Неподдерживаемый импорт KERNEL32.DLL!GetProductInfo.
+Неподдерживаемый импорт KERNEL32.DLL!CreatePipe.
+Неподдерживаемый импорт KERNEL32.DLL!LCIDToLocaleName.
+Неподдерживаемый импорт KERNEL32.DLL!GetExitCodeThread.
+Неподдерживаемый импорт KERNEL32.DLL!GetVersionExA.
+Неподдерживаемый импорт KERNEL32.DLL!GetFileSize.
+Неподдерживаемый импорт KERNEL32.DLL!CreateProcessW.
+Неподдерживаемый импорт KERNEL32.DLL!SetThreadLocale.
+Неподдерживаемый импорт KERNEL32.DLL!FindFirstFileW.
+Неподдерживаемый импорт KERNEL32.DLL!FindNextFileW.
+Неподдерживаемый импорт KERNEL32.DLL!GetThreadLocale.
+Неподдерживаемый импорт KERNEL32.DLL!FindClose.
+Неподдерживаемый импорт KERNEL32.DLL!GetModuleHandleA.
+Неподдерживаемый импорт KERNEL32.DLL!FormatMessageW.
+Неподдерживаемый импорт KERNEL32.DLL!CancelSynchronousIo.
+Неподдерживаемый импорт KERNEL32.DLL!OutputDebugStringW.
+Неподдерживаемый импорт KERNEL32.DLL!LoadLibraryW.
+Неподдерживаемый импорт KERNEL32.DLL!GetFileSizeEx.
+Неподдерживаемый импорт KERNEL32.DLL!CancelIoEx.
+Неподдерживаемый импорт KERNEL32.DLL!GetOverlappedResult.
+Неподдерживаемый импорт KERNEL32.DLL!MoveFileExW.
+Неподдерживаемый импорт KERNEL32.DLL!GetDiskFreeSpaceExA.
+Неподдерживаемый импорт KERNEL32.DLL!GetVolumePathNameA.
+Неподдерживаемый импорт KERNEL32.DLL!GetSystemDefaultLCID.
+Неподдерживаемый импорт KERNEL32.DLL!GetTimeZoneInformation.
+Неподдерживаемый импорт KERNEL32.DLL!GetUserDefaultLCID.
+Неподдерживаемый импорт KERNEL32.DLL!FlsSetValue.
+Неподдерживаемый импорт KERNEL32.DLL!FlsGetValue.
+Неподдерживаемый импорт KERNEL32.DLL!FlsAlloc.
+Неподдерживаемый импорт KERNEL32.DLL!FlsFree.
+Неподдерживаемый импорт KERNEL32.DLL!GetStartupInfoW.
+Неподдерживаемый импорт KERNEL32.DLL!SetUnhandledExceptionFilter.
+Неподдерживаемый импорт KERNEL32.DLL!InitializeSListHead.
+Неподдерживаемый импорт KERNEL32.DLL!QueryPerformanceCounter.
+Неподдерживаемый импорт KERNEL32.DLL!DeleteCriticalSection.
+Неподдерживаемый импорт KERNEL32.DLL!InitializeConditionVariable.
+Неподдерживаемый импорт KERNEL32.DLL!InitializeCriticalSection.
+Неподдерживаемый импорт KERNEL32.DLL!LeaveCriticalSection.
+Неподдерживаемый импорт KERNEL32.DLL!WakeConditionVariable.
+Неподдерживаемый импорт KERNEL32.DLL!WakeAllConditionVariable.
+Неподдерживаемый импорт KERNEL32.DLL!EnterCriticalSection.
+Неподдерживаемый импорт KERNEL32.DLL!SleepConditionVariableCS.
+Неподдерживаемый импорт KERNEL32.DLL!GetFileInformationByHandle.
+Неподдерживаемый импорт KERNEL32.DLL!SetEndOfFile.
+Неподдерживаемый импорт KERNEL32.DLL!HeapAlloc.
+Неподдерживаемый импорт KERNEL32.DLL!GetProcessHeap.
+Неподдерживаемый импорт KERNEL32.DLL!HeapFree.
+Неподдерживаемый импорт KERNEL32.DLL!GetSystemTimeAsFileTime.
+Неподдерживаемый импорт KERNEL32.DLL!GlobalMemoryStatusEx.
+Неподдерживаемый импорт KERNEL32.DLL!VirtualQuery.
+Неподдерживаемый импорт KERNEL32.DLL!VirtualProtect.
+Неподдерживаемый импорт KERNEL32.DLL!GetSystemInfo.
+Неподдерживаемый импорт KERNEL32.DLL!RaiseException.
+Неподдерживаемый импорт KERNEL32.DLL!EncodePointer.
+Неподдерживаемый импорт KERNEL32.DLL!GetModuleHandleExW.
+Неподдерживаемый импорт KERNEL32.DLL!WriteConsoleW.
+Неподдерживаемый импорт KERNEL32.DLL!IsProcessorFeaturePresent.
+Неподдерживаемый импорт KERNEL32.DLL!GetConsoleOutputCP.
+Неподдерживаемый импорт KERNEL32.DLL!GetConsoleMode.
+Неподдерживаемый импорт KERNEL32.DLL!SetEnvironmentVariableW.
+Неподдерживаемый импорт KERNEL32.DLL!SetCurrentDirectoryW.
+Неподдерживаемый импорт KERNEL32.DLL!GetCurrentDirectoryW.
+Неподдерживаемый импорт KERNEL32.DLL!GetDriveTypeW.
+Неподдерживаемый импорт KERNEL32.DLL!SystemTimeToTzSpecificLocalTime.
+Неподдерживаемый импорт KERNEL32.DLL!FileTimeToSystemTime.
+Неподдерживаемый импорт KERNEL32.DLL!GetFileAttributesExW.
+Неподдерживаемый импорт KERNEL32.DLL!ReadConsoleW.
+Неподдерживаемый импорт KERNEL32.DLL!SetStdHandle.
+Неподдерживаемый импорт KERNEL32.DLL!IsDebuggerPresent.
+Неподдерживаемый импорт KERNEL32.DLL!UnhandledExceptionFilter.
+Неподдерживаемый импорт KERNEL32.DLL!HeapReAlloc.
+Неподдерживаемый импорт KERNEL32.DLL!HeapSize.
+Неподдерживаемый импорт KERNEL32.DLL!HeapQueryInformation.
+Неподдерживаемый импорт ntdll.dll!RtlCaptureContext.
+Неподдерживаемый импорт ntdll.dll!RtlPcToFileHeader.
+Неподдерживаемый импорт ntdll.dll!RtlLookupFunctionEntry.
+Неподдерживаемый импорт ntdll.dll!RtlUnwind.
+Неподдерживаемый импорт ntdll.dll!RtlUnwindEx.
+Неподдерживаемый импорт ntdll.dll!NtQuerySecurityObject.
+Неподдерживаемый импорт ntdll.dll!NtQueryDirectoryFile.
+Неподдерживаемый импорт ntdll.dll!NtQueryEaFile.
+Неподдерживаемый импорт ntdll.dll!NtSetSecurityObject.
+Неподдерживаемый импорт ntdll.dll!NtSetEaFile.
+Неподдерживаемый импорт ntdll.dll!NtSetInformationFile.
+Неподдерживаемый импорт ntdll.dll!RtlInitUnicodeString.
+Неподдерживаемый импорт ntdll.dll!NtOpenSymbolicLinkObject.
+Неподдерживаемый импорт ntdll.dll!NtWaitForSingleObject.
+Неподдерживаемый импорт ntdll.dll!NtDelayExecution.
+Неподдерживаемый импорт ntdll.dll!NtFsControlFile.
+Неподдерживаемый импорт ntdll.dll!NtFlushBuffersFile.
+Неподдерживаемый импорт ntdll.dll!NtWriteFile.
+Неподдерживаемый импорт ntdll.dll!NtReadFile.
+Неподдерживаемый импорт ntdll.dll!RtlNtStatusToDosError.
+Неподдерживаемый импорт ntdll.dll!NtDeviceIoControlFile.
+Неподдерживаемый импорт ntdll.dll!NtOpenFile.
+Неподдерживаемый импорт ntdll.dll!RtlVirtualUnwind.
+Неподдерживаемый импорт ntdll.dll!NtQueryVolumeInformationFile.
+Неподдерживаемый импорт ntdll.dll!NtCreateFile.
+Неподдерживаемый импорт ntdll.dll!NtQueryObject.
+Неподдерживаемый импорт ntdll.dll!RtlCreateHeap.
+Неподдерживаемый импорт ntdll.dll!RtlFreeHeap.
+Неподдерживаемый импорт ntdll.dll!NtQueryInformationFile.
+Неподдерживаемый импорт ntdll.dll!NtDuplicateObject.
+Неподдерживаемый импорт ntdll.dll!NtClose.
+Неподдерживаемый импорт ntdll.dll!NtOpenProcess.
+Неподдерживаемый импорт ntdll.dll!NtQueryInformationProcess.
+Неподдерживаемый импорт ntdll.dll!NtQuerySystemInformation.
+Неподдерживаемый импорт ntdll.dll!RtlAllocateHeap.
+Неподдерживаемый импорт ntdll.dll!RtlDestroyHeap.
+Неподдерживаемый импорт ntdll.dll!NtOpenProcessToken.
+Неподдерживаемый импорт ntdll.dll!NtAdjustPrivilegesToken.
+Неподдерживаемый импорт ntdll.dll!VerSetConditionMask.
+Неподдерживаемый импорт USER32.dll!DrawTextExA.
+Неподдерживаемый импорт USER32.dll!DrawTextExW.
+Неподдерживаемый импорт USER32.dll!DestroyMenu.
+Неподдерживаемый импорт USER32.dll!MoveWindow.
+Неподдерживаемый импорт USER32.dll!GetSysColor.
+Неподдерживаемый импорт USER32.dll!MessageBoxA.
+Неподдерживаемый импорт USER32.dll!GetDlgItemTextW.
+Неподдерживаемый импорт USER32.dll!SetWindowTextA.
+Неподдерживаемый импорт USER32.dll!SetDlgItemTextW.
+Неподдерживаемый импорт USER32.dll!GetWindowTextA.
+Неподдерживаемый импорт USER32.dll!ClientToScreen.
+Неподдерживаемый импорт USER32.dll!IsDialogMessageW.
+Неподдерживаемый импорт USER32.dll!DispatchMessageW.
+Неподдерживаемый импорт USER32.dll!ShowWindow.
+Неподдерживаемый импорт USER32.dll!CreatePopupMenu.
+Неподдерживаемый импорт USER32.dll!MessageBeep.
+Неподдерживаемый импорт USER32.dll!GetSystemMetrics.
+Неподдерживаемый импорт USER32.dll!MessageBoxExW.
+Неподдерживаемый импорт USER32.dll!SetWindowPos.
+Неподдерживаемый импорт USER32.dll!IsWindowVisible.
+Неподдерживаемый импорт USER32.dll!DestroyWindow.
+Неподдерживаемый импорт USER32.dll!GetWindowRect.
+Неподдерживаемый импорт USER32.dll!SetProcessDefaultLayout.
+Неподдерживаемый импорт USER32.dll!GetKeyState.
+Неподдерживаемый импорт USER32.dll!GetMessageW.
+Неподдерживаемый импорт USER32.dll!GetWindowTextLengthW.
+Неподдерживаемый импорт USER32.dll!EndDialog.
+Неподдерживаемый импорт USER32.dll!LoadImageW.
+Неподдерживаемый импорт USER32.dll!UnhookWinEvent.
+Неподдерживаемый импорт USER32.dll!SetWinEventHook.
+Неподдерживаемый импорт USER32.dll!CreateDialogIndirectParamW.
+Неподдерживаемый импорт USER32.dll!DrawIconEx.
+Неподдерживаемый импорт USER32.dll!FlashWindowEx.
+Неподдерживаемый импорт USER32.dll!SetCursor.
+Неподдерживаемый импорт USER32.dll!SetWindowsHookExW.
+Неподдерживаемый импорт USER32.dll!SetDlgItemTextA.
+Неподдерживаемый импорт USER32.dll!LoadCursorW.
+Неподдерживаемый импорт USER32.dll!LoadIconW.
+Неподдерживаемый импорт USER32.dll!UnhookWindowsHookEx.
+Неподдерживаемый импорт USER32.dll!DialogBoxIndirectParamW.
+Неподдерживаемый импорт USER32.dll!CopyRect.
+Неподдерживаемый импорт USER32.dll!GetWindowInfo.
+Неподдерживаемый импорт USER32.dll!OffsetRect.
+Неподдерживаемый импорт USER32.dll!LoadStringW.
+Неподдерживаемый импорт USER32.dll!CallNextHookEx.
+Неподдерживаемый импорт USER32.dll!ScreenToClient.
+Неподдерживаемый импорт USER32.dll!CreateWindowExW.
+Неподдерживаемый импорт USER32.dll!GetWindow.
+Неподдерживаемый импорт USER32.dll!CallWindowProcW.
+Неподдерживаемый импорт USER32.dll!AdjustWindowRectEx.
+Неподдерживаемый импорт USER32.dll!MapDialogRect.
+Неподдерживаемый импорт USER32.dll!CreateIconFromResourceEx.
+Неподдерживаемый импорт USER32.dll!SendDlgItemMessageA.
+Неподдерживаемый импорт USER32.dll!ChangeWindowMessageFilterEx.
+Неподдерживаемый импорт USER32.dll!SendMessageA.
+Неподдерживаемый импорт USER32.dll!InsertMenuW.
+Неподдерживаемый импорт USER32.dll!TrackPopupMenuEx.
+Неподдерживаемый импорт USER32.dll!CharUpperBuffW.
+Неподдерживаемый импорт USER32.dll!CheckDlgButton.
+Неподдерживаемый импорт USER32.dll!PostQuitMessage.
+Неподдерживаемый импорт USER32.dll!GetDesktopWindow.
+Неподдерживаемый импорт USER32.dll!GetSysColorBrush.
+Неподдерживаемый импорт USER32.dll!FindWindowA.
+Неподдерживаемый импорт USER32.dll!UpdateWindow.
+Неподдерживаемый импорт USER32.dll!SendInput.
+Неподдерживаемый импорт USER32.dll!EnableWindow.
+Неподдерживаемый импорт USER32.dll!CharLowerA.
+Неподдерживаемый импорт USER32.dll!SetWindowTextW.
+Неподдерживаемый импорт USER32.dll!IsWindow.
+Неподдерживаемый импорт USER32.dll!GetDlgItem.
+Неподдерживаемый импорт USER32.dll!CharUpperA.
+Неподдерживаемый импорт USER32.dll!PostMessageW.
+Неподдерживаемый импорт USER32.dll!IsDlgButtonChecked.
+Неподдерживаемый импорт USER32.dll!GetKeyboardLayoutNameA.
+Неподдерживаемый импорт USER32.dll!DefWindowProcW.
+Неподдерживаемый импорт USER32.dll!InflateRect.
+Неподдерживаемый импорт USER32.dll!GetDC.
+Неподдерживаемый импорт USER32.dll!EnumChildWindows.
+Неподдерживаемый импорт USER32.dll!SetWindowLongPtrW.
+Неподдерживаемый импорт USER32.dll!wsprintfW.
+Неподдерживаемый импорт USER32.dll!GetIconInfo.
+Неподдерживаемый импорт USER32.dll!SendMessageW.
+Неподдерживаемый импорт USER32.dll!GetWindowLongPtrW.
+Неподдерживаемый импорт USER32.dll!RedrawWindow.
+Неподдерживаемый импорт USER32.dll!DestroyIcon.
+Неподдерживаемый импорт USER32.dll!CreateIconIndirect.
+Неподдерживаемый импорт USER32.dll!GetDlgCtrlID.
+Неподдерживаемый импорт USER32.dll!MapWindowPoints.
+Неподдерживаемый импорт USER32.dll!DrawFocusRect.
+Неподдерживаемый импорт USER32.dll!IsWindowEnabled.
+Неподдерживаемый импорт USER32.dll!IntersectRect.
+Неподдерживаемый импорт USER32.dll!SetPropW.
+Неподдерживаемый импорт USER32.dll!GetClassNameW.
+Неподдерживаемый импорт USER32.dll!GetClientRect.
+Неподдерживаемый импорт USER32.dll!DrawTextW.
+Неподдерживаемый импорт USER32.dll!SystemParametersInfoW.
+Неподдерживаемый импорт USER32.dll!GetParent.
+Неподдерживаемый импорт USER32.dll!InvalidateRect.
+Неподдерживаемый импорт USER32.dll!ReleaseDC.
+Неподдерживаемый импорт USER32.dll!BeginPaint.
+Неподдерживаемый импорт USER32.dll!GetWindowTextW.
+Неподдерживаемый импорт USER32.dll!SetTimer.
+Неподдерживаемый импорт USER32.dll!KillTimer.
+Неподдерживаемый импорт USER32.dll!TranslateMessage.
+Неподдерживаемый импорт USER32.dll!EndPaint.
+Неподдерживаемый импорт USER32.dll!FillRect.
+Неподдерживаемый импорт ADVAPI32.dll!RegOpenKeyExA.
+Неподдерживаемый импорт ADVAPI32.dll!RegLoadKeyW.
+Неподдерживаемый импорт ADVAPI32.dll!RegCreateKeyExA.
+Неподдерживаемый импорт ADVAPI32.dll!RegQueryValueExA.
+Неподдерживаемый импорт ADVAPI32.dll!RegGetValueA.
+Неподдерживаемый импорт ADVAPI32.dll!RegCloseKey.
+Неподдерживаемый импорт ADVAPI32.dll!RegSetValueExA.
+Неподдерживаемый импорт ADVAPI32.dll!ConvertStringSecurityDescriptorToSecurityDescriptorA.
+Неподдерживаемый импорт ADVAPI32.dll!CryptReleaseContext.
+Неподдерживаемый импорт ADVAPI32.dll!CryptImportKey.
+Неподдерживаемый импорт ADVAPI32.dll!CryptDestroyHash.
+Неподдерживаемый импорт ADVAPI32.dll!CryptHashData.
+Неподдерживаемый импорт ADVAPI32.dll!CryptCreateHash.
+Неподдерживаемый импорт ADVAPI32.dll!CryptVerifySignatureW.
+Неподдерживаемый импорт ADVAPI32.dll!CryptAcquireContextW.
+Неподдерживаемый импорт ADVAPI32.dll!GetUserNameA.
+Неподдерживаемый импорт ADVAPI32.dll!RegDeleteKeyA.
+Неподдерживаемый импорт ADVAPI32.dll!GetTokenInformation.
+Неподдерживаемый импорт ADVAPI32.dll!RegDeleteValueA.
+Неподдерживаемый импорт ADVAPI32.dll!ConvertStringSidToSidA.
+Неподдерживаемый импорт ADVAPI32.dll!InitializeSecurityDescriptor.
+Неподдерживаемый импорт ADVAPI32.dll!CheckTokenMembership.
+Неподдерживаемый импорт ADVAPI32.dll!RegLoadKeyA.
+Неподдерживаемый импорт ADVAPI32.dll!FreeSid.
+Неподдерживаемый импорт ADVAPI32.dll!OpenProcessToken.
+Неподдерживаемый импорт ADVAPI32.dll!RegUnLoadKeyA.
+Неподдерживаемый импорт ADVAPI32.dll!AllocateAndInitializeSid.
+Неподдерживаемый импорт ADVAPI32.dll!SetSecurityDescriptorOwner.
+Неподдерживаемый импорт ADVAPI32.dll!ConvertSidToStringSidA.
+Неподдерживаемый импорт ADVAPI32.dll!AdjustTokenPrivileges.
+Неподдерживаемый импорт ADVAPI32.dll!LookupPrivilegeValueW.
+Неподдерживаемый импорт ADVAPI32.dll!GetUserNameW.
+Неподдерживаемый импорт ADVAPI32.dll!RegUnLoadKeyW.
+Неподдерживаемый импорт ADVAPI32.dll!WriteEncryptedFileRaw.
+Неподдерживаемый импорт ADVAPI32.dll!RegSetValueExW.
+Неподдерживаемый импорт ADVAPI32.dll!RegCreateKeyExW.
+Неподдерживаемый импорт ADVAPI32.dll!RegFlushKey.
+Неподдерживаемый импорт ADVAPI32.dll!CloseEncryptedFileRaw.
+Неподдерживаемый импорт ADVAPI32.dll!ReadEncryptedFileRaw.
+Неподдерживаемый импорт ADVAPI32.dll!SystemFunction036.
+Неподдерживаемый импорт ADVAPI32.dll!OpenEncryptedFileRawW.
+Неподдерживаемый импорт COMCTL32.dll!#411.
+Неподдерживаемый импорт COMCTL32.dll!#410.
+Неподдерживаемый импорт COMCTL32.dll!#413.
+Неподдерживаемый импорт COMCTL32.dll!ImageList_Create.
+Неподдерживаемый импорт COMCTL32.dll!#412.
+Неподдерживаемый импорт COMCTL32.dll!ImageList_ReplaceIcon.
+Неподдерживаемый импорт COMCTL32.dll!ImageList_Destroy.
+Неподдерживаемый импорт CRYPT32.dll!CertCloseStore.
+Неподдерживаемый импорт CRYPT32.dll!CertGetNameStringA.
+Неподдерживаемый импорт CRYPT32.dll!CryptDecodeObjectEx.
+Неподдерживаемый импорт CRYPT32.dll!CryptMsgOpenToDecode.
+Неподдерживаемый импорт CRYPT32.dll!CertFreeCertificateContext.
+Неподдерживаемый импорт CRYPT32.dll!CertFindCertificateInStore.
+Неподдерживаемый импорт CRYPT32.dll!CryptMsgGetParam.
+Неподдерживаемый импорт CRYPT32.dll!CertGetCertificateChain.
+Неподдерживаемый импорт CRYPT32.dll!CryptMsgUpdate.
+Неподдерживаемый импорт CRYPT32.dll!CryptMsgClose.
+Неподдерживаемый импорт CRYPT32.dll!CryptHashCertificate.
+Неподдерживаемый импорт CRYPT32.dll!CryptQueryObject.
+Неподдерживаемый импорт GDI32.dll!CreatePen.
+Неподдерживаемый импорт GDI32.dll!SetBkMode.
+Неподдерживаемый импорт GDI32.dll!SetTextColor.
+Неподдерживаемый импорт GDI32.dll!GetTextExtentPoint32W.
+Неподдерживаемый импорт GDI32.dll!DeleteDC.
+Неподдерживаемый импорт GDI32.dll!GetDIBits.
+Неподдерживаемый импорт GDI32.dll!SelectClipRgn.
+Неподдерживаемый импорт GDI32.dll!GetStockObject.
+Неподдерживаемый импорт GDI32.dll!CreateCompatibleDC.
+Неподдерживаемый импорт GDI32.dll!SelectObject.
+Неподдерживаемый импорт GDI32.dll!CreateCompatibleBitmap.
+Неподдерживаемый импорт GDI32.dll!GetDeviceCaps.
+Неподдерживаемый импорт GDI32.dll!CreateFontA.
+Неподдерживаемый импорт GDI32.dll!EnumFontFamiliesExA.
+Неподдерживаемый импорт GDI32.dll!CreateBitmap.
+Неподдерживаемый импорт GDI32.dll!GetTextMetricsW.
+Неподдерживаемый импорт GDI32.dll!SetLayout.
+Неподдерживаемый импорт GDI32.dll!GetTextFaceW.
+Неподдерживаемый импорт GDI32.dll!GetTextExtentPoint32A.
+Неподдерживаемый импорт GDI32.dll!CreateDIBSection.
+Неподдерживаемый импорт GDI32.dll!BitBlt.
+Неподдерживаемый импорт GDI32.dll!ExtTextOutW.
+Неподдерживаемый импорт GDI32.dll!SetDCPenColor.
+Неподдерживаемый импорт GDI32.dll!MoveToEx.
+Неподдерживаемый импорт GDI32.dll!Rectangle.
+Неподдерживаемый импорт GDI32.dll!LineTo.
+Неподдерживаемый импорт GDI32.dll!GetObjectW.
+Неподдерживаемый импорт GDI32.dll!SetDIBits.
+Неподдерживаемый импорт GDI32.dll!ExcludeClipRect.
+Неподдерживаемый импорт GDI32.dll!SetBkColor.
+Неподдерживаемый импорт GDI32.dll!DeleteObject.
+Неподдерживаемый импорт GDI32.dll!CreateSolidBrush.
+Неподдерживаемый импорт GDI32.dll!CreateFontIndirectW.
+Неподдерживаемый импорт GDI32.dll!RoundRect.
+Неподдерживаемый импорт GDI32.dll!Polyline.
+Неподдерживаемый импорт ole32.dll!CoUninitialize.
+Неподдерживаемый импорт ole32.dll!CoInitializeSecurity.
+Неподдерживаемый импорт ole32.dll!CoTaskMemFree.
+Неподдерживаемый импорт ole32.dll!CoCreateInstance.
+Неподдерживаемый импорт ole32.dll!CoCreateGuid.
+Неподдерживаемый импорт ole32.dll!CoInitializeEx.
+Неподдерживаемый импорт dwmapi.dll!DwmGetColorizationColor.
+Неподдерживаемый импорт dwmapi.dll!DwmSetWindowAttribute.
+Неподдерживаемый импорт dwmapi.dll!DwmGetWindowAttribute.
+Неподдерживаемый импорт SETUPAPI.dll!SetupDiGetDeviceInstanceIdA.
+Неподдерживаемый импорт SETUPAPI.dll!SetupDiDestroyDeviceInfoList.
+Неподдерживаемый импорт SETUPAPI.dll!CM_Get_Parent.
+Неподдерживаемый импорт SETUPAPI.dll!CM_Get_Device_IDA.
+Неподдерживаемый импорт SETUPAPI.dll!SetupDiEnumDeviceInterfaces.
+Неподдерживаемый импорт SETUPAPI.dll!CM_Get_DevNode_Status.
+Неподдерживаемый импорт SETUPAPI.dll!SetupDiChangeState.
+Неподдерживаемый импорт SETUPAPI.dll!SetupDiGetClassDevsA.
+Неподдерживаемый импорт SETUPAPI.dll!SetupDiGetDeviceInterfaceDetailA.
+Неподдерживаемый импорт SETUPAPI.dll!CM_Get_DevNode_Registry_PropertyA.
+Неподдерживаемый импорт SETUPAPI.dll!CM_Get_Device_ID_ListA.
+Неподдерживаемый импорт SETUPAPI.dll!CM_Get_Sibling.
+Неподдерживаемый импорт SETUPAPI.dll!SetupDiSetClassInstallParamsW.
+Неподдерживаемый импорт SETUPAPI.dll!CM_Get_Device_ID_List_SizeA.
+Неподдерживаемый импорт SETUPAPI.dll!CM_Get_Child.
+Неподдерживаемый импорт SETUPAPI.dll!CM_Locate_DevNodeA.
+Неподдерживаемый импорт SETUPAPI.dll!SetupDiEnumDeviceInfo.
+Неподдерживаемый импорт SETUPAPI.dll!SetupDiGetDeviceRegistryPropertyA.
+Неподдерживаемый импорт SETUPAPI.dll!SetupDiGetDeviceRegistryPropertyW.
+Неподдерживаемый импорт SHELL32.dll!SHCreateDirectoryExW.
+Неподдерживаемый импорт SHELL32.dll!DragQueryFileW.
+Неподдерживаемый импорт SHELL32.dll!SHCreateDirectoryExA.
+Неподдерживаемый импорт SHELL32.dll!SHFileOperationW.
+Неподдерживаемый импорт SHELL32.dll!#4.
+Неподдерживаемый импорт SHELL32.dll!#2.
+Неподдерживаемый импорт SHELL32.dll!SHGetSpecialFolderLocation.
+Неподдерживаемый импорт SHELL32.dll!SHGetSpecialFolderPathW.
+Неподдерживаемый импорт SHELL32.dll!ShellExecuteW.
+Неподдерживаемый импорт SHELL32.dll!SHCreateItemFromParsingName.
+Неподдерживаемый импорт SHELL32.dll!ShellExecuteA.
+Неподдерживаемый импорт SHELL32.dll!SHGetKnownFolderPath.
+Неподдерживаемый импорт SHLWAPI.dll!PathCombineW.
+Неподдерживаемый импорт SHLWAPI.dll!wnsprintfW.
+Неподдерживаемый импорт SHLWAPI.dll!PathFileExistsW.
+Неподдерживаемый импорт SHLWAPI.dll!PathFileExistsA.
+Неподдерживаемый импорт SHLWAPI.dll!StrStrIA.
+Неподдерживаемый импорт SHLWAPI.dll!PathGetDriveNumberW.
+Неподдерживаемый импорт UxTheme.dll!GetThemeFont.
+Неподдерживаемый импорт UxTheme.dll!EndBufferedAnimation.
+Неподдерживаемый импорт UxTheme.dll!GetThemeBackgroundContentRect.
+Неподдерживаемый импорт UxTheme.dll!DrawThemeTextEx.
+Неподдерживаемый импорт UxTheme.dll!BufferedPaintStopAllAnimations.
+Неподдерживаемый импорт UxTheme.dll!BeginBufferedAnimation.
+Неподдерживаемый импорт UxTheme.dll!BufferedPaintRenderAnimation.
+Неподдерживаемый импорт UxTheme.dll!OpenThemeData.
+Неподдерживаемый импорт UxTheme.dll!DrawThemeBackground.
+Неподдерживаемый импорт UxTheme.dll!GetThemePartSize.
+Неподдерживаемый импорт UxTheme.dll!CloseThemeData.
+Неподдерживаемый импорт UxTheme.dll!DrawThemeParentBackground.
+Неподдерживаемый импорт UxTheme.dll!GetThemeTransitionDuration.
+Неподдерживаемый импорт UxTheme.dll!SetWindowTheme.
+Неподдерживаемый импорт VERSION.dll!GetFileVersionInfoW.
+Неподдерживаемый импорт VERSION.dll!VerQueryValueA.
+Неподдерживаемый импорт VERSION.dll!GetFileVersionInfoSizeW.
+Неподдерживаемый импорт VirtDisk.dll!DetachVirtualDisk.
+Неподдерживаемый импорт VirtDisk.dll!CreateVirtualDisk.
+Неподдерживаемый импорт VirtDisk.dll!GetVirtualDiskPhysicalPath.
+Неподдерживаемый импорт VirtDisk.dll!AttachVirtualDisk.
+Неподдерживаемый импорт VirtDisk.dll!GetVirtualDiskInformation.
+Неподдерживаемый импорт VirtDisk.dll!GetVirtualDiskOperationProgress.
+Неподдерживаемый импорт VirtDisk.dll!OpenVirtualDisk.
+Неподдерживаемый импорт WININET.dll!HttpQueryInfoA.
+Неподдерживаемый импорт WININET.dll!InternetConnectA.
+Неподдерживаемый импорт WININET.dll!HttpOpenRequestA.
+Неподдерживаемый импорт WININET.dll!InternetCrackUrlA.
+Неподдерживаемый импорт WININET.dll!InternetSetOptionA.
+Неподдерживаемый импорт WININET.dll!HttpAddRequestHeadersA.
+Неподдерживаемый импорт WININET.dll!InternetOpenA.
+Неподдерживаемый импорт WININET.dll!InternetCloseHandle.
+Неподдерживаемый импорт WININET.dll!HttpSendRequestA.
+Неподдерживаемый импорт WININET.dll!InternetGetConnectedState.
+Неподдерживаемый импорт WININET.dll!InternetReadFile.
+Неподдерживаемый импорт WINTRUST.dll!WinVerifyTrustEx.
+Полный список динамических зависимостей неизвестен.

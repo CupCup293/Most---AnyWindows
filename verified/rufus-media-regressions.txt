@@ -1,0 +1,50 @@
+outputs/rufus-preview/rufus-linux: ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=070379f73b201e3e12bf6425ab036299ff3027a0, for GNU/Linux 4.4.0, not stripped
+
+blank target
+Main window shown: Rufus 4.15.2396  (592x516), screenshot=1
+Rufus file selected: /scratch/sample.img
+  Image is a bootable disk image
+Confirmed write to isolated file-backed disk
+Rufus write workflow returned to its main dialog
+*** Rufus exit ***
+Byte-for-byte match: 1474560 bytes
+RUFUS-BOOT-OK
+
+mbr target
+Main window shown: Rufus 4.15.2396  (592x516), screenshot=1
+Partition type: MBR, NB Partitions: 1
+  Start Sector: 2048, Boot: Yes
+Rufus file selected: /scratch/sample.img
+  Image is a bootable disk image
+Confirmed write to isolated file-backed disk
+Rufus write workflow returned to its main dialog
+*** Rufus exit ***
+Byte-for-byte match: 1474560 bytes
+RUFUS-BOOT-OK
+
+gpt target
+Main window shown: Rufus 4.15.2396  (592x516), screenshot=1
+Partition type: GPT, NB Partitions: 1
+  Start Sector: 2048, Attributes: 0x0000000000000000
+GPT target unchanged
+
+corrupt-gpt target
+Main window shown: Rufus 4.15.2396  (592x516), screenshot=1
+Unsupported or invalid primary GPT
+Unsupported or invalid primary GPT
+Invalid GPT target unchanged
+
+write-gpt target
+Main window shown: Rufus 4.15.2396  (592x516), screenshot=1
+Partition type: GPT, NB Partitions: 1
+  Start Sector: 2048, Attributes: 0x0000000000000000
+Rufus file selected: /scratch/sample.img
+  Image is a bootable disk image
+Confirmed write to isolated file-backed disk
+Rufus write workflow returned to its main dialog
+*** Rufus exit ***
+Byte-for-byte match: 1474560 bytes
+Old backup GPT erased
+RUFUS-BOOT-OK
+
+Original EXE SHA-256 unchanged. Physical writes not tested in this run.

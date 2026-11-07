@@ -1,0 +1,51 @@
+Ярлык проверен через gio launch. Окно открыто.
+
+Готово к сборке
+Архитектура — x86 / PE32
+  KERNEL32.dll!ExitProcess
+  KERNEL32.dll!GetStdHandle
+  KERNEL32.dll!WriteFile
+Переведено инструкций — 16
+Слой Win32 встроен в ELF. Нужна системная glibc. Наличие внешних данных по PE определить нельзя. Файловый API Windows не поддерживается.
+g++ — компиляция переведённого кода и слоя Win32.
+Собрано — <workspace>/work/native-verified.1ISg2C/hello-linux
+Запуск не проверен.
+<workspace>/outputs/most-native/verified/hello-linux: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=c736f3d46386bdaa593eb4c93cb262f7a6d43816, for GNU/Linux 4.4.0, not stripped
+  Class:                             ELF64
+  Type:                              DYN (Position-Independent Executable file)
+  Machine:                           Advanced Micro Devices X86-64
+
+Изоляция bwrap: доступны только ELF, загрузчик и системные libc/libm.
+Hello from a statically recompiled PE!
+Код завершения — 7
+Запуск проверен.
+
+Qt PASS — drag and drop, build, separate run status, Rufus rejection, clipboard
+
+Анализ Rufus 4.15
+Сборка недоступна
+Архитектура — x86-64 / PE32+
+  KERNEL32.DLL!LoadLibraryA
+  KERNEL32.DLL!ExitProcess
+  KERNEL32.DLL!GetProcAddress
+  KERNEL32.DLL!VirtualProtect
+  ntdll.dll!NtClose
+  USER32.dll!GetDC
+Поддерживается только x86 PE32.
+Требуется консольный Windows EXE (подсистема CUI).
+Обнаружены секции UPX. Распаковка не поддерживается.
+Список отложенных импортов неполон. Адрес таблицы импортов выходит за пределы данных PE.
+Каталог RESOURCE не поддерживается.
+Каталог EXCEPTION не поддерживается.
+Каталог SECURITY не поддерживается.
+Каталог LOAD_CONFIG не поддерживается.
+Каталог DELAY_IMPORT не поддерживается.
+Неподдерживаемый импорт KERNEL32.DLL!LoadLibraryA.
+Неподдерживаемый импорт KERNEL32.DLL!GetProcAddress.
+Неподдерживаемый импорт KERNEL32.DLL!VirtualProtect.
+Неподдерживаемый импорт ntdll.dll!NtClose.
+Неподдерживаемый импорт USER32.dll!GetDC.
+Полный список динамических зависимостей неизвестен.
+Код отказа — 2
+
+Проверка повторной сборки — существующий ELF сохранён.

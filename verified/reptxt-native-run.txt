@@ -1,0 +1,13 @@
+  Class:                             ELF64
+PASS exact replacement in binary data, absolute UTF-8 path
+PASS ASCII case-insensitive matching
+PASS no match preserves content
+PASS multi-file glob and hidden-file option
+Reptxt requires nonempty search and replacement strings of equal byte length.
+Reptxt requires nonempty search and replacement strings of equal byte length.
+Reptxt found no regular files matching missing.
+missing: The system cannot find the file specified.
+
+PASS invalid arguments and absent files leave data unchanged
+PASS interactive input
+PASS direct Linux run with Bubblewrap absent from PATH

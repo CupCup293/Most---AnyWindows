@@ -1,0 +1,14 @@
+  Class:                             ELF64
+Machine: x86-64
+Machine: x86
+Number of sections: 4
+Number of sections: 6
+Entry point: 0x14F0
+Entry point: 0x1000
+PASS known PE32 and PE32+ headers, absolute UTF-8 path and multiple operands
+Module name: Z:\test\.hidden.exe
+PASS wildcard and hidden-file inclusion
+File name: Z:\test\truncated.exe
+PASS truncated header rejected
+Machine: x86
+PASS direct Linux run with Bubblewrap absent from PATH

@@ -1,0 +1,48 @@
+Готово к сборке
+Архитектура — x86-64 / PE32+
+Доступна экспериментальная перелинковка Win64 — Cut x64.
+Консольный запуск в Linux. Доступные операции зависят от профиля.
+
+Импорты — 42
+  msvcrt.dll!realloc
+  msvcrt.dll!memset
+  msvcrt.dll!putchar
+  msvcrt.dll!fwrite
+  msvcrt.dll!_iob
+  msvcrt.dll!mblen
+  msvcrt.dll!fgets
+  msvcrt.dll!getc
+  msvcrt.dll!free
+  msvcrt.dll!malloc
+  msvcrt.dll!memcpy
+  msvcrt.dll!exit
+  msvcrt.dll!fprintf
+  msvcrt.dll!strtol
+  msvcrt.dll!isdigit
+  msvcrt.dll!_findclose
+  msvcrt.dll!_findnext
+  msvcrt.dll!strncpy
+  msvcrt.dll!strrchr
+  msvcrt.dll!fclose
+  msvcrt.dll!fopen
+  msvcrt.dll!_findfirst
+  msvcrt.dll!setlocale
+  msvcrt.dll!vfprintf
+  msvcrt.dll!__argv
+  msvcrt.dll!strchr
+  msvcrt.dll!getenv
+  msvcrt.dll!strncmp
+  msvcrt.dll!strerror
+  msvcrt.dll!_errno
+  msvcrt.dll!__C_specific_handler
+  msvcrt.dll!_XcptFilter
+  msvcrt.dll!_c_exit
+  msvcrt.dll!_exit
+  msvcrt.dll!_cexit
+  msvcrt.dll!__initenv
+  msvcrt.dll!__getmainargs
+  msvcrt.dll!_initterm
+  msvcrt.dll!__setusermatherr
+  msvcrt.dll!_commode
+  msvcrt.dll!_fmode
+  msvcrt.dll!__set_app_type

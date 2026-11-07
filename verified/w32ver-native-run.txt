@@ -1,0 +1,7 @@
+Input SHA-256: c87c9e8a34fc7270552f8e11239db52bea65c780e94bd4d5449796b23dd52a1a
+ELF SHA-256: 632ee10a12a28db962e0de0defd76ddbdef7ab108a2387d97a9fe3c0c16eb807
+  Class:                             ELF64
+w32ver-linux message [Win32 version]: Windows 10 version 10.0
+Build 19045 
+Dialog content verified; exit status 0.
+Native dialog verified with Bubblewrap absent from PATH.

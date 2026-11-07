@@ -1,0 +1,536 @@
+Сборка недоступна
+Архитектура — x86-64 / PE32+
+Обнаружена упаковка UPX.
+UPX распакован автоматически. Анализируется распакованный PE.
+Поддерживается только x86 PE32.
+Требуется консольный Windows EXE (подсистема CUI).
+Каталог RESOURCE не поддерживается.
+Каталог EXCEPTION не поддерживается.
+Каталог LOAD_CONFIG не поддерживается.
+Каталог DELAY_IMPORT не поддерживается.
+Неподдерживаемых импортов — 518, например KERNEL32.DLL!InitializeCriticalSectionEx.
+Полный список динамических зависимостей неизвестен.
+
+Импорты — 522
+  KERNEL32.DLL!InitializeCriticalSectionEx — не поддерживается
+  KERNEL32.DLL!FreeEnvironmentStringsW — не поддерживается
+  KERNEL32.DLL!GetEnvironmentStringsW — не поддерживается
+  KERNEL32.DLL!GetCommandLineW — не поддерживается
+  KERNEL32.DLL!GetCommandLineA — не поддерживается
+  KERNEL32.DLL!GetACP — не поддерживается
+  KERNEL32.DLL!IsValidCodePage — не поддерживается
+  KERNEL32.DLL!FindFirstFileExW — не поддерживается
+  KERNEL32.DLL!GetStringTypeW — не поддерживается
+  KERNEL32.DLL!GetCPInfo — не поддерживается
+  KERNEL32.DLL!EnumSystemLocalesW — не поддерживается
+  KERNEL32.DLL!IsValidLocale — не поддерживается
+  KERNEL32.DLL!GetLocaleInfoW — не поддерживается
+  KERNEL32.DLL!LCMapStringW — не поддерживается
+  KERNEL32.DLL!CompareStringW — не поддерживается
+  KERNEL32.DLL!GetTickCount64 — не поддерживается
+  KERNEL32.DLL!MultiByteToWideChar — не поддерживается
+  KERNEL32.DLL!GetProcAddress — не поддерживается
+  KERNEL32.DLL!GetModuleHandleW — не поддерживается
+  KERNEL32.DLL!VerifyVersionInfoW — не поддерживается
+  KERNEL32.DLL!LoadLibraryExW — не поддерживается
+  KERNEL32.DLL!GetOEMCP — не поддерживается
+  KERNEL32.DLL!GetUserDefaultUILanguage — не поддерживается
+  KERNEL32.DLL!GetLocaleInfoA — не поддерживается
+  KERNEL32.DLL!GetSystemDefaultLangID — не поддерживается
+  KERNEL32.DLL!ReadFile — не поддерживается
+  KERNEL32.DLL!GetVolumeInformationW — не поддерживается
+  KERNEL32.DLL!SetLastError — не поддерживается
+  KERNEL32.DLL!DeleteVolumeMountPointA — не поддерживается
+  KERNEL32.DLL!DeviceIoControl — не поддерживается
+  KERNEL32.DLL!GetDriveTypeA — не поддерживается
+  KERNEL32.DLL!QueryDosDeviceA — не поддерживается
+  KERNEL32.DLL!FindFirstVolumeA — не поддерживается
+  KERNEL32.DLL!GetVolumeInformationA — не поддерживается
+  KERNEL32.DLL!GetVolumeNameForVolumeMountPointA — не поддерживается
+  KERNEL32.DLL!Sleep — не поддерживается
+  KERNEL32.DLL!GetLastError
+  KERNEL32.DLL!SetVolumeMountPointA — не поддерживается
+  KERNEL32.DLL!CreateFileA — не поддерживается
+  KERNEL32.DLL!DefineDosDeviceA — не поддерживается
+  KERNEL32.DLL!CloseHandle — не поддерживается
+  KERNEL32.DLL!GetLogicalDriveStringsA — не поддерживается
+  KERNEL32.DLL!SetFilePointerEx — не поддерживается
+  KERNEL32.DLL!FindNextVolumeA — не поддерживается
+  KERNEL32.DLL!FindVolumeClose — не поддерживается
+  KERNEL32.DLL!WideCharToMultiByte — не поддерживается
+  KERNEL32.DLL!GetVolumeInformationByHandleW — не поддерживается
+  KERNEL32.DLL!FlushFileBuffers — не поддерживается
+  KERNEL32.DLL!WriteFile
+  KERNEL32.DLL!SetThreadUILanguage — не поддерживается
+  KERNEL32.DLL!GetEnvironmentVariableW — не поддерживается
+  KERNEL32.DLL!WaitForSingleObject — не поддерживается
+  KERNEL32.DLL!CreateFileW — не поддерживается
+  KERNEL32.DLL!ExitThread — не поддерживается
+  KERNEL32.DLL!GetThreadUILanguage — не поддерживается
+  KERNEL32.DLL!DeleteFileW — не поддерживается
+  KERNEL32.DLL!SetFileAttributesA — не поддерживается
+  KERNEL32.DLL!GetLocalTime — не поддерживается
+  KERNEL32.DLL!GetOverlappedResultEx — не поддерживается
+  KERNEL32.DLL!CopyFileW — не поддерживается
+  KERNEL32.DLL!CreateDirectoryA — не поддерживается
+  KERNEL32.DLL!CreateEventA — не поддерживается
+  KERNEL32.DLL!SetFileTime — не поддерживается
+  KERNEL32.DLL!SetVolumeLabelA — не поддерживается
+  KERNEL32.DLL!SizeofResource — не поддерживается
+  KERNEL32.DLL!FindResourceA — не поддерживается
+  KERNEL32.DLL!LockResource — не поддерживается
+  KERNEL32.DLL!LoadResource — не поддерживается
+  KERNEL32.DLL!CreateDirectoryW — не поддерживается
+  KERNEL32.DLL!MoveFileA — не поддерживается
+  KERNEL32.DLL!CopyFileA — не поддерживается
+  KERNEL32.DLL!DeleteFileA — не поддерживается
+  KERNEL32.DLL!CreateThread — не поддерживается
+  KERNEL32.DLL!CreateSymbolicLinkW — не поддерживается
+  KERNEL32.DLL!EnumUILanguagesW — не поддерживается
+  KERNEL32.DLL!CreateNamedPipeA — не поддерживается
+  KERNEL32.DLL!GetCurrentProcess — не поддерживается
+  KERNEL32.DLL!PeekNamedPipe — не поддерживается
+  KERNEL32.DLL!SetFileAttributesW — не поддерживается
+  KERNEL32.DLL!LocalFree — не поддерживается
+  KERNEL32.DLL!SystemTimeToFileTime — не поддерживается
+  KERNEL32.DLL!GetSystemTime — не поддерживается
+  KERNEL32.DLL!IsWow64Process — не поддерживается
+  KERNEL32.DLL!GetModuleFileNameW — не поддерживается
+  KERNEL32.DLL!lstrcmpA — не поддерживается
+  KERNEL32.DLL!OutputDebugStringA — не поддерживается
+  KERNEL32.DLL!K32GetModuleFileNameExW — не поддерживается
+  KERNEL32.DLL!SetThreadPriority — не поддерживается
+  KERNEL32.DLL!CreateMutexA — не поддерживается
+  KERNEL32.DLL!K32GetProcessImageFileNameW — не поддерживается
+  KERNEL32.DLL!ReleaseMutex — не поддерживается
+  KERNEL32.DLL!SetEvent — не поддерживается
+  KERNEL32.DLL!TerminateThread — не поддерживается
+  KERNEL32.DLL!GetNativeSystemInfo — не поддерживается
+  KERNEL32.DLL!ReadProcessMemory — не поддерживается
+  KERNEL32.DLL!GetCurrentProcessId — не поддерживается
+  KERNEL32.DLL!QueryFullProcessImageNameW — не поддерживается
+  KERNEL32.DLL!GetFileType — не поддерживается
+  KERNEL32.DLL!GetExitCodeProcess — не поддерживается
+  KERNEL32.DLL!SetDefaultDllDirectories — не поддерживается
+  KERNEL32.DLL!GetFullPathNameW — не поддерживается
+  KERNEL32.DLL!GetFinalPathNameByHandleW — не поддерживается
+  KERNEL32.DLL!LoadLibraryExA — не поддерживается
+  KERNEL32.DLL!GetTempPathW — не поддерживается
+  KERNEL32.DLL!GetFileAttributesW — не поддерживается
+  KERNEL32.DLL!GetCurrentThreadId — не поддерживается
+  KERNEL32.DLL!GetSystemDirectoryW — не поддерживается
+  KERNEL32.DLL!UnmapViewOfFile — не поддерживается
+  KERNEL32.DLL!AttachConsole — не поддерживается
+  KERNEL32.DLL!FreeConsole — не поддерживается
+  KERNEL32.DLL!FreeLibrary — не поддерживается
+  KERNEL32.DLL!GetConsoleWindow — не поддерживается
+  KERNEL32.DLL!GetTempFileNameW — не поддерживается
+  KERNEL32.DLL!CreateFileMappingW — не поддерживается
+  KERNEL32.DLL!MapViewOfFile — не поддерживается
+  KERNEL32.DLL!MulDiv — не поддерживается
+  KERNEL32.DLL!SetThreadAffinityMask — не поддерживается
+  KERNEL32.DLL!WaitForMultipleObjects — не поддерживается
+  KERNEL32.DLL!CreateEventW — не поддерживается
+  KERNEL32.DLL!GetCurrentThread — не поддерживается
+  KERNEL32.DLL!lstrcmpiA — не поддерживается
+  KERNEL32.DLL!MoveFileW — не поддерживается
+  KERNEL32.DLL!VerifyVersionInfoA — не поддерживается
+  KERNEL32.DLL!TerminateProcess — не поддерживается
+  KERNEL32.DLL!GetProcessAffinityMask — не поддерживается
+  KERNEL32.DLL!GetProductInfo — не поддерживается
+  KERNEL32.DLL!CreatePipe — не поддерживается
+  KERNEL32.DLL!LCIDToLocaleName — не поддерживается
+  KERNEL32.DLL!GetExitCodeThread — не поддерживается
+  KERNEL32.DLL!GetVersionExA — не поддерживается
+  KERNEL32.DLL!GetFileSize — не поддерживается
+  KERNEL32.DLL!CreateProcessW — не поддерживается
+  KERNEL32.DLL!SetThreadLocale — не поддерживается
+  KERNEL32.DLL!FindFirstFileW — не поддерживается
+  KERNEL32.DLL!FindNextFileW — не поддерживается
+  KERNEL32.DLL!GetThreadLocale — не поддерживается
+  KERNEL32.DLL!FindClose — не поддерживается
+  KERNEL32.DLL!GetModuleHandleA — не поддерживается
+  KERNEL32.DLL!FormatMessageW — не поддерживается
+  KERNEL32.DLL!CancelSynchronousIo — не поддерживается
+  KERNEL32.DLL!OutputDebugStringW — не поддерживается
+  KERNEL32.DLL!LoadLibraryW — не поддерживается
+  KERNEL32.DLL!GetFileSizeEx — не поддерживается
+  KERNEL32.DLL!CancelIoEx — не поддерживается
+  KERNEL32.DLL!GetOverlappedResult — не поддерживается
+  KERNEL32.DLL!MoveFileExW — не поддерживается
+  KERNEL32.DLL!GetDiskFreeSpaceExA — не поддерживается
+  KERNEL32.DLL!GetVolumePathNameA — не поддерживается
+  KERNEL32.DLL!GetSystemDefaultLCID — не поддерживается
+  KERNEL32.DLL!GetTimeZoneInformation — не поддерживается
+  KERNEL32.DLL!GetUserDefaultLCID — не поддерживается
+  KERNEL32.DLL!FlsSetValue — не поддерживается
+  KERNEL32.DLL!FlsGetValue — не поддерживается
+  KERNEL32.DLL!FlsAlloc — не поддерживается
+  KERNEL32.DLL!FlsFree — не поддерживается
+  KERNEL32.DLL!GetStartupInfoW — не поддерживается
+  KERNEL32.DLL!SetUnhandledExceptionFilter — не поддерживается
+  KERNEL32.DLL!InitializeSListHead — не поддерживается
+  KERNEL32.DLL!QueryPerformanceCounter — не поддерживается
+  KERNEL32.DLL!DeleteCriticalSection — не поддерживается
+  KERNEL32.DLL!InitializeConditionVariable — не поддерживается
+  KERNEL32.DLL!InitializeCriticalSection — не поддерживается
+  KERNEL32.DLL!LeaveCriticalSection — не поддерживается
+  KERNEL32.DLL!WakeConditionVariable — не поддерживается
+  KERNEL32.DLL!WakeAllConditionVariable — не поддерживается
+  KERNEL32.DLL!EnterCriticalSection — не поддерживается
+  KERNEL32.DLL!SleepConditionVariableCS — не поддерживается
+  KERNEL32.DLL!GetFileInformationByHandle — не поддерживается
+  KERNEL32.DLL!SetEndOfFile — не поддерживается
+  KERNEL32.DLL!HeapAlloc — не поддерживается
+  KERNEL32.DLL!GetProcessHeap — не поддерживается
+  KERNEL32.DLL!HeapFree — не поддерживается
+  KERNEL32.DLL!GetSystemTimeAsFileTime — не поддерживается
+  KERNEL32.DLL!GlobalMemoryStatusEx — не поддерживается
+  KERNEL32.DLL!VirtualQuery — не поддерживается
+  KERNEL32.DLL!VirtualProtect — не поддерживается
+  KERNEL32.DLL!GetSystemInfo — не поддерживается
+  KERNEL32.DLL!RaiseException — не поддерживается
+  KERNEL32.DLL!EncodePointer — не поддерживается
+  KERNEL32.DLL!GetStdHandle
+  KERNEL32.DLL!GetModuleHandleExW — не поддерживается
+  KERNEL32.DLL!WriteConsoleW — не поддерживается
+  KERNEL32.DLL!IsProcessorFeaturePresent — не поддерживается
+  KERNEL32.DLL!GetConsoleOutputCP — не поддерживается
+  KERNEL32.DLL!GetConsoleMode — не поддерживается
+  KERNEL32.DLL!SetEnvironmentVariableW — не поддерживается
+  KERNEL32.DLL!SetCurrentDirectoryW — не поддерживается
+  KERNEL32.DLL!GetCurrentDirectoryW — не поддерживается
+  KERNEL32.DLL!GetDriveTypeW — не поддерживается
+  KERNEL32.DLL!SystemTimeToTzSpecificLocalTime — не поддерживается
+  KERNEL32.DLL!FileTimeToSystemTime — не поддерживается
+  KERNEL32.DLL!GetFileAttributesExW — не поддерживается
+  KERNEL32.DLL!ReadConsoleW — не поддерживается
+  KERNEL32.DLL!SetStdHandle — не поддерживается
+  KERNEL32.DLL!ExitProcess
+  KERNEL32.DLL!IsDebuggerPresent — не поддерживается
+  KERNEL32.DLL!UnhandledExceptionFilter — не поддерживается
+  KERNEL32.DLL!HeapReAlloc — не поддерживается
+  KERNEL32.DLL!HeapSize — не поддерживается
+  KERNEL32.DLL!HeapQueryInformation — не поддерживается
+  ntdll.dll!RtlCaptureContext — не поддерживается
+  ntdll.dll!RtlPcToFileHeader — не поддерживается
+  ntdll.dll!RtlLookupFunctionEntry — не поддерживается
+  ntdll.dll!RtlUnwind — не поддерживается
+  ntdll.dll!RtlUnwindEx — не поддерживается
+  ntdll.dll!NtQuerySecurityObject — не поддерживается
+  ntdll.dll!NtQueryDirectoryFile — не поддерживается
+  ntdll.dll!NtQueryEaFile — не поддерживается
+  ntdll.dll!NtSetSecurityObject — не поддерживается
+  ntdll.dll!NtSetEaFile — не поддерживается
+  ntdll.dll!NtSetInformationFile — не поддерживается
+  ntdll.dll!RtlInitUnicodeString — не поддерживается
+  ntdll.dll!NtOpenSymbolicLinkObject — не поддерживается
+  ntdll.dll!NtWaitForSingleObject — не поддерживается
+  ntdll.dll!NtDelayExecution — не поддерживается
+  ntdll.dll!NtFsControlFile — не поддерживается
+  ntdll.dll!NtFlushBuffersFile — не поддерживается
+  ntdll.dll!NtWriteFile — не поддерживается
+  ntdll.dll!NtReadFile — не поддерживается
+  ntdll.dll!RtlNtStatusToDosError — не поддерживается
+  ntdll.dll!NtDeviceIoControlFile — не поддерживается
+  ntdll.dll!NtOpenFile — не поддерживается
+  ntdll.dll!RtlVirtualUnwind — не поддерживается
+  ntdll.dll!NtQueryVolumeInformationFile — не поддерживается
+  ntdll.dll!NtCreateFile — не поддерживается
+  ntdll.dll!NtQueryObject — не поддерживается
+  ntdll.dll!RtlCreateHeap — не поддерживается
+  ntdll.dll!RtlFreeHeap — не поддерживается
+  ntdll.dll!NtQueryInformationFile — не поддерживается
+  ntdll.dll!NtDuplicateObject — не поддерживается
+  ntdll.dll!NtClose — не поддерживается
+  ntdll.dll!NtOpenProcess — не поддерживается
+  ntdll.dll!NtQueryInformationProcess — не поддерживается
+  ntdll.dll!NtQuerySystemInformation — не поддерживается
+  ntdll.dll!RtlAllocateHeap — не поддерживается
+  ntdll.dll!RtlDestroyHeap — не поддерживается
+  ntdll.dll!NtOpenProcessToken — не поддерживается
+  ntdll.dll!NtAdjustPrivilegesToken — не поддерживается
+  ntdll.dll!VerSetConditionMask — не поддерживается
+  USER32.dll!DrawTextExA — не поддерживается
+  USER32.dll!DrawTextExW — не поддерживается
+  USER32.dll!DestroyMenu — не поддерживается
+  USER32.dll!MoveWindow — не поддерживается
+  USER32.dll!GetSysColor — не поддерживается
+  USER32.dll!MessageBoxA — не поддерживается
+  USER32.dll!GetDlgItemTextW — не поддерживается
+  USER32.dll!SetWindowTextA — не поддерживается
+  USER32.dll!SetDlgItemTextW — не поддерживается
+  USER32.dll!GetWindowTextA — не поддерживается
+  USER32.dll!ClientToScreen — не поддерживается
+  USER32.dll!IsDialogMessageW — не поддерживается
+  USER32.dll!DispatchMessageW — не поддерживается
+  USER32.dll!ShowWindow — не поддерживается
+  USER32.dll!CreatePopupMenu — не поддерживается
+  USER32.dll!MessageBeep — не поддерживается
+  USER32.dll!GetSystemMetrics — не поддерживается
+  USER32.dll!MessageBoxExW — не поддерживается
+  USER32.dll!SetWindowPos — не поддерживается
+  USER32.dll!IsWindowVisible — не поддерживается
+  USER32.dll!DestroyWindow — не поддерживается
+  USER32.dll!GetWindowRect — не поддерживается
+  USER32.dll!SetProcessDefaultLayout — не поддерживается
+  USER32.dll!GetKeyState — не поддерживается
+  USER32.dll!GetMessageW — не поддерживается
+  USER32.dll!GetWindowTextLengthW — не поддерживается
+  USER32.dll!EndDialog — не поддерживается
+  USER32.dll!LoadImageW — не поддерживается
+  USER32.dll!UnhookWinEvent — не поддерживается
+  USER32.dll!SetWinEventHook — не поддерживается
+  USER32.dll!CreateDialogIndirectParamW — не поддерживается
+  USER32.dll!DrawIconEx — не поддерживается
+  USER32.dll!FlashWindowEx — не поддерживается
+  USER32.dll!SetCursor — не поддерживается
+  USER32.dll!SetWindowsHookExW — не поддерживается
+  USER32.dll!SetDlgItemTextA — не поддерживается
+  USER32.dll!LoadCursorW — не поддерживается
+  USER32.dll!LoadIconW — не поддерживается
+  USER32.dll!UnhookWindowsHookEx — не поддерживается
+  USER32.dll!DialogBoxIndirectParamW — не поддерживается
+  USER32.dll!CopyRect — не поддерживается
+  USER32.dll!GetWindowInfo — не поддерживается
+  USER32.dll!OffsetRect — не поддерживается
+  USER32.dll!LoadStringW — не поддерживается
+  USER32.dll!CallNextHookEx — не поддерживается
+  USER32.dll!ScreenToClient — не поддерживается
+  USER32.dll!CreateWindowExW — не поддерживается
+  USER32.dll!GetWindow — не поддерживается
+  USER32.dll!CallWindowProcW — не поддерживается
+  USER32.dll!AdjustWindowRectEx — не поддерживается
+  USER32.dll!MapDialogRect — не поддерживается
+  USER32.dll!CreateIconFromResourceEx — не поддерживается
+  USER32.dll!SendDlgItemMessageA — не поддерживается
+  USER32.dll!ChangeWindowMessageFilterEx — не поддерживается
+  USER32.dll!SendMessageA — не поддерживается
+  USER32.dll!InsertMenuW — не поддерживается
+  USER32.dll!TrackPopupMenuEx — не поддерживается
+  USER32.dll!CharUpperBuffW — не поддерживается
+  USER32.dll!CheckDlgButton — не поддерживается
+  USER32.dll!PostQuitMessage — не поддерживается
+  USER32.dll!GetDesktopWindow — не поддерживается
+  USER32.dll!GetSysColorBrush — не поддерживается
+  USER32.dll!FindWindowA — не поддерживается
+  USER32.dll!UpdateWindow — не поддерживается
+  USER32.dll!SendInput — не поддерживается
+  USER32.dll!EnableWindow — не поддерживается
+  USER32.dll!CharLowerA — не поддерживается
+  USER32.dll!SetWindowTextW — не поддерживается
+  USER32.dll!IsWindow — не поддерживается
+  USER32.dll!GetDlgItem — не поддерживается
+  USER32.dll!CharUpperA — не поддерживается
+  USER32.dll!PostMessageW — не поддерживается
+  USER32.dll!IsDlgButtonChecked — не поддерживается
+  USER32.dll!GetKeyboardLayoutNameA — не поддерживается
+  USER32.dll!DefWindowProcW — не поддерживается
+  USER32.dll!InflateRect — не поддерживается
+  USER32.dll!GetDC — не поддерживается
+  USER32.dll!EnumChildWindows — не поддерживается
+  USER32.dll!SetWindowLongPtrW — не поддерживается
+  USER32.dll!wsprintfW — не поддерживается
+  USER32.dll!GetIconInfo — не поддерживается
+  USER32.dll!SendMessageW — не поддерживается
+  USER32.dll!GetWindowLongPtrW — не поддерживается
+  USER32.dll!RedrawWindow — не поддерживается
+  USER32.dll!DestroyIcon — не поддерживается
+  USER32.dll!CreateIconIndirect — не поддерживается
+  USER32.dll!GetDlgCtrlID — не поддерживается
+  USER32.dll!MapWindowPoints — не поддерживается
+  USER32.dll!DrawFocusRect — не поддерживается
+  USER32.dll!IsWindowEnabled — не поддерживается
+  USER32.dll!IntersectRect — не поддерживается
+  USER32.dll!SetPropW — не поддерживается
+  USER32.dll!GetClassNameW — не поддерживается
+  USER32.dll!GetClientRect — не поддерживается
+  USER32.dll!DrawTextW — не поддерживается
+  USER32.dll!SystemParametersInfoW — не поддерживается
+  USER32.dll!GetParent — не поддерживается
+  USER32.dll!InvalidateRect — не поддерживается
+  USER32.dll!ReleaseDC — не поддерживается
+  USER32.dll!BeginPaint — не поддерживается
+  USER32.dll!GetWindowTextW — не поддерживается
+  USER32.dll!SetTimer — не поддерживается
+  USER32.dll!KillTimer — не поддерживается
+  USER32.dll!TranslateMessage — не поддерживается
+  USER32.dll!EndPaint — не поддерживается
+  USER32.dll!FillRect — не поддерживается
+  ADVAPI32.dll!RegOpenKeyExA (отложенный) — не поддерживается
+  ADVAPI32.dll!RegLoadKeyW (отложенный) — не поддерживается
+  ADVAPI32.dll!RegCreateKeyExA (отложенный) — не поддерживается
+  ADVAPI32.dll!RegQueryValueExA (отложенный) — не поддерживается
+  ADVAPI32.dll!RegGetValueA (отложенный) — не поддерживается
+  ADVAPI32.dll!RegCloseKey (отложенный) — не поддерживается
+  ADVAPI32.dll!RegSetValueExA (отложенный) — не поддерживается
+  ADVAPI32.dll!ConvertStringSecurityDescriptorToSecurityDescriptorA (отложенный) — не поддерживается
+  ADVAPI32.dll!CryptReleaseContext (отложенный) — не поддерживается
+  ADVAPI32.dll!CryptImportKey (отложенный) — не поддерживается
+  ADVAPI32.dll!CryptDestroyHash (отложенный) — не поддерживается
+  ADVAPI32.dll!CryptHashData (отложенный) — не поддерживается
+  ADVAPI32.dll!CryptCreateHash (отложенный) — не поддерживается
+  ADVAPI32.dll!CryptVerifySignatureW (отложенный) — не поддерживается
+  ADVAPI32.dll!CryptAcquireContextW (отложенный) — не поддерживается
+  ADVAPI32.dll!GetUserNameA (отложенный) — не поддерживается
+  ADVAPI32.dll!RegDeleteKeyA (отложенный) — не поддерживается
+  ADVAPI32.dll!GetTokenInformation (отложенный) — не поддерживается
+  ADVAPI32.dll!RegDeleteValueA (отложенный) — не поддерживается
+  ADVAPI32.dll!ConvertStringSidToSidA (отложенный) — не поддерживается
+  ADVAPI32.dll!InitializeSecurityDescriptor (отложенный) — не поддерживается
+  ADVAPI32.dll!CheckTokenMembership (отложенный) — не поддерживается
+  ADVAPI32.dll!RegLoadKeyA (отложенный) — не поддерживается
+  ADVAPI32.dll!FreeSid (отложенный) — не поддерживается
+  ADVAPI32.dll!OpenProcessToken (отложенный) — не поддерживается
+  ADVAPI32.dll!RegUnLoadKeyA (отложенный) — не поддерживается
+  ADVAPI32.dll!AllocateAndInitializeSid (отложенный) — не поддерживается
+  ADVAPI32.dll!SetSecurityDescriptorOwner (отложенный) — не поддерживается
+  ADVAPI32.dll!ConvertSidToStringSidA (отложенный) — не поддерживается
+  ADVAPI32.dll!AdjustTokenPrivileges (отложенный) — не поддерживается
+  ADVAPI32.dll!LookupPrivilegeValueW (отложенный) — не поддерживается
+  ADVAPI32.dll!GetUserNameW (отложенный) — не поддерживается
+  ADVAPI32.dll!RegUnLoadKeyW (отложенный) — не поддерживается
+  ADVAPI32.dll!WriteEncryptedFileRaw (отложенный) — не поддерживается
+  ADVAPI32.dll!RegSetValueExW (отложенный) — не поддерживается
+  ADVAPI32.dll!RegCreateKeyExW (отложенный) — не поддерживается
+  ADVAPI32.dll!RegFlushKey (отложенный) — не поддерживается
+  ADVAPI32.dll!CloseEncryptedFileRaw (отложенный) — не поддерживается
+  ADVAPI32.dll!ReadEncryptedFileRaw (отложенный) — не поддерживается
+  ADVAPI32.dll!SystemFunction036 (отложенный) — не поддерживается
+  ADVAPI32.dll!OpenEncryptedFileRawW (отложенный) — не поддерживается
+  COMCTL32.dll!#411 (отложенный) — не поддерживается
+  COMCTL32.dll!#410 (отложенный) — не поддерживается
+  COMCTL32.dll!#413 (отложенный) — не поддерживается
+  COMCTL32.dll!ImageList_Create (отложенный) — не поддерживается
+  COMCTL32.dll!#412 (отложенный) — не поддерживается
+  COMCTL32.dll!ImageList_ReplaceIcon (отложенный) — не поддерживается
+  COMCTL32.dll!ImageList_Destroy (отложенный) — не поддерживается
+  CRYPT32.dll!CertCloseStore (отложенный) — не поддерживается
+  CRYPT32.dll!CertGetNameStringA (отложенный) — не поддерживается
+  CRYPT32.dll!CryptDecodeObjectEx (отложенный) — не поддерживается
+  CRYPT32.dll!CryptMsgOpenToDecode (отложенный) — не поддерживается
+  CRYPT32.dll!CertFreeCertificateContext (отложенный) — не поддерживается
+  CRYPT32.dll!CertFindCertificateInStore (отложенный) — не поддерживается
+  CRYPT32.dll!CryptMsgGetParam (отложенный) — не поддерживается
+  CRYPT32.dll!CertGetCertificateChain (отложенный) — не поддерживается
+  CRYPT32.dll!CryptMsgUpdate (отложенный) — не поддерживается
+  CRYPT32.dll!CryptMsgClose (отложенный) — не поддерживается
+  CRYPT32.dll!CryptHashCertificate (отложенный) — не поддерживается
+  CRYPT32.dll!CryptQueryObject (отложенный) — не поддерживается
+  GDI32.dll!CreatePen (отложенный) — не поддерживается
+  GDI32.dll!SetBkMode (отложенный) — не поддерживается
+  GDI32.dll!SetTextColor (отложенный) — не поддерживается
+  GDI32.dll!GetTextExtentPoint32W (отложенный) — не поддерживается
+  GDI32.dll!DeleteDC (отложенный) — не поддерживается
+  GDI32.dll!GetDIBits (отложенный) — не поддерживается
+  GDI32.dll!SelectClipRgn (отложенный) — не поддерживается
+  GDI32.dll!GetStockObject (отложенный) — не поддерживается
+  GDI32.dll!CreateCompatibleDC (отложенный) — не поддерживается
+  GDI32.dll!SelectObject (отложенный) — не поддерживается
+  GDI32.dll!CreateCompatibleBitmap (отложенный) — не поддерживается
+  GDI32.dll!GetDeviceCaps (отложенный) — не поддерживается
+  GDI32.dll!CreateFontA (отложенный) — не поддерживается
+  GDI32.dll!EnumFontFamiliesExA (отложенный) — не поддерживается
+  GDI32.dll!CreateBitmap (отложенный) — не поддерживается
+  GDI32.dll!GetTextMetricsW (отложенный) — не поддерживается
+  GDI32.dll!SetLayout (отложенный) — не поддерживается
+  GDI32.dll!GetTextFaceW (отложенный) — не поддерживается
+  GDI32.dll!GetTextExtentPoint32A (отложенный) — не поддерживается
+  GDI32.dll!CreateDIBSection (отложенный) — не поддерживается
+  GDI32.dll!BitBlt (отложенный) — не поддерживается
+  GDI32.dll!ExtTextOutW (отложенный) — не поддерживается
+  GDI32.dll!SetDCPenColor (отложенный) — не поддерживается
+  GDI32.dll!MoveToEx (отложенный) — не поддерживается
+  GDI32.dll!Rectangle (отложенный) — не поддерживается
+  GDI32.dll!LineTo (отложенный) — не поддерживается
+  GDI32.dll!GetObjectW (отложенный) — не поддерживается
+  GDI32.dll!SetDIBits (отложенный) — не поддерживается
+  GDI32.dll!ExcludeClipRect (отложенный) — не поддерживается
+  GDI32.dll!SetBkColor (отложенный) — не поддерживается
+  GDI32.dll!DeleteObject (отложенный) — не поддерживается
+  GDI32.dll!CreateSolidBrush (отложенный) — не поддерживается
+  GDI32.dll!CreateFontIndirectW (отложенный) — не поддерживается
+  GDI32.dll!RoundRect (отложенный) — не поддерживается
+  GDI32.dll!Polyline (отложенный) — не поддерживается
+  ole32.dll!CoUninitialize (отложенный) — не поддерживается
+  ole32.dll!CoInitializeSecurity (отложенный) — не поддерживается
+  ole32.dll!CoTaskMemFree (отложенный) — не поддерживается
+  ole32.dll!CoCreateInstance (отложенный) — не поддерживается
+  ole32.dll!CoCreateGuid (отложенный) — не поддерживается
+  ole32.dll!CoInitializeEx (отложенный) — не поддерживается
+  dwmapi.dll!DwmGetColorizationColor (отложенный) — не поддерживается
+  dwmapi.dll!DwmSetWindowAttribute (отложенный) — не поддерживается
+  dwmapi.dll!DwmGetWindowAttribute (отложенный) — не поддерживается
+  SETUPAPI.dll!SetupDiGetDeviceInstanceIdA (отложенный) — не поддерживается
+  SETUPAPI.dll!SetupDiDestroyDeviceInfoList (отложенный) — не поддерживается
+  SETUPAPI.dll!CM_Get_Parent (отложенный) — не поддерживается
+  SETUPAPI.dll!CM_Get_Device_IDA (отложенный) — не поддерживается
+  SETUPAPI.dll!SetupDiEnumDeviceInterfaces (отложенный) — не поддерживается
+  SETUPAPI.dll!CM_Get_DevNode_Status (отложенный) — не поддерживается
+  SETUPAPI.dll!SetupDiChangeState (отложенный) — не поддерживается
+  SETUPAPI.dll!SetupDiGetClassDevsA (отложенный) — не поддерживается
+  SETUPAPI.dll!SetupDiGetDeviceInterfaceDetailA (отложенный) — не поддерживается
+  SETUPAPI.dll!CM_Get_DevNode_Registry_PropertyA (отложенный) — не поддерживается
+  SETUPAPI.dll!CM_Get_Device_ID_ListA (отложенный) — не поддерживается
+  SETUPAPI.dll!CM_Get_Sibling (отложенный) — не поддерживается
+  SETUPAPI.dll!SetupDiSetClassInstallParamsW (отложенный) — не поддерживается
+  SETUPAPI.dll!CM_Get_Device_ID_List_SizeA (отложенный) — не поддерживается
+  SETUPAPI.dll!CM_Get_Child (отложенный) — не поддерживается
+  SETUPAPI.dll!CM_Locate_DevNodeA (отложенный) — не поддерживается
+  SETUPAPI.dll!SetupDiEnumDeviceInfo (отложенный) — не поддерживается
+  SETUPAPI.dll!SetupDiGetDeviceRegistryPropertyA (отложенный) — не поддерживается
+  SETUPAPI.dll!SetupDiGetDeviceRegistryPropertyW (отложенный) — не поддерживается
+  SHELL32.dll!SHCreateDirectoryExW (отложенный) — не поддерживается
+  SHELL32.dll!DragQueryFileW (отложенный) — не поддерживается
+  SHELL32.dll!SHCreateDirectoryExA (отложенный) — не поддерживается
+  SHELL32.dll!SHFileOperationW (отложенный) — не поддерживается
+  SHELL32.dll!#4 (отложенный) — не поддерживается
+  SHELL32.dll!#2 (отложенный) — не поддерживается
+  SHELL32.dll!SHGetSpecialFolderLocation (отложенный) — не поддерживается
+  SHELL32.dll!SHGetSpecialFolderPathW (отложенный) — не поддерживается
+  SHELL32.dll!ShellExecuteW (отложенный) — не поддерживается
+  SHELL32.dll!SHCreateItemFromParsingName (отложенный) — не поддерживается
+  SHELL32.dll!ShellExecuteA (отложенный) — не поддерживается
+  SHELL32.dll!SHGetKnownFolderPath (отложенный) — не поддерживается
+  SHLWAPI.dll!PathCombineW (отложенный) — не поддерживается
+  SHLWAPI.dll!wnsprintfW (отложенный) — не поддерживается
+  SHLWAPI.dll!PathFileExistsW (отложенный) — не поддерживается
+  SHLWAPI.dll!PathFileExistsA (отложенный) — не поддерживается
+  SHLWAPI.dll!StrStrIA (отложенный) — не поддерживается
+  SHLWAPI.dll!PathGetDriveNumberW (отложенный) — не поддерживается
+  UxTheme.dll!GetThemeFont (отложенный) — не поддерживается
+  UxTheme.dll!EndBufferedAnimation (отложенный) — не поддерживается
+  UxTheme.dll!GetThemeBackgroundContentRect (отложенный) — не поддерживается
+  UxTheme.dll!DrawThemeTextEx (отложенный) — не поддерживается
+  UxTheme.dll!BufferedPaintStopAllAnimations (отложенный) — не поддерживается
+  UxTheme.dll!BeginBufferedAnimation (отложенный) — не поддерживается
+  UxTheme.dll!BufferedPaintRenderAnimation (отложенный) — не поддерживается
+  UxTheme.dll!OpenThemeData (отложенный) — не поддерживается
+  UxTheme.dll!DrawThemeBackground (отложенный) — не поддерживается
+  UxTheme.dll!GetThemePartSize (отложенный) — не поддерживается
+  UxTheme.dll!CloseThemeData (отложенный) — не поддерживается
+  UxTheme.dll!DrawThemeParentBackground (отложенный) — не поддерживается
+  UxTheme.dll!GetThemeTransitionDuration (отложенный) — не поддерживается
+  UxTheme.dll!SetWindowTheme (отложенный) — не поддерживается
+  VERSION.dll!GetFileVersionInfoW (отложенный) — не поддерживается
+  VERSION.dll!VerQueryValueA (отложенный) — не поддерживается
+  VERSION.dll!GetFileVersionInfoSizeW (отложенный) — не поддерживается
+  VirtDisk.dll!DetachVirtualDisk (отложенный) — не поддерживается
+  VirtDisk.dll!CreateVirtualDisk (отложенный) — не поддерживается
+  VirtDisk.dll!GetVirtualDiskPhysicalPath (отложенный) — не поддерживается
+  VirtDisk.dll!AttachVirtualDisk (отложенный) — не поддерживается
+  VirtDisk.dll!GetVirtualDiskInformation (отложенный) — не поддерживается
+  VirtDisk.dll!GetVirtualDiskOperationProgress (отложенный) — не поддерживается
+  VirtDisk.dll!OpenVirtualDisk (отложенный) — не поддерживается
+  WININET.dll!HttpQueryInfoA (отложенный) — не поддерживается
+  WININET.dll!InternetConnectA (отложенный) — не поддерживается
+  WININET.dll!HttpOpenRequestA (отложенный) — не поддерживается
+  WININET.dll!InternetCrackUrlA (отложенный) — не поддерживается
+  WININET.dll!InternetSetOptionA (отложенный) — не поддерживается
+  WININET.dll!HttpAddRequestHeadersA (отложенный) — не поддерживается
+  WININET.dll!InternetOpenA (отложенный) — не поддерживается
+  WININET.dll!InternetCloseHandle (отложенный) — не поддерживается
+  WININET.dll!HttpSendRequestA (отложенный) — не поддерживается
+  WININET.dll!InternetGetConnectedState (отложенный) — не поддерживается
+  WININET.dll!InternetReadFile (отложенный) — не поддерживается
+  WINTRUST.dll!WinVerifyTrustEx (отложенный) — не поддерживается

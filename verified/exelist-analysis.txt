@@ -1,0 +1,56 @@
+Готово к сборке
+Архитектура — x86-64 / PE32+
+Доступна экспериментальная перелинковка Win64 — EXEList x64.
+Консольный запуск в Linux. Доступные операции зависят от профиля.
+
+Импорты — 50
+  KERNEL32.dll!GetConsoleScreenBufferInfo
+  KERNEL32.dll!FormatMessageA
+  KERNEL32.dll!SetLastError
+  KERNEL32.dll!CompareFileTime
+  KERNEL32.dll!FileTimeToSystemTime
+  KERNEL32.dll!FindFirstFileA
+  KERNEL32.dll!FindClose
+  KERNEL32.dll!FindNextFileA
+  KERNEL32.dll!GetTimeFormatA
+  KERNEL32.dll!GetDateFormatA
+  KERNEL32.dll!LocalFree
+  KERNEL32.dll!GetLastError
+  KERNEL32.dll!VerLanguageNameW
+  KERNEL32.dll!GetBinaryTypeA
+  KERNEL32.dll!SetCurrentDirectoryA
+  KERNEL32.dll!Sleep
+  KERNEL32.dll!SearchPathA
+  KERNEL32.dll!GetFullPathNameA
+  KERNEL32.dll!GetCurrentDirectoryA
+  KERNEL32.dll!GetStdHandle
+  VERSION.dll!VerQueryValueW
+  imagehlp.dll!UnMapAndLoad
+  imagehlp.dll!MapAndLoad
+  imagehlp.dll!ImageNtHeader
+  ntdll.dll!RtlSecondsSince1970ToTime
+  msvcrt.dll!memset
+  msvcrt.dll!fputc
+  msvcrt.dll!fputs
+  msvcrt.dll!_iob
+  msvcrt.dll!_snwprintf
+  msvcrt.dll!puts
+  msvcrt.dll!printf
+  msvcrt.dll!strncpy
+  msvcrt.dll!fflush
+  msvcrt.dll!fprintf
+  msvcrt.dll!__C_specific_handler
+  msvcrt.dll!_XcptFilter
+  msvcrt.dll!_c_exit
+  msvcrt.dll!_exit
+  msvcrt.dll!_cexit
+  msvcrt.dll!exit
+  msvcrt.dll!__initenv
+  msvcrt.dll!__getmainargs
+  msvcrt.dll!_initterm
+  msvcrt.dll!__setusermatherr
+  msvcrt.dll!_commode
+  msvcrt.dll!_fmode
+  msvcrt.dll!__set_app_type
+  msvcrt.dll!memcmp
+  USER32.dll!CharToOemA

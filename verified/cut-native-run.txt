@@ -1,0 +1,10 @@
+ELF SHA-256: b28d9e8e8d5c03d1252ae0c8ef6f04ca8d9bfd3bf25f39161341b2d5cb2c27e5
+  Class:                             ELF64
+PASS byte ranges and stdin
+PASS character selection on ASCII
+PASS UTF-8 byte selection with multibyte boundaries
+PASS custom delimiter, selected fields, suppression and CRLF
+PASS multiple files, absolute UTF-8 path and wildcard
+/test/cut: missing: No such file or directory
+PASS invalid list and missing-file errors
+PASS direct Linux run with Bubblewrap absent from PATH

@@ -1,0 +1,23 @@
+  Class:                             ELF64
+File split into 3 pieces.
+PASS explicit prefix and size, short final part, UTF-8, byte-identical reassembly
+File split into 2 pieces.
+PASS default prefix and size
+existing.1: File exists
+Error creating file existing.1.File split tool by Olof Lagerkvist.
+http://www.ltr-data.se    olof@ltr-data.se
+
+Input file: вход file
+Output file name template: existing
+Fragment size: 8
+Reading вход file...
+Writing existing.1...
+Invalid fragment size: 7x
+File split tool by Olof Lagerkvist.
+http://www.ltr-data.se    olof@ltr-data.se
+
+Input file: вход file
+Output file name template: invalid
+PASS rejects existing output and invalid size
+File split into 1 pieces.
+PASS direct Linux run with Bubblewrap absent from PATH

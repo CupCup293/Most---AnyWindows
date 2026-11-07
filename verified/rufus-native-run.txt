@@ -1,0 +1,13 @@
+rufus-linux: ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=43ef8331baab6d743ce2582df77f6ba01a77b158, for GNU/Linux 4.4.0, not stripped
+Main window shown: Rufus 4.15.2396  (592x516), screenshot=1
+Rufus file selected: /scratch/sample.img
+  Image is a bootable disk image
+Confirmed write to isolated file-backed disk
+Rufus write workflow returned to its main dialog
+*** Rufus exit ***
+Byte-for-byte match: 1474560 bytes
+RUFUS-BOOT-OK
+Rufus main window visible: Rufus 4.15.2396 
+/dev/disk/by-id/usb-Kingston_DataTraveler_[id] (no read/write permission)
+Select a whole removable USB disk from --list-usb.
+Internal disk rejected. Physical writes not tested.

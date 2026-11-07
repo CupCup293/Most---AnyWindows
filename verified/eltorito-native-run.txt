@@ -1,0 +1,7 @@
+ELF SHA-256: 8b20889a5edd5d7778a1fd6715be5cc1d026fa9ada7a7c78f407953df9a4e962
+  Class:                             ELF64
+PASS exact catalog-sized extraction, Unicode path and alternate sector count
+PASS high file offset and refusal to emit a truncated boot image
+Image does not contain an El Torito default boot image.
+PASS nonbootable ISO and output write failure
+PASS direct Linux run with Bubblewrap absent from PATH

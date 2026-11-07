@@ -1,0 +1,14 @@
+ELF SHA-256: 59a565e7416bd523acf861f4e71a6e16d6a38d40d10d7f819e111cd8e2165c9a
+  Class:                             ELF64
+PASS create zero-filled file, with UTF-8 name and spaces
+PASS extend existing file, preserving data and zero-filling new bytes
+PASS shrink existing file, preserving prefix
+PASS sparse extension beyond 4 GiB
+Expected file size, got "-1"
+Expected file size, got "1KB"
+Expected file size, got "9223372036854775807T"
+Only regular files are supported: pipe
+pipe: Access is denied.
+
+PASS reject invalid sizes and special files
+PASS direct Linux run with Bubblewrap absent from PATH

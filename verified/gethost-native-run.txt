@@ -1,0 +1,12 @@
+ELF SHA-256: b0c92dad17eae4c55bdf7bd0a41f706657f7b972d50d37d349e7bf9a6024d2f8
+  Class:                             ELF64
+IP:	192.0.2.42	
+PASS forward lookup by alias, canonical name and IPv4
+IP:	192.0.2.42	
+PASS reverse IPv4 lookup
+IP:	192.0.2.43	
+PASS implicit lookup of the local hostname
+Host name lookup failed.
+PASS missing host fails in an isolated resolver without DNS
+IP:	127.0.0.1	127.0.0.1	
+PASS direct Linux run with Bubblewrap absent from PATH

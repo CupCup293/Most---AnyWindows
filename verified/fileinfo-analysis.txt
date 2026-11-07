@@ -1,0 +1,40 @@
+Готово к сборке
+Архитектура — x86-64 / PE32+
+Доступна экспериментальная перелинковка Win64 — FileInfo x64.
+Консольный запуск в Linux. Доступные операции зависят от профиля.
+
+Импорты — 34
+  KERNEL32.dll!FileTimeToSystemTime
+  KERNEL32.dll!GetTimeFormatA
+  KERNEL32.dll!GetDateFormatA
+  KERNEL32.dll!GetLastError
+  KERNEL32.dll!GetFileSize
+  KERNEL32.dll!SetLastError
+  KERNEL32.dll!GetFileInformationByHandle
+  KERNEL32.dll!GetFileType
+  KERNEL32.dll!CloseHandle
+  KERNEL32.dll!HeapFree
+  KERNEL32.dll!GetProcessHeap
+  KERNEL32.dll!CreateFileW
+  KERNEL32.dll!GetFileAttributesW
+  KERNEL32.dll!GetStdHandle
+  KERNEL32.dll!ExitProcess
+  KERNEL32.dll!GetCommandLineW
+  KERNEL32.dll!WideCharToMultiByte
+  KERNEL32.dll!HeapAlloc
+  KERNEL32.dll!FormatMessageA
+  KERNEL32.dll!LocalFree
+  USER32.dll!CharToOemA
+  USER32.dll!MessageBoxA
+  SHELL32.dll!CommandLineToArgvW
+  ntdll.dll!NtSetInformationFile
+  ntdll.dll!RtlNtStatusToDosError
+  msvcrt.dll!fputc
+  msvcrt.dll!fputs
+  msvcrt.dll!_iob
+  msvcrt.dll!puts
+  msvcrt.dll!exit
+  msvcrt.dll!fprintf
+  msvcrt.dll!fflush
+  msvcrt.dll!printf
+  msvcrt.dll!wcstoul

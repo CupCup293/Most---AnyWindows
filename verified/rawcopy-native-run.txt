@@ -1,0 +1,17 @@
+PASS full copy, absolute UTF-8 paths
+PASS source range
+PASS target offset with surrounding data preserved
+PASS stdin/stdout pipe
+PASS user-selected buffer size
+
+17 bytes of 17 bytes updated (100 %).
+PASS differential copy, equal-size target
+
+0 bytes of 1 MB updated (0 %).
+PASS sparse copy, empty target
+RawCopy input and output refer to the same file.
+RawCopy differential output must be empty or match the input size.
+RawCopy could not open missing: No such file or directory
+RawCopy cannot combine a write offset with differential or sparse mode.
+PASS invalid input, alias and short differential target rejected without modifying data
+PASS direct Linux run with Bubblewrap absent from PATH

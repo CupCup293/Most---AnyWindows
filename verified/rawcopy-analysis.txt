@@ -1,0 +1,44 @@
+Готово к сборке
+Архитектура — x86-64 / PE32+
+Доступна экспериментальная перелинковка Win64 — RawCopy x64.
+Консольный запуск в Linux. Поддерживаются обычные файлы и стандартные потоки.
+
+Импорты — 38
+  KERNEL32.dll!GetLastError
+  KERNEL32.dll!GetFileSize
+  KERNEL32.dll!WriteFile
+  KERNEL32.dll!SetEndOfFile
+  KERNEL32.dll!ReadFile
+  KERNEL32.dll!Sleep
+  KERNEL32.dll!SetLastError
+  KERNEL32.dll!FlushFileBuffers
+  KERNEL32.dll!LocalFree
+  KERNEL32.dll!LocalSize
+  KERNEL32.dll!LocalAlloc
+  KERNEL32.dll!DeviceIoControl
+  KERNEL32.dll!SetFilePointer
+  KERNEL32.dll!GetStdHandle
+  KERNEL32.dll!CreateFileW
+  KERNEL32.dll!SetErrorMode
+  KERNEL32.dll!GetCommandLineW
+  KERNEL32.dll!GetCurrentProcess
+  KERNEL32.dll!CloseHandle
+  KERNEL32.dll!GetFileInformationByHandle
+  KERNEL32.dll!FormatMessageA
+  KERNEL32.dll!FormatMessageW
+  USER32.dll!MessageBoxW
+  USER32.dll!CharToOemA
+  SHELL32.dll!CommandLineToArgvW
+  ntdll.dll!RtlCompareMemoryUlong
+  ADVAPI32.dll!LookupPrivilegeValueW
+  ADVAPI32.dll!AdjustTokenPrivileges
+  ADVAPI32.dll!OpenProcessToken
+  msvcrt.dll!fputs
+  msvcrt.dll!fprintf
+  msvcrt.dll!_iob
+  msvcrt.dll!swscanf
+  msvcrt.dll!wcstoul
+  msvcrt.dll!memset
+  msvcrt.dll!memcmp
+  msvcrt.dll!exit
+  msvcrt.dll!fflush

@@ -1,0 +1,21 @@
+Готово к сборке
+Архитектура — x86 / PE32
+  KERNEL32.DLL!ExitProcess
+  KERNEL32.DLL!GetStdHandle
+  KERNEL32.DLL!WriteFile
+Обнаружена упаковка UPX.
+UPX распакован автоматически. Анализируется распакованный PE.
+Переведено инструкций — 16
+Слой Win32 встроен в ELF. Нужна системная glibc. Наличие внешних данных по PE определить нельзя. Файловый API Windows не поддерживается.
+g++ — компиляция переведённого кода и слоя Win32.
+Собрано — <workspace>/work/auto-upx.dPGTKp/packed-linux
+Запуск не проверен.
+<workspace>/work/auto-upx.dPGTKp/packed-linux: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=c00c495b31dc8da84b205222bf82469c1c58d595, for GNU/Linux 4.4.0, not stripped
+Запуск проверен — Hello from a statically recompiled PE! (код 7)
+Повторная сборка сохранила существующий ELF.
+Qt PASS — drag and drop, automatic UPX unpacking and sibling build, separate run status, Rufus rejection, clipboard
+UPX распакован автоматически. Анализируется распакованный PE.
+Rufus: 522 записей импорта, 17 DLL
+Оба исходных EXE сохранили контрольные суммы.
+Ярлык с переданным EXE автоматически создал ELF рядом с входом.
+Qt PASS — light/dark palette, drag and drop, automatic UPX unpacking and sibling build, separate run status, Rufus rejection, clipboard
