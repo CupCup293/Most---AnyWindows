@@ -129,9 +129,80 @@ void Pe::readImports(bool delayed, QList<Import>& result) const
     throw Failure(u"Таблица импортов не завершена нулевым дескриптором."_s);
 }
 
+unsigned Pe::countResources() const
+{
+    const auto directory = directories[2];
+    const auto root = fileOffset(directory.rva, directory.size);
+    if (!root || !directory.rva || quint64(directory.rva) + directory.size > imageSize)
+        throw Failure(u"RESOURCE — каталог выходит за пределы образа."_s);
+    const auto at = [&](quint64 offset, quint64 size) {
+        if (offset + size > directory.size)
+            throw Failure(u"RESOURCE — запись выходит за пределы каталога."_s);
+        return *root + offset;
+    };
+
+    constexpr quint64 subdirectory = 0x80000000;
+    unsigned visited = 0;
+    const auto countLeaves = [&](auto&& walk, quint64 offset, unsigned level) -> unsigned {
+        const auto table = at(offset, 16);
+        const auto entries = number(table + 12, 2) + number(table + 14, 2);
+        if (entries > 8192 - visited)
+            throw Failure(u"RESOURCE — превышен предел в 8192 записи."_s);
+        visited += entries;
+        const auto first = at(offset + 16, entries * 8);
+        unsigned leaves = 0;
+        for (quint64 index = 0; index < entries; ++index) {
+            const auto entry = first + index * 8;
+            const auto name = number(entry, 4);
+            if (name & subdirectory) {
+                const auto offset = name & ~subdirectory;
+                const auto chars = number(at(offset, 2), 2);
+                at(offset + 2, chars * 2);
+            }
+            const auto target = number(entry + 4, 4);
+            if (level < 2 && (target & subdirectory)) {
+                leaves += walk(walk, target & ~subdirectory, level + 1);
+            } else if (level == 2 && !(target & subdirectory)) {
+                const auto data = at(target, 16);
+                const auto rva = number(data, 4), size = number(data + 4, 4);
+                if (size && (!fileOffset(rva, size) || rva + size > imageSize))
+                    throw Failure(u"RESOURCE — данные ресурса выходят за пределы образа."_s);
+                ++leaves;
+            } else {
+                throw Failure(u"RESOURCE — некорректный уровень дерева ресурсов."_s);
+            }
+        }
+        return leaves;
+    };
+    return countLeaves(countLeaves, 0, 0);
+}
+
+unsigned Pe::countCertificates() const
+{
+    const auto directory = directories[4];
+    // Unlike other data directories, the certificate table uses a file offset.
+    const quint64 start = directory.rva, end = start + directory.size;
+    if (!start || start < headers || start % 8 || !directory.size || end > quint64(bytes.size()) ||
+        std::any_of(sections.cbegin(), sections.cend(), [&](const Section& section) {
+            return section.rawSize && section.raw < end && start < quint64(section.raw) + section.rawSize;
+        }))
+        throw Failure(u"SECURITY — некорректное расположение таблицы сертификатов."_s);
+    unsigned count = 0;
+    for (quint64 pos = start; pos < end; ++count) {
+        if (end - pos < 8)
+            throw Failure(u"SECURITY — заголовок сертификата обрезан."_s);
+        const auto length = number(pos, 4);
+        const auto aligned = (length + 7) & ~quint64(7);
+        if (length < 8 || aligned > end - pos)
+            throw Failure(u"SECURITY — некорректная длина записи сертификата."_s);
+        pos += aligned;
+    }
+    return count;
+}
+
 void Pe::validateImage() const
 {
-    if (base < 0x10000 || imageSize == 0 || imageSize > 16 * 1024 * 1024
+    if (base < 0x10000 || imageSize == 0
         || base + imageSize > 0x7ff00000 || headers > quint64(bytes.size()) || entry >= imageSize)
         throw Failure(u"Некорректный диапазон образа PE или точки входа."_s);
     for (qsizetype i = 0; i < sections.size(); ++i) {
@@ -150,6 +221,16 @@ void Pe::validateImage() const
         if (s.executable() && s.writable())
             throw Failure(u"Секция кода допускает запись."_s);
     }
+}
+
+std::optional<quint32> Pe::dataWordAt(quint32 address) const
+{
+    if (address < base)
+        return std::nullopt;
+    const auto offset = fileOffset(quint64(address) - base, 4);
+    if (!offset)
+        return std::nullopt;
+    return quint32(number(*offset, 4));
 }
 
 QByteArray Pe::codeAt(quint32 address) const

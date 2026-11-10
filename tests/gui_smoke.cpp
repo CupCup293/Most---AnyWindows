@@ -83,7 +83,9 @@ int main(int argc, char** argv)
         if (button->text() == u"Копировать журнал")
             button->click();
     }
-    if (!launchVisible || !QApplication::clipboard()->text().contains(u"KERNEL32.DLL!DeviceIoControl"))
+    const auto journal = QApplication::clipboard()->text();
+    if (!launchVisible || !journal.startsWith(most::buildVersionLine() + u'\n') ||
+        !journal.contains(u"KERNEL32.DLL!DeviceIoControl"))
         return 7;
     if (app.arguments().size() == 4) {
         const auto w32ver = output.filePath(u"w32ver sample.exe"_s);
@@ -94,5 +96,28 @@ int main(int argc, char** argv)
             return 9;
         std::puts("Qt PASS — W32Ver drag and drop and sibling ELF");
     }
+    const auto batch = output.filePath(u"batch"_s);
+    const auto nested = batch + u"/nested"_s;
+    if (!QDir().mkpath(nested))
+        return 10;
+    const auto batchExe = nested + u"/sample.EXE"_s;
+    const auto batchElf = nested + u"/sample-linux"_s;
+    QFile bad(batch + u"/bad.exe"_s);
+    QFile existing(batchElf);
+    if (!QFile::copy(app.arguments()[1], batchExe) ||
+        !bad.open(QIODevice::WriteOnly | QIODevice::NewOnly) || bad.write("invalid") != 7 ||
+        !existing.open(QIODevice::WriteOnly | QIODevice::NewOnly) || existing.write("existing") != 8)
+        return 10;
+    bad.close();
+    existing.close();
+    if (!drop(window, batch) || !waitFor(window, u"Обработка папки завершена"_s) ||
+        !hasLabel(window, u"Собрано: 1 · Сборка недоступна: 1 · Ошибок сборки: 0"_s) ||
+        !QFileInfo::exists(batchElf + u"-2"_s) ||
+        !existing.open(QIODevice::ReadOnly) || existing.readAll() != "existing")
+        return 10;
+    const auto batchLog = window.findChild<QPlainTextEdit*>()->toPlainText();
+    if (!batchLog.contains(u"bad.exe") || !batchLog.contains(u"nested/sample.EXE"))
+        return 10;
+    std::puts("Qt PASS — recursive folder build, per-file diagnostics and existing ELF preserved");
     std::puts("Qt PASS — light/dark palette, drag and drop, automatic UPX unpacking and sibling build, separate run status, experimental Rufus build, clipboard");
 }

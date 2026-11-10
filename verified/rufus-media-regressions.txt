@@ -92,3 +92,117 @@ Interactive launch with the same authorized device reached the main window.
 Rufus reported one removable device and read its existing GPT and FAT32
 partition named GPARTEDLIVE. The UI used the generic Most Test Media USB name.
 The physical write workflow was not started.
+
+2026-11-08, MBR/FAT32 on a new file-backed disk (baseline 52b2d51)
+Commands from the repository root:
+  git status --short -b
+  git log -5 --oneline
+  sha256sum "$HOME/Downloads/rufus-4.15.exe"
+  make
+  scratch=$(mktemp -d)
+  ./most build "$HOME/Downloads/rufus-4.15.exe" -o "$scratch/rufus-linux"
+  sh tests/rufus_media_smoke.sh "$scratch/rufus-linux" --format
+
+First failure on the baseline ELF: WaitForLogical -> GetLogicalName ->
+FindFirstVolumeA returned INVALID_HANDLE_VALUE / ERROR_NO_MORE_FILES. Rufus
+had already written one FAT32 LBA partition. The runtime required a FAT boot
+sector at disk offset 0 before advertising a volume. The full first failure
+log was retained separately as rufus-format-first.log.
+
+Once the runtime reported the partition extent, WaitForLogical advanced to
+FormatNative and failed loading fmifs.dll!FormatEx. Virtual media now set
+Rufus's ForceLargeFat32Formatting registry value, which selects its built-in
+formatter. The Win32 volume handle exposes partition-relative position and
+length. Its extents describe disk 2, partition start and partition length.
+The runtime supplies IOCTL_DISK_GET_PARTITION_INFO and SetVolumeLabelA for
+the new FAT32 volume.
+
+Fresh ELF acceptance, exit 0:
+  Format completed.
+  Rufus write workflow returned to its main dialog
+  *** Rufus exit ***
+  sfdisk --verify: No errors detected.
+  partx: 2048 260064 dos 0xc
+  fsck.fat -vn: 512-byte sectors, 1024-byte clusters, two FATs with
+    32-bit entries, 127984 data clusters, clean free-cluster summary.
+  fatlabel: MOST FAT32
+  Disk size remained 128 MiB. Unallocated bytes before and after the
+    partition were zero after Rufus's deliberate clearing. Guards just past
+    the first 8 MiB of the partition and just before the trailing MiB survived.
+  The shared-runtime boundary check used a shorter partition. It confirmed
+    synchronous and overlapped I/O bounds, unchanged bytes directly before
+    and after the extent, C: removal, and invalidation of old volume handles
+    after both a layout IOCTL and a raw sector-zero write.
+
+On the same ELF:
+  sh tests/rufus_media_smoke.sh "$scratch/rufus-linux"
+  for mode in --mbr-target --gpt-target --corrupt-gpt-target --write-gpt-target --gzip; do
+      sh tests/rufus_media_smoke.sh "$scratch/rufus-linux" "$mode" || break
+  done
+  file "$scratch/rufus-linux"
+  readelf -d "$scratch/rufus-linux"
+  sha256sum "$HOME/Downloads/rufus-4.15.exe"
+  "$scratch/rufus-linux" --list-usb
+
+All six media regressions exited 0. Blank, existing MBR, existing GPT and
+gzip write cases matched 1,474,560 bytes and reached RUFUS-BOOT-OK in KVM.
+The GPT write cleared the old backup table and preserved the adjacent guard.
+GPT inspection and rejection of a damaged GPT left their images unchanged.
+The ELF ran inside the sandbox with no access to the EXE or Windows runtime.
+Original EXE SHA-256 before and after:
+84c8a437f8af89257524478489e5c85f1edf25f761d299e2bcde46ac0afbe106
+
+Window: Rufus 4.15.2396 displayed through Qt offscreen.
+Imports: 522 bound slots, including fallback stubs.
+USB: --list-usb found Kingston DataTraveler without direct read/write
+permissions. Prior UDisks2 authorization and GPT/FAT32 detection stand
+separately. This run used temporary disk images for all writes.
+Matrix from 52b2d51: 2/10 complete groups. MBR/FAT32 passes individually.
+The MBR/GPT partitioning and formatting group remains partial.
+
+Next scenario probes on the same ELF:
+  iso_dir=$(mktemp -d)
+  curl -fL https://dl-cdn.alpinelinux.org/alpine/v3.22/releases/x86_64/alpine-virt-3.22.0-x86_64.iso \
+      -o "$iso_dir/alpine.iso"
+  sha256sum "$iso_dir/alpine.iso"
+  # For GPT/FAT32 use control=Format and scheme=GPT.
+  # For Alpine use control=Write and scheme=MBR.
+  target=$(mktemp -d)
+  truncate -s 128M "$target/device.img"
+  timeout 35 bwrap --unshare-all --uid 0 --gid 0 --clearenv \
+      --setenv QT_QPA_PLATFORM offscreen --setenv HOME /scratch --setenv XDG_CACHE_HOME /scratch/cache \
+      --setenv RUFUS_PROBE_NONINTERACTIVE 1 --setenv RUFUS_PROBE_STARTUP 1 \
+      --setenv RUFUS_PROBE_CAPTURE /capture/window.png --setenv RUFUS_PROBE_CONTROL "$control" \
+      --setenv RUFUS_PROBE_FORMAT_SCHEME "$scheme" --setenv RUFUS_PROBE_PICK sample.iso \
+      --setenv RUFUS_PROBE_DEVICE 1 --ro-bind-try /etc/fonts /etc/fonts \
+      --ro-bind /usr /usr --ro-bind /lib /lib --ro-bind /lib64 /lib64 \
+      --ro-bind "$scratch/rufus-linux" /rufus --bind "$target" /capture --tmpfs /scratch \
+      --ro-bind "$iso_dir/alpine.iso" /scratch/sample.iso --bind "$target/device.img" /scratch/device.img \
+      --proc /proc --chdir /scratch -- /rufus
+
+GPT/FAT32: after Partitioning (GPT) and Creating Main Data Partition, exit
+125 on Missing ole32.dll!CoCreateGuid, caller=0x14000d73f.
+
+Alpine SHA-256:
+c935c3715c80ca416e2ce912c552f0cbfd8531219b7973ae4a600873c793eb1b
+Rufus identified ISO9660, Syslinux 6.04/pre1 and /efi/boot/bootx64.efi.
+Start exited 125 on Missing USER32.dll!SetWindowsHookExW, caller=0x14005029f,
+first argument 0x7 (WH_MOUSE). ISO/DD selection and ISO-mode writing were
+not reached.
+
+MBR/FAT32 recheck after the PE32 USER32 changes, Most 20261109.172205Z:
+  make
+  scratch=$(mktemp -d)
+  ./most build "$HOME/Downloads/rufus-4.15.exe" -o "$scratch/rufus-linux"
+  sh tests/rufus_media_smoke.sh "$scratch/rufus-linux" --format
+  sha256sum "$HOME/Downloads/rufus-4.15.exe"
+
+The file-backed test exited 0. MBR verification, FAT32 label MOST FAT32,
+guard bytes, logical volume bounds and layout invalidation passed.
+The original EXE SHA-256 was unchanged. The other media scenarios were
+not rerun in this recheck.
+
+Repeated the same MBR/FAT32 recheck with Most 20261109.174014Z after
+adding PE32 window procedures, dialogs and drawing. The test exited 0,
+including the FAT32 label, logical volume bounds, layout invalidation and
+guard bytes. The original Rufus EXE SHA-256 was unchanged.

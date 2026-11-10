@@ -27,7 +27,14 @@ if [ "$mode" = --gzip ]; then
     gzip -n -c "$temporary/source.img" > "$input"
 fi
 case "$mode" in
-    --format) control=Format ;;
+    --format)
+        control=Format
+        # Rufus clears the first 8 MiB of both disk and partition,
+        # and the last MiB of the disk. Guard the bytes beside those ranges.
+        printf 'KEEP-HEAD' | dd of="$temporary/target.img" bs=1 seek=$((9 * 1024 * 1024)) \
+            conv=notrunc status=none
+        printf 'KEEP-TAIL' | dd of="$temporary/target.img" bs=1 seek=$((127 * 1024 * 1024 - 9)) \
+            conv=notrunc status=none ;;
     --mbr-target)
         printf 'label: dos\nstart=2048, size=32768, type=c, bootable\n' |
             sfdisk --quiet "$temporary/target.img" ;;
@@ -87,6 +94,11 @@ case "$mode" in
 esac
 if [ "$mode" = --format ]; then
     require_log 'Confirmed write'
+    require_log 'Format completed.'
+    if grep -Fq 'Rufus modal [Error]' "$temporary/rufus.log"; then
+        cat "$temporary/rufus.log"
+        exit 1
+    fi
     require_log 'returned to its main dialog'
     require_log 'Rufus exit'
     if ! sfdisk --verify "$temporary/target.img" ||
@@ -99,13 +111,49 @@ EOF
         cat "$temporary/rufus.log"
         exit 1
     fi
-    if [ "$start" != 2048 ] || [ "$scheme" != dos ] || [ "$type" != 0xc ] ||
+    if [ "$partition" != '2048 260064 dos 0xc' ] ||
        ! dd if="$temporary/target.img" of="$temporary/partition.img" bs=512 \
            skip="$start" count="$sectors" status=none ||
-       ! fsck.fat -n "$temporary/partition.img"; then
+       ! fsck.fat -vn "$temporary/partition.img" > "$temporary/fsck.log" ||
+       ! grep -Fq '32 bit entries' "$temporary/fsck.log" ||
+       [ "$(fatlabel "$temporary/partition.img")" != 'MOST FAT32' ]; then
         cat "$temporary/rufus.log"
+        cat "$temporary/fsck.log" 2>/dev/null || :
         exit 1
     fi
+    cat "$temporary/fsck.log"
+    test "$(stat -c %s "$temporary/target.img")" -eq $((128 * 1024 * 1024))
+    printf 'KEEP-HEAD' > "$temporary/expected"
+    dd if="$temporary/target.img" of="$temporary/actual" bs=1 \
+        skip=$((9 * 1024 * 1024)) count=9 status=none
+    cmp "$temporary/expected" "$temporary/actual"
+    printf 'KEEP-TAIL' > "$temporary/expected"
+    dd if="$temporary/target.img" of="$temporary/actual" bs=1 \
+        skip=$((127 * 1024 * 1024 - 9)) count=9 status=none
+    cmp "$temporary/expected" "$temporary/actual"
+    # The unallocated space on both sides of the partition is cleared.
+    dd if="$temporary/target.img" of="$temporary/gap" bs=512 skip=1 count=$((start - 1)) status=none
+    tail -c $((32 * 512)) "$temporary/target.img" >> "$temporary/gap"
+    truncate -s "$(((start - 1 + 32) * 512))" "$temporary/zeros"
+    cmp "$temporary/gap" "$temporary/zeros"
+    echo 'FAT32 label MOST FAT32, unallocated space and guard bytes verified'
+
+    # Supply the generated headers needed to compile the shared runtime.
+    cat > "$temporary/entry.h" <<'EOF'
+#define GUEST_BASE 0x140000000ull
+#define GUEST_SIZE 4096u
+#define GUEST_RSRC 0ull
+#define GUEST_RSRC_SIZE 0u
+EOF
+    printf ' {GUEST_BASE, 4096, 4},\n' > "$temporary/pages.h"
+    touch "$temporary/modules.h" "$temporary/exports.h" "$temporary/imports.h"
+    cc -O2 -ffunction-sections -fdata-sections -Wl,--gc-sections -I"$temporary" \
+        "$here/rufus_volume_check.c" -o "$temporary/volume-check" -pthread
+    truncate -s 16M "$temporary/volume.img"
+    bwrap --unshare-all --clearenv --setenv RUFUS_PROBE_DEVICE 1 \
+        --ro-bind /usr /usr --ro-bind /lib /lib --ro-bind /lib64 /lib64 \
+        --tmpfs /scratch --bind "$temporary/volume.img" /scratch/device.img \
+        --ro-bind "$temporary/volume-check" /check -- /check
     exit 0
 fi
 require_log 'Rufus file selected'

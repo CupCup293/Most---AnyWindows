@@ -1,4 +1,6 @@
 #include "registry.inc"
+#include <ctype.h>
+#include <stdatomic.h>
 #include <linux/fs.h>
 #include <sys/ioctl.h>
 
@@ -70,7 +72,7 @@ static int probe_disk_stat(struct stat *info)
 
 // Duplicates of a UDisks descriptor share a Linux file offset. Keep the
 // position and requested access of each guest handle independently.
-static pthread_mutex_t authorized_disk_lock = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t media_lock = PTHREAD_MUTEX_INITIALIZER;
 static struct {
     off_t position;
     int access; // O_ACCMODE value plus one, or zero for an ordinary descriptor.
@@ -81,7 +83,7 @@ static int open_probe_disk(int mode)
     if (native_usb_fd < 0)
         return open(probe_disk_path, mode | O_NOFOLLOW);
     if (native_usb_authorized) {
-        pthread_mutex_lock(&authorized_disk_lock);
+        pthread_mutex_lock(&media_lock);
         int fd = fcntl(native_usb_fd, F_DUPFD_CLOEXEC, 3);
         if (fd >= 0x10000) {
             close(fd);
@@ -92,7 +94,7 @@ static int open_probe_disk(int mode)
             authorized_handles[fd].position = 0;
             authorized_handles[fd].access = (mode & O_ACCMODE) + 1;
         }
-        pthread_mutex_unlock(&authorized_disk_lock);
+        pthread_mutex_unlock(&media_lock);
         return fd;
     }
     char fd_path[64];
@@ -103,31 +105,83 @@ static int open_probe_disk(int mode)
 static const char probe_volume[] = "\\\\?\\Volume{7b2e56cb-24f4-4618-ab0b-377102c02d01}\\";
 static _Atomic int probe_mounted;
 
-static int probe_volume_sector(unsigned char sector[512])
+typedef struct {
+    off_t start, length;
+} VolumeExtent;
+
+static VolumeExtent volume_handles[0x10000];
+static int disk_layout_volume(int fd, off_t size, VolumeExtent *extent);
+
+static int file_probe_enabled(void)
 {
-    struct stat info;
-    if (!probe_disk_stat(&info))
-        return 0;
-    if (native_usb_fd >= 0 && pread(native_usb_fd, sector, 512, 0) != 512)
-        return 0;
-    int fd = native_usb_fd >= 0 ? -1 : open_probe_disk(O_RDONLY | O_CLOEXEC);
-    if (native_usb_fd < 0 && fd < 0)
-        return 0;
-    ssize_t count = fd < 0 ? 512 : pread(fd, sector, 512, 0);
-    if (fd >= 0)
-        close(fd);
-    if (count != 512 || sector[510] != 0x55 || sector[511] != 0xaa ||
-        read_word(sector + 11) != 512 || !sector[13] || !sector[16])
+    return native_usb_fd < 0 && getenv("RUFUS_PROBE_DEVICE") != NULL;
+}
+
+static int media_needs_lock(void)
+{
+    return native_usb_authorized || file_probe_enabled();
+}
+
+#ifdef MOST_RUFUS
+void configure_virtual_media(void)
+{
+    struct stat disk;
+    if (native_usb_fd >= 0 || !probe_disk_stat(&disk))
+        return;
+    // Use Rufus's own FAT32 formatter on virtual media, including small
+    // disks that Windows would normally send to fmifs.dll.
+    void *software = lookup_key((void *)0x80000001u, "SOFTWARE", 1, NULL);
+    void *key = software ? lookup_key(software, "Akeo Consulting\\Rufus", 1, NULL) : NULL;
+    const DWORD enabled = 1;
+    if (key)
+        win_RegSetValueExA(key, "ForceLargeFat32Formatting", 0, 4, &enabled, sizeof(enabled));
+}
+#endif
+
+// Zero length denotes an ordinary descriptor; a negative length denotes a
+// volume handle invalidated by a layout change. It can still be closed.
+static void reset_probe_volume(void)
+{
+    probe_mounted = 0;
+    for (size_t i = 3; i < sizeof(volume_handles) / sizeof(*volume_handles); ++i)
+        if (volume_handles[i].length > 0)
+            volume_handles[i].length = -1;
+}
+
+
+static int read_fat_boot(int fd, VolumeExtent extent, unsigned char sector[512])
+{
+    if (pread(fd, sector, 512, extent.start) != 512 ||
+        read_word(sector + 510) != 0xaa55 || read_word(sector + 11) != 512 ||
+        !sector[13] || !sector[16])
         return 0;
     DWORD sectors = read_word(sector + 19);
     if (!sectors)
         sectors = read_dword(sector + 32);
-    return sectors && sectors <= (uint64_t)info.st_size / 512;
+    return sectors && sectors <= (uint64_t)extent.length / 512;
 }
+
+static int probe_volume_info(VolumeExtent *extent)
+{
+    struct stat info;
+    if (!probe_disk_stat(&info))
+        return 0;
+    int fd = native_usb_fd >= 0 ? native_usb_fd : open_probe_disk(O_RDONLY | O_CLOEXEC);
+    if (fd < 0)
+        return 0;
+    *extent = (VolumeExtent){0, info.st_size};
+    unsigned char sector[512];
+    int valid = (native_usb_fd < 0 && disk_layout_volume(fd, info.st_size, extent)) ||
+        read_fat_boot(fd, *extent, sector);
+    if (native_usb_fd < 0)
+        close(fd);
+    return valid;
+}
+
 static int probe_volume_ready(void)
 {
-    unsigned char sector[512];
-    return probe_volume_sector(sector);
+    VolumeExtent extent;
+    return probe_volume_info(&extent);
 }
 static int is_probe_volume(const char *path)
 {
@@ -136,7 +190,7 @@ static int is_probe_volume(const char *path)
         (!path[length] || (path[length] == '\\' && !path[length + 1]));
 }
 
-static int host_path(const WCHAR *name, char *output, size_t capacity)
+static int host_path_kind(const WCHAR *name, char *output, size_t capacity, int *volume)
 {
     char path[512];
 #if defined(MOST_RAWCOPY) || defined(MOST_CHSIZE) || defined(MOST_FILEINFO) || defined(MOST_REPTXT) || defined(MOST_ELTORITO)
@@ -149,9 +203,13 @@ static int host_path(const WCHAR *name, char *output, size_t capacity)
 #endif
     if (!name || !(native_launch ? win_WideCharToMultiByte(65001, 0, name, -1, path, sizeof(path), NULL, NULL) : ascii_name(name, path, sizeof(path))))
         return 0;
+    const int guid = is_probe_volume(path);
+    const int mounted = probe_mounted && (!strcasecmp(path, "\\\\.\\C:") || !strcasecmp(path, "C:\\"));
+    const int logical = guid || mounted;
+    if (volume)
+        *volume = guid ? 1 : mounted ? 2 : 0;
     if (!strcasecmp(path, probe_disk_link) || !strcasecmp(path, probe_physical_drive) ||
-        (is_probe_volume(path) && probe_volume_ready()) ||
-        (probe_mounted && (!strcasecmp(path, "\\\\.\\C:") || !strcasecmp(path, "C:\\")))) {
+        (logical && (volume || (native_usb_fd >= 0 && probe_volume_ready())))) {
         struct stat info;
         if (!probe_disk_stat(&info))
             return 0;
@@ -181,12 +239,18 @@ static int host_path(const WCHAR *name, char *output, size_t capacity)
     return count >= 0 && (size_t)count < capacity;
 }
 
+static int host_path(const WCHAR *name, char *output, size_t capacity)
+{
+    return host_path_kind(name, output, capacity, NULL);
+}
+
 WIN uintptr_t win_CreateFileW(const WCHAR *name, DWORD access, DWORD share, void *security,
                                DWORD disposition, DWORD flags, uintptr_t template)
 {
     (void)share; (void)security; (void)flags; (void)template;
     char path[512];
-    if (!host_path(name, path, sizeof(path))) {
+    int volume = 0;
+    if (!host_path_kind(name, path, sizeof(path), &volume)) {
 #ifdef MOST_FILEINFO
         fputs("FileInfo could not map a path to a Linux file.\n", stderr);
         fileinfo_failed = 1;
@@ -289,7 +353,21 @@ WIN uintptr_t win_CreateFileW(const WCHAR *name, DWORD access, DWORD share, void
     }
 #else
     if (!strcmp(path, probe_disk_path)) {
-        fd = open_probe_disk(mode & ~O_NOFOLLOW);
+        if (volume && native_usb_fd < 0) {
+            pthread_mutex_lock(&media_lock);
+            VolumeExtent extent;
+            fd = (volume == 1 || probe_mounted) && probe_volume_info(&extent)
+                ? open_probe_disk(mode) : -1;
+            if (fd >= 0 && fd < 0x10000)
+                volume_handles[fd] = extent;
+            else if (fd >= 0) {
+                close(fd);
+                fd = -1;
+            }
+            pthread_mutex_unlock(&media_lock);
+        } else {
+            fd = !volume || probe_volume_ready() ? open_probe_disk(mode & ~O_NOFOLLOW) : -1;
+        }
     } else if (native_launch && *path == '/' && !is_work_path(path)) {
         const char *input = !strcmp(path, "/rufus") ? native_executable : path;
         if (disposition != 3 || access & 0x40000000u) {
@@ -462,12 +540,13 @@ WIN int win_CloseHandle(uintptr_t handle)
     }
     int fd = handle_fd(handle);
     if (fd >= 3) {
-        if (native_usb_authorized)
-            pthread_mutex_lock(&authorized_disk_lock);
+        if (media_needs_lock())
+            pthread_mutex_lock(&media_lock);
         const int closed = close(fd) == 0;
-        if (native_usb_authorized) {
+        if (media_needs_lock()) {
             authorized_handles[fd].access = 0;
-            pthread_mutex_unlock(&authorized_disk_lock);
+            volume_handles[fd].length = 0;
+            pthread_mutex_unlock(&media_lock);
         }
         if (closed)
             return 1;
@@ -503,15 +582,29 @@ static int file_transfer_locked(uintptr_t handle, void *buffer, DWORD count, DWO
     }
     off_t position = overlapped ? (off_t)overlapped->offset :
         access ? authorized_handles[fd].position : 0;
+    const VolumeExtent volume = volume_handles[fd];
+    if (volume.length < 0) {
+        last_error = 6;
+        return 0;
+    }
+    if (volume.length) {
+        if (!overlapped)
+            position = lseek(fd, 0, SEEK_CUR);
+        if (position < 0 || position > volume.length || count > (uint64_t)(volume.length - position)) {
+            last_error = writing ? 112 : 38;
+            return 0;
+        }
+    }
     struct stat disk;
-    int replaces_sector_zero = 0;
-    if (writing && disk_handle_stat(handle, &disk)) {
+    int replaces_sector_zero = 0, touches_sector_zero = 0;
+    if (writing && !volume.length && disk_handle_stat(handle, &disk)) {
         off_t offset = (overlapped || access) ? position : lseek(fd, 0, SEEK_CUR);
         if (offset < 0 || offset > disk.st_size || count > (uint64_t)(disk.st_size - offset)) {
             last_error = 112;
             return 0;
         }
         replaces_sector_zero = offset == 0 && count >= 512;
+        touches_sector_zero = offset < 512;
     }
     ssize_t result;
 #ifdef MOST_ELTORITO
@@ -542,9 +635,9 @@ static int file_transfer_locked(uintptr_t handle, void *buffer, DWORD count, DWO
     result = done;
 #else
     do {
-        if (overlapped || access)
-            result = writing ? pwrite(fd, buffer, count, position)
-                             : pread(fd, buffer, count, position);
+        if (overlapped || access || volume.length)
+            result = writing ? pwrite(fd, buffer, count, volume.start + position)
+                             : pread(fd, buffer, count, volume.start + position);
         else
             result = writing ? write(fd, buffer, count) : read(fd, buffer, count);
     } while (result < 0 && errno == EINTR);
@@ -559,6 +652,10 @@ static int file_transfer_locked(uintptr_t handle, void *buffer, DWORD count, DWO
     }
     if (access && !overlapped)
         authorized_handles[fd].position += result;
+    if (volume.length && !overlapped)
+        lseek(fd, position + result, SEEK_SET);
+    if (touches_sector_zero && result > 0 && native_usb_fd < 0)
+        reset_probe_volume();
     if (replaces_sector_zero && result >= 512 &&
         !discard_stale_gpt(fd, disk.st_size, buffer)) {
         last_error = 29;
@@ -578,11 +675,11 @@ static int file_transfer_locked(uintptr_t handle, void *buffer, DWORD count, DWO
 static int file_transfer(uintptr_t handle, void *buffer, DWORD count, DWORD *completed,
                          Overlapped *overlapped, int writing)
 {
-    if (native_usb_authorized)
-        pthread_mutex_lock(&authorized_disk_lock);
+    if (media_needs_lock())
+        pthread_mutex_lock(&media_lock);
     int result = file_transfer_locked(handle, buffer, count, completed, overlapped, writing);
-    if (native_usb_authorized)
-        pthread_mutex_unlock(&authorized_disk_lock);
+    if (media_needs_lock())
+        pthread_mutex_unlock(&media_lock);
     return result;
 }
 
@@ -1057,7 +1154,16 @@ WIN int win_GetFileSizeEx(uintptr_t handle, int64_t *length)
         last_error = 6;
         return 0;
     }
-    *length = info.st_size;
+    if (media_needs_lock())
+        pthread_mutex_lock(&media_lock);
+    off_t volume_length = volume_handles[fd].length;
+    if (media_needs_lock())
+        pthread_mutex_unlock(&media_lock);
+    if (volume_length < 0) {
+        last_error = 6;
+        return 0;
+    }
+    *length = volume_length ? volume_length : info.st_size;
     return 1;
 }
 
@@ -1069,9 +1175,15 @@ WIN int win_SetFilePointerEx(uintptr_t handle, int64_t distance, int64_t *result
         return 0;
     }
     off_t offset = -1;
-    if (native_usb_authorized)
-        pthread_mutex_lock(&authorized_disk_lock);
-    if (native_usb_authorized && authorized_handles[fd].access) {
+    if (media_needs_lock())
+        pthread_mutex_lock(&media_lock);
+    const off_t length = volume_handles[fd].length;
+    if (length > 0) {
+        const off_t base = origin == SEEK_END ? length : origin == SEEK_CUR ? lseek(fd, 0, SEEK_CUR) : 0;
+        off_t next;
+        if (base >= 0 && !__builtin_add_overflow(base, distance, &next) && next >= 0 && next <= length)
+            offset = lseek(fd, next, SEEK_SET);
+    } else if (length == 0 && native_usb_authorized && authorized_handles[fd].access) {
         struct stat disk;
         if (disk_handle_stat(handle, &disk)) {
             const off_t base = origin == SEEK_END ? disk.st_size :
@@ -1080,13 +1192,13 @@ WIN int win_SetFilePointerEx(uintptr_t handle, int64_t distance, int64_t *result
             if (!__builtin_add_overflow(base, distance, &next) && next >= 0)
                 offset = authorized_handles[fd].position = next;
         }
-    } else {
+    } else if (!length) {
         offset = lseek(fd, distance, origin);
     }
-    if (native_usb_authorized)
-        pthread_mutex_unlock(&authorized_disk_lock);
+    if (media_needs_lock())
+        pthread_mutex_unlock(&media_lock);
     if (offset < 0) {
-        last_error = 25;
+        last_error = length < 0 ? 6 : 25;
         return 0;
     }
     if (result)
@@ -2256,7 +2368,27 @@ static unsigned disk_layout(int fd, uint64_t disk_size, unsigned char *output)
     return disk_layout_header_size + mbr_partition_count * disk_partition_size;
 }
 
-WIN int win_DeviceIoControl(uintptr_t handle, DWORD code, const void *input, DWORD input_size,
+static int disk_layout_volume(int fd, off_t size, VolumeExtent *extent)
+{
+    unsigned char sector[512];
+    if (pread(fd, sector, sizeof(sector), 0) != sizeof(sector) ||
+        (sector[450] != 0x0b && sector[450] != 0x0c))
+        return 0;
+    unsigned char layout[disk_layout_limit] = {0};
+    if (!disk_layout(fd, size, layout) || read_dword(layout) != 0)
+        return 0;
+    const unsigned char *first = layout + disk_layout_header_size;
+    if ((first[32] != 0x0b && first[32] != 0x0c) ||
+        read_dword(first + disk_partition_size + 24) ||
+        read_dword(first + 2 * disk_partition_size + 24) ||
+        read_dword(first + 3 * disk_partition_size + 24))
+        return 0;
+    extent->start = disk_qword(first + 8);
+    extent->length = disk_qword(first + 16);
+    return 1;
+}
+
+static int device_io_control(uintptr_t handle, DWORD code, const void *input, DWORD input_size,
                              void *output, DWORD capacity, DWORD *returned, Overlapped *overlapped)
 {
     if (returned)
@@ -2278,6 +2410,12 @@ WIN int win_DeviceIoControl(uintptr_t handle, DWORD code, const void *input, DWO
         uint64_t align;
         unsigned char bytes[disk_layout_limit];
     } info = {.bytes = {0}};
+    int fd = handle_fd(handle);
+    const VolumeExtent volume = volume_handles[fd];
+    if (volume.length < 0) {
+        last_error = 6;
+        return 0;
+    }
     unsigned length;
     DWORD *words = (DWORD *)info.bytes;
     int64_t *wide = (int64_t *)info.bytes;
@@ -2301,11 +2439,10 @@ WIN int win_DeviceIoControl(uintptr_t handle, DWORD code, const void *input, DWO
         }
         const unsigned char *layout = input;
         DWORD style = read_dword(layout);
-        if (!S_ISREG(disk.st_mode) || (style != 0 && (set_layout || style != 2))) {
+        if (volume.length || !S_ISREG(disk.st_mode) || (style != 0 && (set_layout || style != 2))) {
             last_error = 50;
             return 0;
         }
-        int fd = handle_fd(handle);
         if ((fcntl(fd, F_GETFL) & O_ACCMODE) == O_RDONLY) {
             last_error = 5;
             return 0;
@@ -2363,16 +2500,21 @@ WIN int win_DeviceIoControl(uintptr_t handle, DWORD code, const void *input, DWO
         do {
             written = pwrite(fd, sector, sizeof(sector), 0);
         } while (written < 0 && errno == EINTR);
+        if (written > 0)
+            reset_probe_volume();
         if (written != sizeof(sector)) {
             last_error = 29;
             return 0;
         }
-        probe_mounted = 0;
         return 1;
     }
     case 0x70140: // IOCTL_DISK_UPDATE_PROPERTIES
-        if (probe_volume_ready())
-            probe_mounted = 1;
+        if (native_usb_fd >= 0) {
+            if (probe_volume_ready())
+                probe_mounted = 1;
+        } else if (!probe_volume_ready()) {
+            reset_probe_volume();
+        }
         return 1;
     case 0x90020: // FSCTL_DISMOUNT_VOLUME
     case 0x90083: // FSCTL_ALLOW_EXTENDED_DASD_IO
@@ -2380,8 +2522,12 @@ WIN int win_DeviceIoControl(uintptr_t handle, DWORD code, const void *input, DWO
     case 0x560000: // IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS
         words[0] = 1;
         words[2] = 2;
-        wide[2] = probe_volume_ready() ? 0 : 1048576;
-        wide[3] = disk.st_size - wide[2];
+        if (!volume.length && native_usb_fd < 0) {
+            last_error = 1;
+            return 0;
+        }
+        wide[2] = native_usb_fd >= 0 && !probe_volume_ready() ? 1048576 : volume.start;
+        wide[3] = volume.length ? volume.length : disk.st_size - wide[2];
         length = 32;
         break;
     case 0x2d4800: // IOCTL_STORAGE_CHECK_VERIFY
@@ -2394,7 +2540,7 @@ WIN int win_DeviceIoControl(uintptr_t handle, DWORD code, const void *input, DWO
     case 0x2d1080: // IOCTL_STORAGE_GET_DEVICE_NUMBER
         words[0] = 7;
         words[1] = 2;
-        words[2] = UINT32_MAX;
+        words[2] = volume.start ? 1 : UINT32_MAX;
         length = 12;
         break;
     case 0x700a0: // IOCTL_DISK_GET_DRIVE_GEOMETRY_EX
@@ -2404,7 +2550,7 @@ WIN int win_DeviceIoControl(uintptr_t handle, DWORD code, const void *input, DWO
         words[3] = 255;
         words[4] = 63;
         words[5] = 512;
-        wide[3] = disk.st_size;
+        wide[3] = volume.length ? volume.length : disk.st_size;
         length = code == 0x70000 ? 24 : 32;
         break;
     case 0x70050: // IOCTL_DISK_GET_DRIVE_LAYOUT_EX
@@ -2412,8 +2558,21 @@ WIN int win_DeviceIoControl(uintptr_t handle, DWORD code, const void *input, DWO
         if (!length)
             return 0;
         break;
+    case 0x74004: // IOCTL_DISK_GET_PARTITION_INFO
+        if (!volume.length) {
+            last_error = 1;
+            return 0;
+        }
+        wide[0] = volume.start;
+        wide[1] = volume.length;
+        words[4] = volume.start / 512;
+        words[5] = volume.start ? 1 : 0;
+        info.bytes[24] = volume.start ? 0x0c : 0;
+        info.bytes[26] = 1;
+        length = 32;
+        break;
     case 0x7405c: // IOCTL_DISK_GET_LENGTH_INFO
-        wide[0] = disk.st_size;
+        wide[0] = volume.length ? volume.length : disk.st_size;
         length = 8;
         break;
     case 0x70024: // IOCTL_DISK_IS_WRITABLE
@@ -2435,6 +2594,17 @@ WIN int win_DeviceIoControl(uintptr_t handle, DWORD code, const void *input, DWO
     if (returned)
         *returned = length;
     return 1;
+}
+
+WIN int win_DeviceIoControl(uintptr_t handle, DWORD code, const void *input, DWORD input_size,
+                             void *output, DWORD capacity, DWORD *returned, Overlapped *overlapped)
+{
+    if (file_probe_enabled())
+        pthread_mutex_lock(&media_lock);
+    int result = device_io_control(handle, code, input, input_size, output, capacity, returned, overlapped);
+    if (file_probe_enabled())
+        pthread_mutex_unlock(&media_lock);
+    return result;
 }
 
 WIN DWORD win_QueryDosDeviceA(const char *name, char *output, DWORD capacity)
@@ -2546,20 +2716,25 @@ WIN int win_FindVolumeClose(uintptr_t handle)
 }
 WIN int win_SetVolumeMountPointA(const char *point, const char *volume)
 {
-    if (!point || !volume || strcasecmp(point, "C:\\") || !is_probe_volume(volume) || !probe_volume_ready()) {
+    if (!point || !volume || strcasecmp(point, "C:\\") || !is_probe_volume(volume)) {
         last_error = 87;
         return 0;
     }
-    probe_mounted = 1;
-    return 1;
+    pthread_mutex_lock(&media_lock);
+    int ready = probe_volume_ready();
+    if (ready)
+        probe_mounted = 1;
+    pthread_mutex_unlock(&media_lock);
+    if (!ready)
+        last_error = 87;
+    return ready;
 }
 WIN int win_DeleteVolumeMountPointA(const char *point)
 {
-    if (!point || strcasecmp(point, "C:\\") || !probe_mounted) {
+    if (!point || strcasecmp(point, "C:\\") || !atomic_exchange(&probe_mounted, 0)) {
         last_error = 2;
         return 0;
     }
-    probe_mounted = 0;
     return 1;
 }
 WIN int win_GetVolumeNameForVolumeMountPointA(const char *point, char *volume, DWORD capacity)
@@ -2574,6 +2749,67 @@ WIN int win_GetVolumeNameForVolumeMountPointA(const char *point, char *volume, D
     }
     memcpy(volume, probe_volume, sizeof(probe_volume));
     return 1;
+}
+
+// Rufus calls SetVolumeLabel after creating an empty FAT32 root directory.
+static int label_empty_fat32(int fd, VolumeExtent volume, const char label[11])
+{
+    unsigned char boot[512], backup[512], entry[32];
+    if (pread(fd, boot, sizeof(boot), volume.start) != sizeof(boot) ||
+        read_word(boot + 11) != 512 || !boot[13] || !boot[16] || read_word(boot + 22) ||
+        memcmp(boot + 82, "FAT32   ", 8) || read_word(boot + 510) != 0xaa55 ||
+        read_dword(boot + 44) != 2)
+        return 0;
+
+    const DWORD total = read_dword(boot + 32), reserved = read_word(boot + 14);
+    const DWORD backup_sector = read_word(boot + 50), fat_sectors = read_dword(boot + 36);
+    const uint64_t root_sector = reserved + (uint64_t)boot[16] * fat_sectors;
+    if (!fat_sectors || !backup_sector || backup_sector >= reserved ||
+        root_sector >= total || total > (uint64_t)volume.length / 512)
+        return 0;
+
+    off_t root = volume.start + root_sector * 512, mirror = volume.start + backup_sector * 512;
+    if (pread(fd, backup, sizeof(backup), mirror) != sizeof(backup) ||
+        memcmp(boot, backup, 71) || memcmp(boot + 82, backup + 82, sizeof(boot) - 82) ||
+        pread(fd, entry, sizeof(entry), root) != sizeof(entry) ||
+        (entry[0] && entry[11] != 0x08))
+        return 0;
+
+    memset(entry, 0, sizeof(entry));
+    memcpy(entry, label, 11);
+    entry[11] = 0x08;
+    return pwrite(fd, entry, sizeof(entry), root) == sizeof(entry) &&
+        pwrite(fd, label, 11, mirror + 71) == 11 &&
+        pwrite(fd, label, 11, volume.start + 71) == 11 && fsync(fd) == 0;
+}
+
+WIN int win_SetVolumeLabelA(const char *root, const char *name)
+{
+    if (!root || !is_probe_volume(root) || !name || !*name || strlen(name) > 11 ||
+        native_usb_fd >= 0) {
+        last_error = 87;
+        return 0;
+    }
+    char label[11];
+    memset(label, ' ', sizeof(label));
+    for (size_t i = 0; name[i]; ++i) {
+        if ((unsigned char)name[i] < 32 || (unsigned char)name[i] >= 127 ||
+            strchr("\"*+,./:;<=>?[\\]|", name[i])) {
+            last_error = 123;
+            return 0;
+        }
+        label[i] = toupper((unsigned char)name[i]);
+    }
+    pthread_mutex_lock(&media_lock);
+    VolumeExtent volume;
+    int fd = probe_volume_info(&volume) && volume.start ? open_probe_disk(O_RDWR | O_CLOEXEC) : -1;
+    int result = fd >= 0 && label_empty_fat32(fd, volume, label);
+    if (fd >= 0)
+        close(fd);
+    pthread_mutex_unlock(&media_lock);
+    if (!result)
+        last_error = 29;
+    return result;
 }
 
 WIN int win_GetVolumeInformationByHandleW(uintptr_t handle, WCHAR *label, DWORD label_capacity,
@@ -2591,8 +2827,15 @@ WIN int win_GetVolumeInformationByHandleW(uintptr_t handle, WCHAR *label, DWORD 
     DWORD volume_serial = info.st_dev;
     if (disk_handle_stat(handle, &disk)) {
         unsigned char sector[512];
-        if (!probe_volume_sector(sector)) {
-            last_error = 1005;
+        if (media_needs_lock())
+            pthread_mutex_lock(&media_lock);
+        const VolumeExtent volume = volume_handles[fd];
+        const VolumeExtent extent = volume.length ? volume : (VolumeExtent){0, disk.st_size};
+        int formatted = volume.length >= 0 && read_fat_boot(fd, extent, sector);
+        if (media_needs_lock())
+            pthread_mutex_unlock(&media_lock);
+        if (!formatted) {
+            last_error = volume.length < 0 ? 6 : 1005;
             return 0;
         }
         int fat32 = read_word(sector + 22) == 0;

@@ -1000,13 +1000,26 @@ WINAPI int win_GetMessageW(WinMessage* output, void* filter, uint32_t first, uin
                                 std::_Exit(130);
                             boot->setCurrentIndex(index);
                             Q_EMIT boot->activated(index);
+                            const auto scheme = qEnvironmentVariable("RUFUS_PROBE_FORMAT_SCHEME", "MBR");
+                            // IDC_PARTITION_TYPE in the same resource.
+                            auto* partition = qobject_cast<QComboBox*>(dialog->controls.value(1004));
+                            const int scheme_index = partition ? partition->findText(scheme) : -1;
+                            if (scheme_index < 0)
+                                std::_Exit(130);
+                            partition->setCurrentIndex(scheme_index);
+                            Q_EMIT partition->activated(scheme_index);
                             // IDC_FILE_SYSTEM in the same resource.
                             auto* fs = qobject_cast<QComboBox*>(dialog->controls.value(1002));
-                            const int fat32 = fs ? fs->findText(QStringLiteral("FAT32"), Qt::MatchStartsWith) : -1;
+                            const int fat32 = fs ? fs->findText(QStringLiteral("FAT32"), Qt::MatchContains) : -1;
                             if (fat32 < 0)
                                 std::_Exit(130);
                             fs->setCurrentIndex(fat32);
                             Q_EMIT fs->activated(fat32);
+                            // IDC_LABEL in the Rufus 4.15 dialog resource.
+                            auto* label = qobject_cast<QLineEdit*>(dialog->controls.value(1007));
+                            if (!label)
+                                std::_Exit(130);
+                            label->setText(QStringLiteral("MOST FAT32"));
                         }
                         const auto first = format ? QStringLiteral("Start") : test_control == QStringLiteral("Write")
                             ? QStringLiteral("Select") : test_control;

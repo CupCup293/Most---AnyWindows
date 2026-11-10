@@ -35,7 +35,10 @@ struct Pe {
 
     explicit Pe(QByteArray input);
     void readImports(bool delayed, QList<Import>& result) const;
+    unsigned countResources() const;
+    unsigned countCertificates() const;
     QByteArray codeAt(quint32 address) const;
+    std::optional<quint32> dataWordAt(quint32 address) const;
     void validateImage() const;
 
 private:

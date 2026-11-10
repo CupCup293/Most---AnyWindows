@@ -59,6 +59,9 @@ uint32_t *guest_last_error(void) { return (uint32_t *)(teb + 0x68); }
 extern int native_launch;
 void configure_arguments(int argc, char **argv);
 int launch_if_needed(int argc, char **argv);
+#ifdef MOST_RUFUS
+void configure_virtual_media(void);
+#endif
 
 #if defined(MOST_CHSIZE) || defined(MOST_FSPLIT) || defined(MOST_REPTXT) || defined(MOST_ELTORITO) || defined(MOST_CUT) || defined(MOST_GETHOST) || defined(MOST_EXELIST)
 char **guest_narrow_argv;
@@ -87,5 +90,8 @@ int main(int argc, char **argv)
     if (!guest_enter_thread())
         return 124;
     configure_arguments(native_launch ? 1 : argc, argv);
+#ifdef MOST_RUFUS
+    configure_virtual_media();
+#endif
     return ((WIN int (*)(void))GUEST_ENTRY)();
 }

@@ -4,6 +4,7 @@
 #include <QClipboard>
 #include <QDesktopServices>
 #include <QDir>
+#include <QDirIterator>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QFile>
@@ -60,6 +61,53 @@ struct BuildResult {
     QString error;
 };
 
+QString availableOutput(const QString& input)
+{
+    const auto base = most::defaultOutput(input);
+    auto path = base;
+    for (int index = 2; QFileInfo::exists(path) || QFileInfo(path).isSymLink(); ++index)
+        path = u"%1-%2"_s.arg(base).arg(index);
+    return path;
+}
+
+struct FolderResult {
+    qsizetype built = 0, rejected = 0, failed = 0;
+    QStringList log{most::buildVersionLine()};
+};
+
+FolderResult buildFolder(const QString& path)
+{
+    FolderResult result;
+    const QDir root(path);
+    QStringList files;
+    QDirIterator entries(path, QDir::Files | QDir::Hidden | QDir::NoSymLinks,
+                         QDirIterator::Subdirectories);
+    while (entries.hasNext()) {
+        const auto file = entries.next();
+        if (file.endsWith(u".exe", Qt::CaseInsensitive))
+            files << file;
+    }
+    files.sort();
+    for (const auto& file : files) {
+        result.log << u"\n%1"_s.arg(root.relativeFilePath(file));
+        const auto report = most::analyze(file);
+        result.log << report.log();
+        if (!report.ready()) {
+            ++result.rejected;
+            continue;
+        }
+        try {
+            most::build(report, availableOutput(file),
+                        [&](const QString& line) { result.log << line; });
+            ++result.built;
+        } catch (const std::exception& error) {
+            result.log << QString::fromUtf8(error.what());
+            ++result.failed;
+        }
+    }
+    return result;
+}
+
 class Window : public QWidget {
 public:
     Window()
@@ -84,10 +132,12 @@ public:
         drop->setMinimumHeight(170);
         auto* dropLayout = new QVBoxLayout(drop);
         dropLayout->setAlignment(Qt::AlignCenter);
-        dropLayout->addWidget(new QLabel(u"Перетащите сюда файл .exe"_s), 0, Qt::AlignHCenter);
-        dropLayout->addWidget(new QLabel(u"Для консольных программ x86 PE32"_s), 0, Qt::AlignHCenter);
+        dropLayout->addWidget(new QLabel(u"Перетащите сюда файл .exe или папку"_s), 0, Qt::AlignHCenter);
+        dropLayout->addWidget(new QLabel(u"x86 PE32 и отдельные профили Win64"_s), 0, Qt::AlignHCenter);
         choose_ = new QPushButton(u"Выбрать файл…"_s);
         dropLayout->addWidget(choose_, 0, Qt::AlignHCenter);
+        chooseFolder_ = new QPushButton(u"Выбрать папку…"_s);
+        dropLayout->addWidget(chooseFolder_, 0, Qt::AlignHCenter);
         page->addWidget(drop);
         setAcceptDrops(true);
         connect(choose_, &QPushButton::clicked, this, [this] {
@@ -97,10 +147,16 @@ public:
                 load(path);
         });
 
+        connect(chooseFolder_, &QPushButton::clicked, this, [this] {
+            const auto path = QFileDialog::getExistingDirectory(this, u"Выберите папку с Windows EXE"_s);
+            if (!path.isEmpty())
+                load(path);
+        });
+
         auto* card = new QFrame;
         card->setFrameShape(QFrame::StyledPanel);
         auto* summary = new QVBoxLayout(card);
-        status_ = makeLabel(u"Ожидается файл"_s);
+        status_ = makeLabel(u"Ожидается файл или папка"_s);
         auto heading = status_->font();
         heading.setBold(true);
         status_->setFont(heading);
@@ -132,7 +188,9 @@ public:
         page->addLayout(actions);
         connect(assemble_, &QPushButton::clicked, this, [this] { compile(); });
         connect(folder_, &QPushButton::clicked, this, [this] {
-            if (!QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(output_).absolutePath()))) {
+            const QFileInfo result(output_);
+            const auto directory = result.isDir() ? result.absoluteFilePath() : result.absolutePath();
+            if (!QDesktopServices::openUrl(QUrl::fromLocalFile(directory))) {
                 log_->appendPlainText(u"Не удалось открыть папку."_s);
                 toggle_->setChecked(true);
             }
@@ -154,6 +212,7 @@ public:
         details->setContentsMargins(0, 0, 0, 0);
         log_ = new QPlainTextEdit;
         log_->setReadOnly(true);
+        log_->setPlainText(most::buildVersionLine());
         log_->setMinimumHeight(120);
         details->addWidget(log_);
         auto* copy = new QPushButton(u"Копировать журнал"_s);
@@ -189,8 +248,7 @@ public:
                 if (report_.problems.size() > 3)
                     lines << u"Остальные причины в технических подробностях."_s;
             }
-            if (!report_.notes.isEmpty())
-                lines << report_.notes.last();
+            lines << report_.notes;
             detail_->setText(lines.join(u'\n'));
             setBusy(false);
             if (report_.ready())
@@ -220,6 +278,22 @@ public:
             result_->show();
             setBusy(false);
         });
+
+        connect(&batch_, &QFutureWatcher<FolderResult>::finished, this, [this] {
+            const auto done = batch_.result();
+            log_->setPlainText(done.log.join(u'\n'));
+            if (done.built + done.rejected + done.failed == 0) {
+                status_->setText(u"Файлы .exe не найдены"_s);
+            } else {
+                status_->setText(u"Обработка папки завершена"_s);
+                result_->setText(u"Собрано: %1 · Сборка недоступна: %2 · Ошибок сборки: %3"_s
+                                     .arg(done.built).arg(done.rejected).arg(done.failed));
+                result_->show();
+            }
+            output_ = input_;
+            folder_->show();
+            setBusy(false);
+        });
     }
 
     void load(const QString& path)
@@ -229,11 +303,16 @@ public:
         clearResult();
         input_ = path;
         report_ = {};
-        status_->setText(u"Анализ…"_s);
-        detail_->setText(QFileInfo(path).fileName());
-        log_->clear();
+        const bool isFolder = QFileInfo(path).isDir();
+        status_->setText(isFolder ? u"Поиск и сборка EXE…"_s : u"Анализ…"_s);
+        detail_->setText(isFolder ? QDir(path).absolutePath() : QFileInfo(path).fileName());
+        log_->setPlainText(most::buildVersionLine());
         toggle_->setChecked(false);
         setBusy(true);
+        if (isFolder) {
+            batch_.setFuture(QtConcurrent::run([path] { return buildFolder(path); }));
+            return;
+        }
         analysis_.setFuture(QtConcurrent::run([path] { return most::analyze(path); }));
     }
 
@@ -242,12 +321,7 @@ public:
         if (busy_ || !report_.ready())
             return;
         clearResult();
-        auto path = most::defaultOutput(input_);
-        if (isRufus()) {
-            const auto base = path;
-            for (int index = 2; QFileInfo::exists(path) || QFileInfo(path).isSymLink(); ++index)
-                path = u"%1-%2"_s.arg(base).arg(index);
-        }
+        const auto path = isRufus() ? availableOutput(input_) : most::defaultOutput(input_);
         status_->setText(u"Сборка…"_s);
         setBusy(true);
         build_.setFuture(QtConcurrent::run([report = report_, path] {
@@ -264,13 +338,13 @@ public:
 protected:
     void dragEnterEvent(QDragEnterEvent* event) override
     {
-        if (!busy_ && localFile(event->mimeData()))
+        if (!busy_ && localInput(event->mimeData()))
             event->acceptProposedAction();
     }
 
     void dropEvent(QDropEvent* event) override
     {
-        if (!busy_ && localFile(event->mimeData())) {
+        if (!busy_ && localInput(event->mimeData())) {
             load(event->mimeData()->urls().front().toLocalFile());
             event->acceptProposedAction();
         }
@@ -374,10 +448,13 @@ private:
         return journal.fileName();
     }
 
-    static bool localFile(const QMimeData* data)
+    static bool localInput(const QMimeData* data)
     {
         const auto urls = data->urls();
-        return urls.size() == 1 && urls.front().isLocalFile();
+        if (urls.size() != 1 || !urls.front().isLocalFile())
+            return false;
+        const QFileInfo entry(urls.front().toLocalFile());
+        return entry.isFile() || entry.isDir();
     }
 
     static QLabel* makeLabel(const QString& text)
@@ -394,6 +471,7 @@ private:
         busy_ = busy;
         progress_->setVisible(busy);
         choose_->setEnabled(!busy);
+        chooseFolder_->setEnabled(!busy);
         assemble_->setEnabled(!busy && report_.ready());
     }
 
@@ -410,12 +488,13 @@ private:
     most::Report report_;
     QString input_, output_;
     QLabel *status_, *detail_, *result_, *validation_;
-    QPushButton *choose_, *assemble_, *folder_, *launch_;
+    QPushButton *choose_, *chooseFolder_, *assemble_, *folder_, *launch_;
     QToolButton* toggle_;
     QProgressBar* progress_;
     QPlainTextEdit* log_;
     QFutureWatcher<most::Report> analysis_;
     QFutureWatcher<BuildResult> build_;
+    QFutureWatcher<FolderResult> batch_;
 };
 }
 
