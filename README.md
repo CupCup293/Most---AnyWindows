@@ -4,21 +4,6 @@
 переписаны на C++. Окно использует Qt 6. Декодер x86 — нативная библиотека
 Capstone 5.0.7 из каталога `lib`.
 
-
-```sh
-./most analyze /path/to/app.exe
-./most build /path/to/app.exe
-./most build /path/to/app.exe -o /path/to/existing-folder/app-linux
-```
-
-Коды CLI — 0 при успехе, 2 при отказе анализа и 1 при ошибке сборки. Для пересборки
-самого «Моста» нужны C++20, make, pkg-config и заголовки Qt 6.
-
-```sh
-sh tools/fetch-deps.sh # один раз после клонирования, нужны curl и bsdtar
-make
-```
-
 ## Что поддерживается
 
 - Анализ PE32 и PE32+, обычных и отложенных импортов. Общая сборка поддерживает x86 PE32 с подсистемой
